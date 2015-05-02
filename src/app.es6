@@ -8,17 +8,18 @@ import { Pipeline } from 'angular2/src/router/pipeline';
 
 @Component({
   selector: 'menu-link',
-  events: ['click']
+  events: ['click'],
+  properties: {
+    open: 'open'
+  }
 })
 @View({
   template: `
-    <div class="menu-link" (click)="onClick()">
+    <div class="menu-link"
+         [class.menu-link--open]="open"
+         (click)="onClick()">
       <span></span>
     </div>
-
-    <style>
-      @import 'app.css';
-    </style>
   `
 })
 class MenuLink {
@@ -29,7 +30,6 @@ class MenuLink {
   }
 
   onClick() {
-    console.log('ssssss');
     this.click.next('click');
   }
 }
@@ -41,9 +41,8 @@ class MenuLink {
   directives: [MenuLink],
   template: `
     <div class="wrapper"
-         [class.wrapper--menu-close]="!menuOpen"
-         [class.wrapper--menu-open]="menuOpen">
-      <menu-link (click)="toggleMenu()"></menu-link>
+         [class.wrapper--open]="menuOpen">
+      <menu-link (click)="toggleMenu()" [open]="menuOpen"></menu-link>
 
       <div class="menu-bar">
         <ul class="menu-bar__list">
@@ -56,16 +55,6 @@ class MenuLink {
         <h1>Accbook!</h1>
       </div>
     </div>
-
-    <style>
-      menu-link {
-        position: fixed;
-        display: block;
-        top: 0;
-        left: 0;
-        z-index: 10;
-      }
-    </style>
   `
 })
 class AccbookApp {
@@ -74,7 +63,6 @@ class AccbookApp {
   }
 
   toggleMenu() {
-    console.log('toggle');
     this.menuOpen = !this.menuOpen;
   }
 }
