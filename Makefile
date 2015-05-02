@@ -14,6 +14,7 @@ js:
 copy:
 	mkdir -p public
 	cp src/index.html public/
+	cp src/app.css public/
 	cp node_modules/angular2/node_modules/zone.js/zone.js public/
 
 clean:
