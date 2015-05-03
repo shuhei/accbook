@@ -1,3 +1,6 @@
+/* eslint-env node */
+'use strict';
+
 var path = require('path');
 
 var babelOptions = {
