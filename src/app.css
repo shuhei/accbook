@@ -48,6 +48,35 @@ menu-link {
   left: -160px;
 }
 
+/* -- grid -- */
+.grid-row {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.grid-1-2,
+.grid-1-3,
+.grid-1-4,
+.grid-1-6 {
+  display: inline-block;
+}
+
+.grid-1-2 {
+  width: 50%;
+}
+
+.grid-1-3 {
+  width: 33.3333%;
+}
+
+.grid-1-4 {
+  width: 25%;
+}
+
+.grid-1-6 {
+  width: 16.6666%;
+}
+
 /* -- components -- */
 
 /* menu bar */
@@ -99,6 +128,7 @@ menu-link {
   position: absolute;
   content: ' ';
   transition: all 0.5s;
+  cursor: pointer;
 }
 
 .menu-link span {
@@ -125,4 +155,78 @@ menu-link {
 .menu-link--open span:after {
   margin-top: 0;
   transform: rotate(-45deg);
+}
+
+/* budget item */
+.budget-item {
+  padding: 0.4em 0.8em;
+}
+
+/* HACK: Ignore <template> */
+.budget-item:nth-child(2) {
+  border-top: 1px solid #ccc;
+  padding-top: 0.8em;
+}
+
+.budget-item:last-child {
+  padding-bottom: 0.8em;
+}
+
+.budget-item--deficit {
+  background: #fdd;
+}
+
+.budget-item--spending .budget-item__amount {
+  color: rgb(150, 40, 20);
+}
+
+.budget-item--income .budget-item__amount {
+  color: rgb(40, 150, 20);
+}
+
+.budget-item__amount,
+.budget-item__total {
+  margin-right: 1em;
+  margin-left: -1em;
+}
+
+.budget-item__amount,
+.budget-item__total,
+.budget-item__tools {
+  text-align: right;
+}
+
+.budget-total {
+  padding: 0.8em 0.8em;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-weight: bold;
+}
+
+/* button */
+.button {
+  display: inline-block;
+  border: none;
+  padding: 0.5em 1em;
+  user-select: none;
+}
+
+/* button styles */
+.button--danger {
+  color: #fff;
+  background-color: rgb(202, 60, 60);
+}
+
+.button--block {
+  display: block;
+  margin: 0.5em 0;
+}
+
+/* button sizes */
+.button--xsmall {
+  font-size: 70%;
+}
+
+.button--small {
+  font-size: 85%;
 }

@@ -1,44 +1,21 @@
 import 'babel-core/polyfill';
 
-import { Component, View, EventEmitter, bootstrap } from 'angular2/angular2';
+import { Component, View, bootstrap } from 'angular2/angular2';
 import { bind } from 'angular2/di';
+import { PipeRegistry } from 'angular2/change_detection';
 import { Router } from 'angular2/router';
 import { RootRouter } from 'angular2/src/router/router';
 import { Pipeline } from 'angular2/src/router/pipeline';
 
-@Component({
-  selector: 'menu-link',
-  events: ['click'],
-  properties: {
-    open: 'open'
-  }
-})
-@View({
-  template: `
-    <div class="menu-link"
-         [class.menu-link--open]="open"
-         (click)="onClick()">
-      <span></span>
-    </div>
-  `
-})
-class MenuLink {
-  constructor() {
-    // TODO: Do we need to create EventEmitter even for native DOM event
-    // such as click?
-    this.click = new EventEmitter();
-  }
-
-  onClick() {
-    this.click.next('click');
-  }
-}
+import { pipes } from './pipes';
+import { BudgetItem } from './models';
+import { MenuLink, BudgetItemList } from './components';
 
 @Component({
   selector: 'accbook-app'
 })
 @View({
-  directives: [MenuLink],
+  directives: [MenuLink, BudgetItemList],
   template: `
     <div class="wrapper"
          [class.wrapper--open]="menuOpen">
@@ -53,13 +30,21 @@ class MenuLink {
 
       <div class="main">
         <h1>Accbook!</h1>
+        <budget-item-list [items]="items"></budget-item-list>
       </div>
     </div>
   `
 })
 class AccbookApp {
+  menuOpen: boolean;
+  items: Array<BudgetItem>;
+
   constructor() {
     this.menuOpen = false;
+    this.items = [
+      new BudgetItem({ label: 'Hello', amount: 2400, date: new Date(2015, 5, 1) }),
+      new BudgetItem({ label: 'World', amount: 5400, date: new Date(2015, 5, 3) })
+    ];
   }
 
   toggleMenu() {
@@ -68,5 +53,6 @@ class AccbookApp {
 }
 
 bootstrap(AccbookApp, [
-  bind(Router).toValue(new RootRouter(new Pipeline()))
+  bind(Router).toValue(new RootRouter(new Pipeline())),
+  bind(PipeRegistry).toValue(new PipeRegistry(pipes))
 ]);
