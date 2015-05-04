@@ -1,6 +1,8 @@
-import { Component, View, EventEmitter, For } from 'angular2/angular2';
+import { Component, View, EventEmitter, For, ElementRef } from 'angular2/angular2';
+import { Injector } from 'angular2/di';
 
 import { BudgetItem } from './models';
+import { Modal, ModalRef } from './modal';
 
 @Component({
   selector: 'menu-link',
@@ -34,14 +36,58 @@ export class MenuLink {
 }
 
 @Component({
+  selector: 'budget-item-form'
+})
+@View({
+  template: `
+    <form>
+      <label>Label</label>
+      <br>
+      <input type="text">
+      <br>
+      <label>Amount</label>
+      <br>
+      <input type="number">
+      <br>
+      <label>Date</label>
+      <br>
+      <input type="date">
+      <br>
+      <button class="button button--small" type="button" (click)="cancel()">Cancel</button>
+      <button class="button button--small" type="button" (click)="save()">Save</button>
+    </form>
+  `
+})
+export class BudgetItemForm {
+  modelRef: ModalRef;
+
+  constructor(modalRef: ModalRef) {
+    this.modalRef = modalRef;
+  }
+
+  save() {
+    // TODO: Save item.
+    this.modalRef.close();
+  }
+
+  cancel() {
+    this.modalRef.close();
+  }
+}
+
+@Component({
   selector: 'budget-item-list',
   properties: {
     items: 'items'
-  }
+  },
+  injectables: [Modal]
 })
 @View({
   directives: [For],
   template: `
+    <p>
+      <button class="button button--small" (click)="createNewItem()">New</button>
+    </p>
     <div class="budget-item-list">
       <div *for="#item of items; #i = index"
            class="grid-row budget-item"
@@ -53,10 +99,10 @@ export class MenuLink {
         <div class="grid-1-6 budget-item__total">{{totalUntil(i) | number : 0}}</div>
         <div class="grid-1-4">{{item.label}}</div>
         <div class="grid-1-4 budget-item__tools">
-          <button class="button button--small" (click)="edit(item)">
+          <button class="button button--small" (click)="editItem(item)">
             <i class="fa fa-pencil">Edit</i>
           </button>
-          <button class="button button--danger button--small" ng-click="budget.delete(item)">
+          <button class="button button--danger button--small" (click)="deleteItem(item)">
             <i class="fa fa-remove">Delete</i>
           </button>
         </div>
@@ -71,12 +117,39 @@ export class MenuLink {
 })
 export class BudgetItemList {
   items: Array<BudgetItem>;
+  modal: Modal;
+  location: ElementRef;
+  injector: Injector;
 
-  constructor() {
+  constructor(modal: Modal, location: ElementRef, injector: Injector) {
+    this.modal = modal;
+    this.location = location;
+    this.injector = injector;
   }
 
-  edit(item: BudgetItem): void {
-    console.log('Edit', item);
+  // TODO: Make it work. Because of <template>?
+  editItem(item: BudgetItem): void {
+    console.log('edit item', item);
+    (async () => {
+      // TODO: Pass the item via injector. Or add resolve param to open()?
+      const modalRef = await this.modal.open(BudgetItemForm, this.location, this.injector);
+      await modalRef.whenClosed;
+      console.log('edit modal closed');
+    })();
+  }
+
+  deleteItem(item: BudgetItem): void {
+    console.log('delete item', item);
+  }
+
+  // We cannot use async method here because it returns a promise but event handler is
+  // expected to return boolean or nothing.
+  createNewItem(): void {
+    (async () => {
+      const modalRef = await this.modal.open(BudgetItemForm, this.location, this.injector);
+      await modalRef.whenClosed;
+      console.log('new modal closed');
+    })();
   }
 
   total(): number {

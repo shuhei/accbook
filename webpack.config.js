@@ -4,7 +4,10 @@
 var path = require('path');
 
 var babelOptions = {
-  optional: ['es7.decorators'],
+  optional: [
+    'es7.decorators',
+    'es7.asyncFunctions'
+  ],
   plugins: [
     './transformers/disable-define',
     'angular2-annotations',

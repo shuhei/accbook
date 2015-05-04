@@ -1,7 +1,7 @@
 import { Pipe, defaultPipes } from 'angular2/change_detection';
 
 class NumberPipeFactory extends Pipe {
-  supports(obj): boolean {
+  supports(): boolean {
     return true;
   }
 

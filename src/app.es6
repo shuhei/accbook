@@ -32,6 +32,7 @@ import { MenuLink, BudgetItemList } from './components';
         <h1>Accbook!</h1>
         <budget-item-list [items]="items"></budget-item-list>
       </div>
+
     </div>
   `
 })
