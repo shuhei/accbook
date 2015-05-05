@@ -1,5 +1,6 @@
 import { Component, View, EventEmitter, For, ElementRef } from 'angular2/angular2';
 import { Injector } from 'angular2/di';
+import { FormDirectives, FormBuilder, ControlGroup } from 'angular2/forms';
 
 import { BudgetItem } from './models';
 import { Modal, ModalRef } from './modal';
@@ -40,45 +41,84 @@ export class MenuLink {
   selector: 'budget-item-form'
 })
 @View({
-  // TODO: Stop using <br>.
+  directives: [FormDirectives],
   template: `
-    <form>
-      <label>Label</label>
-      <br>
-      <input type="text">
-      <br>
-      <label>Amount</label>
-      <br>
-      <input type="number">
-      <br>
-      <label>Date</label>
-      <br>
-      <input type="date">
-      <br>
-      <button class="button button--small" type="button" (click)="cancel()">Cancel</button>
-      <button class="button button--small" type="button" (click)="save()">Save</button>
+    <form [control-group]="form">
+      <p>
+        <label>
+          <input type="checkbox" control="isIncome"> Income
+        </label>
+      </p>
+      <p>
+        <label>
+          Label <input type="text" control="label">
+        </label>
+      </p>
+      <p>
+        <label>
+          Amount <input type="number" control="amount">
+        </label>
+      </p>
+      <p>
+        <label>
+          Date <input type="date" control="date">
+        </label>
+      </p>
+      <p>
+        <button class="button button--small" type="button" (click)="cancel()">Cancel</button>
+        <button class="button button--small" type="button" (click)="save()">Save</button>
+      </p>
     </form>
   `
 })
 export class BudgetItemForm {
   modelRef: ModalRef;
+  form: ControlGroup;
 
   constructor(modalRef: ModalRef) {
     this.modalRef = modalRef;
+
+    // TODO: Should we inject FormBuilder?
+    // TODO: Validate form.
+    this.form = new FormBuilder().group({
+      isIncome: [false],
+      label: [''],
+      amount: [0],
+      // TODO: Can't we set Date to date control?
+      date: [this._formatDate(new Date())]
+    });
   }
 
   save() {
-    // TODO: Save item.
-    Intent.createBudgetItem(new BudgetItem({
-      date: new Date(),
-      amount: 3000,
-      label: 'Something'
-    }));
+    const value = this.form.value;
+    // TODO: Can't we get Date or number from control?
+    const item = new BudgetItem({
+      date: new Date(value.date),
+      amount: (value.isIncome ? 1 : -1) * parseInt(value.amount),
+      label: value.label
+    });
+    Intent.createBudgetItem(item);
     this.modalRef.close();
   }
 
   cancel() {
     this.modalRef.close();
+  }
+
+  // TODO: Extract to another module.
+  _formatDate(date) {
+    const year = date.getFullYear();
+    const month = this._pad(date.getMonth() + 1);
+    const day = this._pad(date.getDate());
+    return `${year}-${month}-${day}`;
+  }
+
+  _pad(num: number, digits: number = 2) {
+    let str = num.toString();
+    while (str.length < digits) {
+      str = '0' + str;
+    }
+    return str;
   }
 }
 
