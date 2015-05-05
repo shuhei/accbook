@@ -11,7 +11,7 @@ import { pipes } from './pipes';
 import { BudgetItem } from './models';
 import { MenuLink, BudgetItemList } from './components';
 
-import { Model } from './stream';
+import { Model, Intent } from './stream';
 
 @Component({
   selector: 'accbook-app'
@@ -42,10 +42,10 @@ class AccbookApp {
   menuOpen: boolean;
   items: Array<BudgetItem>;
 
-  constructor() {
+  constructor(model: Model) {
     this.menuOpen = false;
 
-    Model.subject.subscribe((state) => {
+    model.subject.subscribe((state) => {
       this.items = state.budgetItems;
     });
   }
@@ -57,5 +57,7 @@ class AccbookApp {
 
 bootstrap(AccbookApp, [
   bind(Router).toValue(new RootRouter(new Pipeline())),
-  bind(PipeRegistry).toValue(new PipeRegistry(pipes))
+  bind(PipeRegistry).toValue(new PipeRegistry(pipes)),
+  Model,
+  Intent
 ]);

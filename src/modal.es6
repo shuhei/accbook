@@ -6,7 +6,7 @@ import { Type, isPresent } from 'angular2/src/facade/lang';
 import { PromiseWrapper } from 'angular2/src/facade/async';
 import { DOM } from 'angular2/src/dom/dom_adapter';
 
-// Stolen from https://github.com/jelbourn/angular/blob/md-dialog/modules/angular2_material/src/components/dialog/dialog.js
+// Stolen from https://github.com/jelbourn/angular/commit/f88c4b77cad5bf08bc124115c7f4d92c65c45f7a
 
 // TODO: What are the differences of ElementRef and ComponentRef?
 // TODO: What's ElementRef?

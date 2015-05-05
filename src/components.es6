@@ -73,10 +73,12 @@ export class MenuLink {
 })
 export class BudgetItemForm {
   modelRef: ModalRef;
+  intent: Intent;
   form: ControlGroup;
 
-  constructor(modalRef: ModalRef) {
+  constructor(modalRef: ModalRef, intent: Intent) {
     this.modalRef = modalRef;
+    this.intent = intent;
 
     // TODO: Should we inject FormBuilder?
     // TODO: Validate form.
@@ -97,7 +99,7 @@ export class BudgetItemForm {
       amount: (value.isIncome ? 1 : -1) * parseInt(value.amount),
       label: value.label
     });
-    Intent.createBudgetItem(item);
+    this.intent.createBudgetItem(item);
     this.modalRef.close();
   }
 
@@ -146,10 +148,10 @@ export class BudgetItemForm {
         <div class="grid-1-6 budget-item__total">{{totalUntil(i) | number : 0}}</div>
         <div class="grid-1-4">{{item.label}}</div>
         <div class="grid-1-4 budget-item__tools">
-          <button class="button button--small" (click)="editItem(item)">
+          <button class="button button--small" (^click)="editItem(item)">
             <i class="fa fa-pencil">Edit</i>
           </button>
-          <button class="button button--danger button--small" (click)="deleteItem(item)">
+          <button class="button button--danger button--small" (^click)="deleteItem(item)">
             <i class="fa fa-remove">Delete</i>
           </button>
         </div>
