@@ -2,7 +2,9 @@
 import keyMirror from 'keymirror';
 
 export const Keys = keyMirror({
-  CREATE_BUDGET_ITEM: null
+  CREATE_BUDGET_ITEM: null,
+  UPDATE_BUDGET_ITEM: null,
+  DELETE_BUDGET_ITEM: null
 });
 
 // intent or action
@@ -21,6 +23,14 @@ export class Intent {
       item: item
     });
   }
+
+  // TODO: Use unique ID instead of object reference.
+  deleteBudgetItem(item: BudgetItem): void {
+    this.subject.onNext({
+      key: Keys.DELETE_BUDGET_ITEM,
+      item: item
+    });
+  }
 }
 
 // model or store
@@ -33,6 +43,7 @@ export class Model {
   constructor(intent: Intent) {
     this.subject = new Rx.ReplaySubject(1);
     // TODO: Remove dummy items.
+    // TODO: Use immutable data structure.
     this.state = {
       budgetItems: [
         new BudgetItem({ label: 'Hello', amount: 2400, date: new Date(2015, 5, 1) }),
@@ -47,8 +58,15 @@ export class Model {
   }
 
   createBudgetItem(item: BudgetItem): void {
-    // TODO: Use immutable data structure.
     this.state.budgetItems.push(item);
+    this.notify();
+  }
+
+  deleteBudgetItem(item: BudgetItem): void {
+    const index = this.state.budgetItems.indexOf(item);
+    if (index >= 0) {
+      this.state.budgetItems.splice(index, 1);
+    }
     this.notify();
   }
 
@@ -56,6 +74,9 @@ export class Model {
     switch (payload.key) {
       case Keys.CREATE_BUDGET_ITEM:
         this.createBudgetItem(payload.item);
+        break;
+      case Keys.DELETE_BUDGET_ITEM:
+        this.deleteBudgetItem(payload.item);
         break;
       default:
         console.warn(`${payload.key} not recognized in model.`);

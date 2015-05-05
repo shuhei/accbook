@@ -156,11 +156,14 @@ export class BudgetItemList {
   modal: Modal;
   location: ElementRef;
   injector: Injector;
+  intent: Intent;
 
-  constructor(modal: Modal, location: ElementRef, injector: Injector) {
+  // TODO: Do we really need to inject three arguments to show a modal?
+  constructor(modal: Modal, location: ElementRef, injector: Injector, intent: Intent) {
     this.modal = modal;
     this.location = location;
     this.injector = injector;
+    this.intent = intent;
   }
 
   // TODO: Make it work. Because of <template>?
@@ -175,7 +178,7 @@ export class BudgetItemList {
   }
 
   deleteItem(item: BudgetItem): void {
-    console.log('delete item', item);
+    this.intent.deleteBudgetItem(item);
   }
 
   // We cannot use async method here because it returns a promise but event handler is
