@@ -10,18 +10,6 @@ body {
   margin: 0;
 }
 
-.wrapper {
-  position: relative;
-  transition: left 0.5s;
-  top: 0;
-  left: 0;
-  bottom: 0;
-}
-
-.wrapper--open {
-  left: 160px;
-}
-
 menu-link {
   position: fixed;
   display: block;
@@ -36,16 +24,28 @@ menu-link {
 }
 
 .main {
+  position: relative;
   padding: 2em;
+  left: 0;
+  transition: left 0.5s;
+}
+
+.wrapper--open .main {
+  left: 160px;
 }
 
 .menu-bar {
-  position: absolute;
+  position: fixed;
   display: block;
   width: 160px;
   top: 0;
   bottom: 0;
   left: -160px;
+  transition: left 0.5s;
+}
+
+.wrapper--open .menu-bar {
+  left: 0px;
 }
 
 /* -- grid -- */
