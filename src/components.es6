@@ -8,7 +8,6 @@ import { Intent } from './stream';
 
 @Component({
   selector: 'menu-link',
-  events: ['click'],
   properties: {
     open: 'open'
   }
@@ -16,25 +15,13 @@ import { Intent } from './stream';
 @View({
   template: `
     <div class="menu-link"
-         [class.menu-link--open]="open"
-         (click)="onClick()">
+         [class.menu-link--open]="open">
       <span></span>
     </div>
   `
 })
 export class MenuLink {
   open: boolean;
-  click: EventEmitter;
-
-  constructor() {
-    // TODO: Do we need to create EventEmitter even for native DOM event
-    // such as click?
-    this.click = new EventEmitter();
-  }
-
-  onClick() {
-    this.click.next('click');
-  }
 }
 
 @Component({

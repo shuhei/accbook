@@ -21,7 +21,7 @@ import { Model, Intent } from './stream';
   template: `
     <div class="wrapper"
          [class.wrapper--open]="menuOpen">
-      <menu-link (click)="toggleMenu()" [open]="menuOpen"></menu-link>
+      <menu-link (^click)="toggleMenu()" [open]="menuOpen"></menu-link>
 
       <div class="menu-bar">
         <ul class="menu-bar__list">
