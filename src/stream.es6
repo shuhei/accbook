@@ -10,6 +10,8 @@ export const Keys = keyMirror({
 // intent or action
 import Rx from 'rx';
 
+// TODO: Create a dispatcher for store dependencies or subject for
+// each method.
 export class Intent {
   subject: Rx.ReplaySubject;
 
@@ -20,6 +22,13 @@ export class Intent {
   createBudgetItem(item: BudgetItem): void {
     this.subject.onNext({
       key: Keys.CREATE_BUDGET_ITEM,
+      item: item
+    });
+  }
+
+  updateBudgetItem(item: BudgetItem): void {
+    this.subject.onNext({
+      key: Keys.UPDATE_BUDGET_ITEM,
       item: item
     });
   }
@@ -62,6 +71,11 @@ export class Model {
     this.notify();
   }
 
+  updateBudgetItem(item: BudgetItem): void {
+    // TODO: Update with ID.
+    this.notify();
+  }
+
   deleteBudgetItem(item: BudgetItem): void {
     const index = this.state.budgetItems.indexOf(item);
     if (index >= 0) {
@@ -74,6 +88,9 @@ export class Model {
     switch (payload.key) {
       case Keys.CREATE_BUDGET_ITEM:
         this.createBudgetItem(payload.item);
+        break;
+      case Keys.UPDATE_BUDGET_ITEM:
+        this.updateBudgetItem(payload.item);
         break;
       case Keys.DELETE_BUDGET_ITEM:
         this.deleteBudgetItem(payload.item);

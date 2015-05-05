@@ -1,9 +1,9 @@
-import { Component, View, EventEmitter, For, ElementRef } from 'angular2/angular2';
-import { Injector } from 'angular2/di';
+import { Component, View, For, ElementRef } from 'angular2/angular2';
+import { bind, Injector, Binding, Optional } from 'angular2/di';
 import { FormDirectives, FormBuilder, ControlGroup } from 'angular2/forms';
 
 import { BudgetItem } from './models';
-import { Modal, ModalRef } from './modal';
+import { Modal, ModalRef, ModalConfig } from './modal';
 import { Intent } from './stream';
 
 @Component({
@@ -62,36 +62,58 @@ export class BudgetItemForm {
   modelRef: ModalRef;
   intent: Intent;
   form: ControlGroup;
+  existingItem: BudgetItem;
 
-  constructor(modalRef: ModalRef, intent: Intent) {
+  constructor(modalRef: ModalRef, intent: Intent, @Optional() existingItem: BudgetItem) {
     this.modalRef = modalRef;
     this.intent = intent;
+    this.existingItem = existingItem;
 
     // TODO: Should we inject FormBuilder?
     // TODO: Validate form.
-    this.form = new FormBuilder().group({
-      isIncome: [false],
-      label: [''],
-      amount: [0],
-      // TODO: Can't we set Date to date control?
-      date: [this._formatDate(new Date())]
-    });
+    if (this.existingItem) {
+      this.form = new FormBuilder().group({
+        isIncome: [existingItem.amount > 0],
+        label: [existingItem.label],
+        amount: [Math.abs(existingItem.amount)],
+        // TODO: Can't we set Date to date control?
+        date: [this._formatDate(this.existingItem.date)]
+      });
+    } else {
+      this.form = new FormBuilder().group({
+        isIncome: [false],
+        label: [''],
+        amount: [0],
+        // TODO: Can't we set Date to date control?
+        date: [this._formatDate(new Date())]
+      });
+    }
   }
 
   save() {
-    const value = this.form.value;
-    // TODO: Can't we get Date or number from control?
-    const item = new BudgetItem({
-      date: new Date(value.date),
-      amount: (value.isIncome ? 1 : -1) * parseInt(value.amount),
-      label: value.label
-    });
-    this.intent.createBudgetItem(item);
+    const formData = this._getFormData();
+    if (this.existingItem) {
+      Object.assign(this.existingItem, formData);
+      this.intent.updateBudgetItem(this.existingItem);
+    } else {
+      const item = new BudgetItem(formData);
+      this.intent.createBudgetItem(item);
+    }
     this.modalRef.close();
   }
 
   cancel() {
     this.modalRef.close();
+  }
+
+  _getFormData() {
+    const value = this.form.value;
+    // TODO: Can't we get Date or number from control?
+    return {
+      date: new Date(value.date),
+      amount: (value.isIncome ? 1 : -1) * parseInt(value.amount),
+      label: value.label
+    };
   }
 
   // TODO: Extract to another module.
@@ -168,17 +190,22 @@ export class BudgetItemList {
 
   // TODO: Make it work. Because of <template>?
   editItem(item: BudgetItem): void {
-    console.log('edit item', item);
     (async () => {
-      // TODO: Pass the item via injector. Or add resolve param to open()?
-      const modalRef = await this.modal.open(BudgetItemForm, this.location, this.injector);
+      const config = new ModalConfig({
+        bindings: [bind(BudgetItem).toValue(item)]
+      });
+      const modalRef =
+        await this.modal.open(BudgetItemForm, this.location, this.injector, config);
       await modalRef.whenClosed;
       console.log('edit modal closed');
     })();
   }
 
   deleteItem(item: BudgetItem): void {
-    this.intent.deleteBudgetItem(item);
+    // TODO: Show a confirm dialog.
+    if (window.confirm('Are you sure?')) {
+      this.intent.deleteBudgetItem(item);
+    }
   }
 
   // We cannot use async method here because it returns a promise but event handler is

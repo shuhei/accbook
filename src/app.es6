@@ -31,7 +31,7 @@ import { Model, Intent } from './stream';
       </div>
 
       <div class="main">
-        <h1>Accbook!</h1>
+        <h1>Accbook</h1>
         <budget-item-list [items]="items" [counter]="counter"></budget-item-list>
       </div>
 

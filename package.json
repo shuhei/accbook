@@ -14,7 +14,7 @@
     "babel-eslint": "^3.0.1",
     "babel-loader": "^5.0.0",
     "babel-plugin-angular2-annotations": "^0.2.0",
-    "babel-plugin-type-assertion": "^0.0.3",
+    "babel-plugin-type-assertion": "^0.1.0",
     "eslint": "^0.20.0",
     "webpack": "^1.8.11"
   },
