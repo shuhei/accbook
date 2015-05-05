@@ -11,6 +11,8 @@ import { pipes } from './pipes';
 import { BudgetItem } from './models';
 import { MenuLink, BudgetItemList } from './components';
 
+import { Model } from './stream';
+
 @Component({
   selector: 'accbook-app'
 })
@@ -30,7 +32,7 @@ import { MenuLink, BudgetItemList } from './components';
 
       <div class="main">
         <h1>Accbook!</h1>
-        <budget-item-list [items]="items"></budget-item-list>
+        <budget-item-list [items]="items" [counter]="counter"></budget-item-list>
       </div>
 
     </div>
@@ -42,10 +44,10 @@ class AccbookApp {
 
   constructor() {
     this.menuOpen = false;
-    this.items = [
-      new BudgetItem({ label: 'Hello', amount: 2400, date: new Date(2015, 5, 1) }),
-      new BudgetItem({ label: 'World', amount: 5400, date: new Date(2015, 5, 3) })
-    ];
+
+    Model.subject.subscribe((state) => {
+      this.items = state.budgetItems;
+    });
   }
 
   toggleMenu() {

@@ -3,6 +3,7 @@ import { Injector } from 'angular2/di';
 
 import { BudgetItem } from './models';
 import { Modal, ModalRef } from './modal';
+import { Intent } from './stream';
 
 @Component({
   selector: 'menu-link',
@@ -39,6 +40,7 @@ export class MenuLink {
   selector: 'budget-item-form'
 })
 @View({
+  // TODO: Stop using <br>.
   template: `
     <form>
       <label>Label</label>
@@ -67,6 +69,11 @@ export class BudgetItemForm {
 
   save() {
     // TODO: Save item.
+    Intent.createBudgetItem(new BudgetItem({
+      date: new Date(),
+      amount: 3000,
+      label: 'Something'
+    }));
     this.modalRef.close();
   }
 
