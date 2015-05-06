@@ -2,27 +2,9 @@ import { Component, View, For, ElementRef } from 'angular2/angular2';
 import { bind, Injector, Binding, Optional } from 'angular2/di';
 import { FormDirectives, FormBuilder, ControlGroup, Validators } from 'angular2/forms';
 
-import { BudgetItem } from './models';
-import { Modal, ModalRef, ModalConfig } from './modal';
-import { Intent } from './stream';
-
-@Component({
-  selector: 'menu-link',
-  properties: {
-    open: 'open'
-  }
-})
-@View({
-  template: `
-    <div class="menu-link"
-         [class.menu-link--open]="open">
-      <span></span>
-    </div>
-  `
-})
-export class MenuLink {
-  open: boolean;
-}
+import { BudgetItem } from '../models';
+import { Modal, ModalRef, ModalConfig } from '../modal';
+import { Intent } from '../stream';
 
 @Component({
   selector: 'budget-item-form'
@@ -32,12 +14,12 @@ export class MenuLink {
   template: `
     <form [control-group]="form">
       <p>
-        <label [class.invalid]="!form.controls.isIncome.valid">
+        <label>
           <input type="checkbox" control="isIncome"> Income
         </label>
       </p>
       <p>
-        <label>
+        <label [class.invalid]="!form.controls.label.valid">
           Label <input type="text" control="label">
         </label>
       </p>
@@ -59,7 +41,7 @@ export class MenuLink {
   `
 })
 export class BudgetItemForm {
-  modelRef: ModalRef;
+  modalRef: ModalRef;
   intent: Intent;
   form: ControlGroup;
   existingItem: BudgetItem;
@@ -147,8 +129,7 @@ export class BudgetItemForm {
   selector: 'budget-item-list',
   properties: {
     items: 'items'
-  },
-  injectables: [Modal]
+  }
 })
 @View({
   directives: [For],
@@ -214,7 +195,7 @@ export class BudgetItemList {
   deleteItem(item: BudgetItem): void {
     // TODO: Show a confirm dialog.
     if (window.confirm('Are you sure?')) {
-      this.intent.deleteBudgetItem(item);
+      this.intent.deleteBudgetItem(item.id);
     }
   }
 

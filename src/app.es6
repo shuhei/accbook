@@ -8,10 +8,29 @@ import { RootRouter } from 'angular2/src/router/router';
 import { Pipeline } from 'angular2/src/router/pipeline';
 
 import { pipes } from './pipes';
-import { BudgetItem } from './models';
-import { MenuLink, BudgetItemList } from './components';
-
+import { Modal } from './modal';
 import { Model, Intent } from './stream';
+import { BudgetItemService } from './services';
+import { BudgetItem } from './models';
+import { BudgetItemList } from './components/budget-item';
+
+@Component({
+  selector: 'menu-link',
+  properties: {
+    open: 'open'
+  }
+})
+@View({
+  template: `
+    <div class="menu-link"
+         [class.menu-link--open]="open">
+      <span></span>
+    </div>
+  `
+})
+export class MenuLink {
+  open: boolean;
+}
 
 @Component({
   selector: 'accbook-app'
@@ -42,12 +61,14 @@ class AccbookApp {
   menuOpen: boolean;
   items: Array<BudgetItem>;
 
-  constructor(model: Model) {
+  constructor(model: Model, intent: Intent) {
     this.menuOpen = false;
 
     model.subject.subscribe((state) => {
       this.items = state.budgetItems;
     });
+
+    intent.fetchBudgetItems();
   }
 
   toggleMenu() {
@@ -58,6 +79,8 @@ class AccbookApp {
 bootstrap(AccbookApp, [
   bind(Router).toValue(new RootRouter(new Pipeline())),
   bind(PipeRegistry).toValue(new PipeRegistry(pipes)),
+  Modal,
   Model,
-  Intent
+  Intent,
+  BudgetItemService
 ]);
