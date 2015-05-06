@@ -7,6 +7,8 @@ export const Keys = keyMirror({
   DELETE_BUDGET_ITEM: null
 });
 
+// TODO: Implement dispatcher for `waitFor()`.
+
 // intent or action
 import Rx from 'rx';
 

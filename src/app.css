@@ -260,3 +260,8 @@ menu-link {
 
   padding: 20px;
 }
+
+/* form */
+.invalid input {
+  border: 1px solid rgb(202, 60, 60);
+}

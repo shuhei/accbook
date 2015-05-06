@@ -1,6 +1,6 @@
 import { Component, View, For, ElementRef } from 'angular2/angular2';
 import { bind, Injector, Binding, Optional } from 'angular2/di';
-import { FormDirectives, FormBuilder, ControlGroup } from 'angular2/forms';
+import { FormDirectives, FormBuilder, ControlGroup, Validators } from 'angular2/forms';
 
 import { BudgetItem } from './models';
 import { Modal, ModalRef, ModalConfig } from './modal';
@@ -32,7 +32,7 @@ export class MenuLink {
   template: `
     <form [control-group]="form">
       <p>
-        <label>
+        <label [class.invalid]="!form.controls.isIncome.valid">
           <input type="checkbox" control="isIncome"> Income
         </label>
       </p>
@@ -42,12 +42,12 @@ export class MenuLink {
         </label>
       </p>
       <p>
-        <label>
+        <label [class.invalid]="!form.controls.amount.valid">
           Amount <input type="number" control="amount">
         </label>
       </p>
       <p>
-        <label>
+        <label [class.invalid]="!form.controls.date.valid">
           Date <input type="date" control="date">
         </label>
       </p>
@@ -69,29 +69,28 @@ export class BudgetItemForm {
     this.intent = intent;
     this.existingItem = existingItem;
 
-    // TODO: Should we inject FormBuilder?
-    // TODO: Validate form.
     if (this.existingItem) {
-      this.form = new FormBuilder().group({
-        isIncome: [existingItem.amount > 0],
-        label: [existingItem.label],
-        amount: [Math.abs(existingItem.amount)],
-        // TODO: Can't we set Date to date control?
-        date: [this._formatDate(this.existingItem.date)]
+      this.form = this._buildForm({
+        isIncome: existingItem.amount > 0,
+        label: existingItem.label,
+        amount: Math.abs(existingItem.amount),
+        date: this.existingItem.date
       });
     } else {
-      this.form = new FormBuilder().group({
-        isIncome: [false],
-        label: [''],
-        amount: [0],
-        // TODO: Can't we set Date to date control?
-        date: [this._formatDate(new Date())]
+      this.form = this._buildForm({
+        isIncome: false,
+        label: '',
+        amount: 0,
+        date: new Date()
       });
     }
   }
 
   save() {
-    const formData = this._getFormData();
+    if (!this.form.valid) {
+      return;
+    }
+    const formData = this._getFormData(this.form);
     if (this.existingItem) {
       Object.assign(this.existingItem, formData);
       this.intent.updateBudgetItem(this.existingItem);
@@ -106,8 +105,19 @@ export class BudgetItemForm {
     this.modalRef.close();
   }
 
-  _getFormData() {
-    const value = this.form.value;
+  _buildForm({ isIncome, label, amount, date }) {
+    // TODO: Should we inject FormBuilder?
+    return new FormBuilder().group({
+      isIncome: [isIncome],
+      label: [label, Validators.required],
+      amount: [amount, Validators.required],
+      // TODO: Can't we set Date to date control?
+      date: [this._formatDate(date), Validators.required]
+    });
+  }
+
+  _getFormData(form) {
+    const value = form.value;
     // TODO: Can't we get Date or number from control?
     return {
       date: new Date(value.date),
