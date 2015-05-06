@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "postinstall": "make",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint **/*.{js,es6}"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
   "license": "ISC",

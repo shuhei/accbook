@@ -19,3 +19,6 @@ copy:
 
 clean:
 	rm -rf public
+
+lint:
+	${NPM_BIN}/eslint **/*.{js,es6}

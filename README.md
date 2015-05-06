@@ -5,7 +5,7 @@ My experimental app using:
 - [Angular 2](https://github.com/angular/angular)
 - ES6 + ES7 async/await by [babel](https://github.com/babel/babel)
 - AtScript-like @/type annotations including formal parameter decorators by [babel-plugin-angular2-annotations](https://github.com/shuhei/babel-plugin-angular2-annotations)
-- Runtime type by [babel-plugin-type-assertion](https://github.com/shuhei/babel-plugin-type-assertion)
+- Runtime type assertion by [babel-plugin-type-assertion](https://github.com/shuhei/babel-plugin-type-assertion)
 - [RxJS](https://github.com/Reactive-Extensions/RxJS)
 - Flux-like architecture
 
