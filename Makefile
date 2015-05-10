@@ -1,20 +1,27 @@
 NPM_BIN=node_modules/.bin
 WEBPACK=${NPM_BIN}/webpack
+WATCH=${NPM_BIN}/watch
+PARALLEL=${NPM_BIN}/parallelshell
 
 all: build
 
 build: copy js
 
 watch:
+	${PARALLEL} "make watch-static" "make watch-js"
+
+watch-js:
 	${WEBPACK} --watch
+
+watch-static:
+	${WATCH} "make copy" assets -d
 
 js:
 	${WEBPACK}
 
 copy:
 	mkdir -p public
-	cp src/index.html public/
-	cp src/app.css public/
+	cp assets/* public/
 	cp node_modules/angular2/node_modules/zone.js/zone.js public/
 
 clean:

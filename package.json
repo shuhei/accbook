@@ -17,6 +17,8 @@
     "babel-plugin-angular2-annotations": "^0.2.0",
     "babel-plugin-type-assertion": "^0.1.0",
     "eslint": "^0.20.0",
+    "parallelshell": "^1.1.1",
+    "watch": "^0.16.0",
     "webpack": "^1.8.11"
   },
   "dependencies": {
