@@ -9,6 +9,7 @@ var babelOptions = {
     'es7.asyncFunctions'
   ],
   plugins: [
+    './transformers/delete-es-module',
     './transformers/disable-define',
     'angular2-annotations',
     'type-assertion'

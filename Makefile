@@ -29,3 +29,6 @@ clean:
 
 lint:
 	${NPM_BIN}/eslint **/*.{js,es6}
+
+patch:
+	sed -i '' "s/Rx.hasOwnProperty('default')/\!Rx.hasOwnProperty('Subject')/g" ./node_modules/angular2/es6/dev/src/facade/async.es6

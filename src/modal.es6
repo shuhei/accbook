@@ -1,10 +1,10 @@
-import { Component, Directive, View, Parent, DynamicComponentLoader, ElementRef, NgElement, onDestroy } from 'angular2/angular2';
-// HACK: Due to the bug on `angular2/core.js` of alpha.21. Will be fixed on alpha.22.
-import { ComponentRef } from 'angular2/src/core/compiler/dynamic_component_loader';
+import { Component, Directive, View, Parent, DynamicComponentLoader, ElementRef, ComponentRef } from 'angular2/angular2';
 import { bind, Injector, Binding } from 'angular2/di';
 import { Type, isPresent } from 'angular2/src/facade/lang';
 import { PromiseWrapper } from 'angular2/src/facade/async';
 import { DOM } from 'angular2/src/dom/dom_adapter';
+
+const KEY_ESC = 27;
 
 // Stolen from https://github.com/angular/angular/commit/f88c4b77cad5bf08bc124115c7f4d92c65c45f7a
 
@@ -57,45 +57,25 @@ export class ModalRef {
   }
 }
 
-// HACK: hostListeners on dynamically loaded component.
-// Blocked by https://github.com/angular/angular/issues/1539
 @Component({
   selector: 'modal-backdrop',
   hostListeners: {
     'click': 'onClick()'
-  },
-  // HACK
-  lifecycle: [onDestroy]
+  }
 })
 @View({
   template: ''
 })
 export class ModalBackdrop {
   modalRef: ModalRef;
-  // HACK
-  element: NgElement;
   boundOnClick: Function;
 
-  constructor(modalRef: ModalRef, element: NgElement) {
+  constructor(modalRef: ModalRef) {
     this.modalRef = modalRef;
-
-    // HACK
-    this.element = element;
-    this.boundOnClick = () => {
-      this.onClick();
-    };
-    this.element.domElement.addEventListener('click', this.boundOnClick, false);
   }
 
   onClick() {
     this.modalRef.close();
-  }
-
-  // HACK
-  onDestroy() {
-    this.element.domElement.removeEventListener('click', this.boundOnClick);
-    this.element = null;
-    this.boundOnClick = null;
   }
 }
 
@@ -125,7 +105,6 @@ export class ModalContainer {
   }
 
   documentKeypress(event: KeyboardEvent) {
-    console.log('body keypress');
     if (event.keyCode === KEY_ESC) {
       this.modalRef.close();
     }
@@ -141,7 +120,7 @@ export class ModalContent {
   }
 }
 // HACK: Due to circular reference. ES6 classe declaration doesn't hoist.
-ModalContainer.annotations[1].directives = [ModalContent];
+Reflect.getMetadata('annotations', ModalContainer)[0].directives = [ModalContent];
 
 export class ModalConfig {
   width: string;
@@ -171,7 +150,6 @@ export class Modal {
 
     const modalRef = new ModalRef();
     const bindings = [bind(ModalRef).toValue(modalRef), ...config.bindings];
-    console.log(config, bindings);
     const contentInjector = parentInjector.resolveAndCreateChild(bindings);
 
     const backdropRefPromise = this._openBackdrop(elementRef, contentInjector);

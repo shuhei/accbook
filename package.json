@@ -5,27 +5,28 @@
   "description": "Budget manager",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "make",
+    "postinstall": "make patch && make",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "babel-core": "^5.2.9",
-    "babel-eslint": "^3.0.1",
+    "babel-core": "^5.2.17",
+    "babel-eslint": "^3.1.1",
     "babel-loader": "^5.0.0",
-    "babel-plugin-angular2-annotations": "^0.2.0",
-    "babel-plugin-type-assertion": "^0.1.0",
-    "eslint": "^0.20.0",
+    "babel-plugin-angular2-annotations": "^1.0.2",
+    "babel-plugin-type-assertion": "^0.1.1",
+    "eslint": "^0.21.0",
     "parallelshell": "^1.1.1",
     "watch": "^0.16.0",
     "webpack": "^1.8.11"
   },
   "dependencies": {
-    "angular2": "^2.0.0-alpha.21",
+    "angular2": "^2.0.0-alpha.22",
     "express": "^4.12.3",
     "keymirror": "^0.1.1",
-    "rtts_assert": "^2.0.0-alpha.21",
+    "reflect-metadata": "^0.1.0",
+    "rtts_assert": "^2.0.0-alpha.22",
     "rx": "^2.5.2"
   }
 }

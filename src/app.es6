@@ -1,11 +1,10 @@
 import 'babel-core/polyfill';
+import 'reflect-metadata';
 
 import { Component, View, bootstrap } from 'angular2/angular2';
 import { bind } from 'angular2/di';
 import { PipeRegistry } from 'angular2/change_detection';
-import { Router } from 'angular2/router';
-import { RootRouter } from 'angular2/src/router/router';
-import { Pipeline } from 'angular2/src/router/pipeline';
+import { routerInjectables } from 'angular2/router';
 
 import { pipes } from './pipes';
 import { Modal } from './modal';
@@ -77,7 +76,7 @@ class AccbookApp {
 }
 
 bootstrap(AccbookApp, [
-  bind(Router).toValue(new RootRouter(new Pipeline())),
+  routerInjectables,
   bind(PipeRegistry).toValue(new PipeRegistry(pipes)),
   Modal,
   Model,
