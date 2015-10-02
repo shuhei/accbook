@@ -2,38 +2,29 @@
 'use strict';
 
 var path = require('path');
-
-var babelOptions = {
-  optional: [
-    'es7.decorators',
-    'es7.asyncFunctions'
-  ],
-  plugins: [
-    './transformers/delete-es-module',
-    './transformers/disable-define',
-    'angular2-annotations',
-    'type-assertion'
-  ]
-};
+var webpack = require('webpack');
 
 module.exports = {
-  entry: './src/app.es6',
+  devtool: 'eval',
+  entry: [
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/only-dev-server',
+    './src/index'
+  ],
   output: {
-    path: path.join(__dirname, 'public'),
-    filename: 'app.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.js',
+    publicPath: '/static/'
   },
-  resolve: {
-    alias: {
-      'angular2': 'angular2/es6/dev',
-      'rtts_assert': 'rtts_assert/es6'
-    },
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.es6']
-  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
   module: {
     loaders: [
       {
-        test: /\.es6$/,
-        loader: 'babel?' + JSON.stringify(babelOptions)
+        test: /\.js$/,
+        loaders: ['react-hot', 'babel'],
+        include: path.join(__dirname, 'src')
       }
     ]
   }
