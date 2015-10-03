@@ -1,8 +1,13 @@
 import { combineReducers } from 'redux';
-import { TOGGLE_MENU, NEW_ITEM, EDIT_ITEM, SAVE_ITEM, DELETE_ITEM, CLOSE_FORM } from './actions';
 
-function menuOpen(state = false, action) {
-  switch (action.type) {
+import {
+  TOGGLE_MENU,
+  FETCH_ITEMS, NEW_ITEM, EDIT_ITEM, SAVE_ITEM, DELETE_ITEM,
+  CLOSE_FORM
+} from './actions';
+
+function menuOpen(state = false, { type }) {
+  switch (type) {
     case TOGGLE_MENU:
       return !state;
     default:
@@ -10,8 +15,8 @@ function menuOpen(state = false, action) {
   }
 }
 
-function form(state = { open: false, item: null }, action) {
-  switch (action.type) {
+function form(state = { open: false, item: null }, { type, payload }) {
+  switch (type) {
     case NEW_ITEM: {
       const item = {
         isChecked: false,
@@ -23,11 +28,11 @@ function form(state = { open: false, item: null }, action) {
     }
     case EDIT_ITEM: {
       const item = {
-        uid: action.item.uid,
-        isChecked: action.item.amount > 0,
-        amount: Math.abs(action.item.amount),
-        label: action.item.label,
-        date: action.item.date
+        uid: payload.uid,
+        isChecked: payload.amount > 0,
+        amount: Math.abs(payload.amount),
+        label: payload.label,
+        date: payload.date
       };
       return { open: true, item };
     }
@@ -40,9 +45,12 @@ function form(state = { open: false, item: null }, action) {
   }
 }
 
-let currentUid = 0;
+function generateUid() {
+  return Math.abs(Math.random() * 100000000).toString();
+}
+
 function createItem(items, item) {
-  return items.concat(Object.assign({}, item, { uid: ++currentUid }));
+  return items.concat({ ...item, uid: generateUid() });
 }
 
 function updateItem(items, item) {
@@ -57,22 +65,26 @@ function validateItem(item) {
   };
 }
 
-const items = [
-  { amount: 1000, label: 'hello', date: new Date() },
-  { amount: -2300, label: 'minus', date: new Date() }
-].reduce(createItem, []);
-
-function budgetItems(state = items, action) {
-  switch (action.type) {
-    case SAVE_ITEM:
-      const item = validateItem(action.item);
+function budgetItems(state = [], { type, payload, error }) {
+  switch (type) {
+    case FETCH_ITEMS: {
+      if (error) {
+        console.error('Failed to fetch items', payload);
+        return state;
+      } else {
+        return payload.reduce(createItem, state);
+      }
+    }
+    case SAVE_ITEM: {
+      const item = validateItem(payload);
       if (item.uid) {
         return updateItem(state, item);
       } else {
         return createItem(state, item);
       }
+    }
     case DELETE_ITEM:
-      return state.filter((item) => item.uid !== action.item.uid);
+      return state.filter((item) => item.uid !== payload.uid);
     default:
       return state;
   }

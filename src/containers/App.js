@@ -3,12 +3,20 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
 
-import { toggleMenu, newItem, editItem, deleteItem, saveItem, closeForm } from '../actions';
+import {
+  toggleMenu,
+  fetchItemsIfNeeded, newItem, editItem, deleteItem, saveItem,
+  closeForm
+} from '../actions';
 import Wrapper from '../components/Wrapper';
 import BudgetItemList from '../components/BudgetItemList';
 import BudgetForm from '../components/BudgetForm';
 
 class App extends Component {
+  componentWillMount() {
+    this.props.dispatch(fetchItemsIfNeeded());
+  }
+
   render() {
     const { dispatch, budgetItems, menuOpen, form } = this.props;
     return (

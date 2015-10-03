@@ -1,30 +1,48 @@
-export const TOGGLE_MENU = 'TOGGLE_MENU';
+import { createAction } from 'redux-actions';
+
+import {
+  login as loginApi,
+  fetchItems as fetchItemsApi
+} from './webapi';
+
+// Constants
+export const LOGIN = 'LOGIN';
+
 export const NEW_ITEM = 'NEW_ITEM';
 export const EDIT_ITEM = 'EDIT_ITEM';
 export const SAVE_ITEM = 'SAVE_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
+export const FETCH_ITEMS = 'FETCH_ITEMS';
+
 export const CLOSE_FORM = 'CLOSE_FORM';
+export const TOGGLE_MENU = 'TOGGLE_MENU';
 
-export function newItem() {
-  return { type: NEW_ITEM };
+// Action creators
+export const login = createAction(LOGIN, loginApi);
+
+export const newItem = createAction(NEW_ITEM);
+export const editItem = createAction(EDIT_ITEM);
+export const deleteItem = createAction(DELETE_ITEM);
+export const saveItem = createAction(SAVE_ITEM);
+
+const fetchItems = createAction(FETCH_ITEMS, fetchItemsApi);
+
+function shouldFetchItems({ budgetItems }) {
+  // TODO: Take care of loading state.
+  if (budgetItems.length > 0) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
-export function editItem(item) {
-  return { type: EDIT_ITEM, item };
+export function fetchItemsIfNeeded() {
+  return (dispatch, getState) => {
+    if (shouldFetchItems(getState())) {
+      return dispatch(fetchItems());
+    }
+  };
 }
 
-export function deleteItem(item) {
-  return { type: DELETE_ITEM, item };
-}
-
-export function saveItem(item) {
-  return { type: SAVE_ITEM, item };
-}
-
-export function closeForm() {
-  return { type: CLOSE_FORM };
-}
-
-export function toggleMenu() {
-  return { type: TOGGLE_MENU };
-}
+export const closeForm = createAction(CLOSE_FORM);
+export const toggleMenu = createAction(TOGGLE_MENU);
