@@ -20,8 +20,8 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      PARSE_APP_ID: `'${process.env.PARSE_APP_ID}'`,
-      PARSE_JS_API_KEY: `'${process.env.PARSE_JS_API_KEY}'`
+      PARSE_APP_ID: JSON.stringify(process.env.PARSE_APP_ID),
+      PARSE_JS_API_KEY: JSON.stringify(process.env.PARSE_JS_API_KEY)
     }),
     new webpack.HotModuleReplacementPlugin()
   ],

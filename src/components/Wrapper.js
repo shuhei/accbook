@@ -14,9 +14,10 @@ const MenuLink = ({ toggleMenu, menuOpen }) => {
 const MenuBar = ({ logout }) => (
   <div className="menu-bar">
     <ul className="menu-bar__list">
-      <li>Budget 1</li>
-      <li>Budget 2</li>
-      <li onClick={logout}>Log out</li>
+      <li className="menu-bar__item">accbook</li>
+    </ul>
+    <ul className="menu-bar__list">
+      <li className="menu-bar__item" onClick={logout}>Log out</li>
     </ul>
   </div>
 );
