@@ -6,6 +6,7 @@ import promise from 'redux-promise';
 import { Provider } from 'react-redux';
 import Parse from 'parse';
 
+import './css/index.css';
 import reducers from './reducers';
 import App from './containers/App';
 

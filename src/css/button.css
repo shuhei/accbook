@@ -1,0 +1,28 @@
+/* button */
+.button {
+  display: inline-block;
+  border: none;
+  padding: 0.5em 1em;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* button styles */
+.button--danger {
+  color: #fff;
+  background-color: rgb(202, 60, 60);
+}
+
+.button--block {
+  display: block;
+  margin: 0.5em 0;
+}
+
+/* button sizes */
+.button--xsmall {
+  font-size: 70%;
+}
+
+.button--small {
+  font-size: 85%;
+}
