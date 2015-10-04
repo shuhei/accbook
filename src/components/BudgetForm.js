@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
 
-function invalidClassName(name, validation) {
+function invalidClassName(name, errors) {
   return classnames({
-    invalid: !validation[name]
+    invalid: errors[name] && errors[name].length > 0
   });
 }
 
@@ -26,43 +26,46 @@ function formatDate(date) {
 export default class BudgetForm extends Component {
   handleSave() {
     const { item, save } = this.props;
+
     const isIncome = findDOMNode(this.refs.isIncome).checked;
     const label = findDOMNode(this.refs.label).value.trim();
     const dateString = findDOMNode(this.refs.date).value;
+    const amountString = findDOMNode(this.refs.amount).value.trim();
+
     const date = dateString ? new Date(dateString) : null;
-    const amount = findDOMNode(this.refs.amount).value.trim();
-    // TODO: isIncome + amount -> amount
-    save({ uid: item.uid, isIncome, label, date, amount });
+    const amount = parseInt(amountString || '0', 10) * (isIncome ? 1 : -1);
+
+    save({ ...item, label, amount, date });
   }
 
   render() {
-    const { item, cancel } = this.props;
-    // TODO: Errors?
-    const validation = {
-      label: true,
-      amount: true,
-      date: true
+    const { item, errors, cancel } = this.props;
+    const defaultItem = {
+      ...item,
+      isIncome: item.amount > 0,
+      amount: Math.abs(item.amount),
+      date: formatDate(item.date)
     };
     return (
       <form>
         <p>
           <label>
-            <input type="checkbox" ref="isIncome" defaultChecked={item.isChecked} /> Income
+            <input type="checkbox" ref="isIncome" defaultChecked={defaultItem.isIncome} /> Income
           </label>
         </p>
         <p>
-          <label className={invalidClassName('label', validation)}>
-            Label <input type="text" ref="label" defaultValue={item.label} />
+          <label className={invalidClassName('label', errors)}>
+            Label <input type="text" ref="label" defaultValue={defaultItem.label} />
           </label>
         </p>
         <p>
-          <label className={invalidClassName('amount', validation)}>
-            Amount <input type="number" ref="amount" defaultValue={item.amount} />
+          <label className={invalidClassName('amount', errors)}>
+            Amount <input type="number" ref="amount" defaultValue={defaultItem.amount} />
           </label>
         </p>
         <p>
-          <label className={invalidClassName('date', validation)}>
-            Date <input type="date" ref="date" defaultValue={formatDate(item.date)} />
+          <label className={invalidClassName('date', errors)}>
+            Date <input type="date" ref="date" defaultValue={defaultItem.date} />
           </label>
         </p>
         <p>

@@ -17,7 +17,7 @@ export default function BudgetItem({ item, subtotal, editItem, deleteItem }) {
     'budget-item--deficit': subtotal < 0
   });
   return (
-    <div key={item.uid} className={className}>
+    <div className={className}>
       <div className="grid-1-6 budget-item__date">{formatDate(item.date)}</div>
       <div className="grid-1-6 budget-item__amount">{item.amount}</div>
       <div className="grid-1-6 budget-item__total">{subtotal}</div>

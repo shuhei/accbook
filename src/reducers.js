@@ -1,10 +1,34 @@
 import { combineReducers } from 'redux';
 
 import {
+  LOGIN, LOGOUT, CURRENT_USER,
   TOGGLE_MENU,
   FETCH_ITEMS, NEW_ITEM, EDIT_ITEM, SAVE_ITEM, DELETE_ITEM,
   CLOSE_FORM
 } from './actions';
+
+function user(state = null, { type, payload, error }) {
+  switch (type) {
+    case LOGIN:
+      if (error) {
+        console.log(error);
+        return null;
+      } else {
+        return payload;
+      }
+    case LOGOUT:
+      return null;
+    case CURRENT_USER:
+      if (error) {
+        console.log(error);
+        return null;
+      } else {
+        return payload;
+      }
+    default:
+      return state;
+  }
+}
 
 function menuOpen(state = false, { type }) {
   switch (type) {
@@ -15,54 +39,30 @@ function menuOpen(state = false, { type }) {
   }
 }
 
-function form(state = { open: false, item: null }, { type, payload }) {
+function form(state = { item: null, errors: {} }, { type, payload, error }) {
   switch (type) {
     case NEW_ITEM: {
       const item = {
-        isChecked: false,
         amount: 0,
         label: '',
         date: new Date()
       };
-      return { open: true, item };
+      return { ...state, item };
     }
     case EDIT_ITEM: {
-      const item = {
-        uid: payload.uid,
-        isChecked: payload.amount > 0,
-        amount: Math.abs(payload.amount),
-        label: payload.label,
-        date: payload.date
-      };
-      return { open: true, item };
+      return { ...state, item: payload };
     }
     case SAVE_ITEM:
-      return { open: false, item: null };
+      if (error) {
+        return state;
+      } else {
+        return { ...state, item: null };
+      }
     case CLOSE_FORM:
-      return { open: false, item: null };
+      return { ...state, item: null };
     default:
       return state;
   }
-}
-
-function generateUid() {
-  return Math.abs(Math.random() * 100000000).toString();
-}
-
-function createItem(items, item) {
-  return items.concat({ ...item, uid: generateUid() });
-}
-
-function updateItem(items, item) {
-  return items.map((x) => x.uid === item.uid ? item : x);
-}
-
-function validateItem(item) {
-  const { uid, isIncome, amount, label, date } = item;
-  const parsed = parseInt(amount || '0', 10) * (isIncome ? 1 : -1);
-  return {
-    uid, label, date, amount: parsed
-  };
 }
 
 function budgetItems(state = [], { type, payload, error }) {
@@ -72,25 +72,30 @@ function budgetItems(state = [], { type, payload, error }) {
         console.error('Failed to fetch items', payload);
         return state;
       } else {
-        return payload.reduce(createItem, state);
+        return state.concat(payload)
       }
     }
     case SAVE_ITEM: {
-      const item = validateItem(payload);
-      if (item.uid) {
-        return updateItem(state, item);
+      if (error) {
+        console.error('Failed to save item', payload);
+        return state;
       } else {
-        return createItem(state, item);
+        if (state.filter((item) => item.id === payload.id).length > 0) {
+          return state.map((item) => item.id === payload.id ? payload : item);
+        } else {
+          return state.concat([payload]);
+        }
       }
     }
     case DELETE_ITEM:
-      return state.filter((item) => item.uid !== payload.uid);
+      return state.filter((item) => item.id !== payload.id);
     default:
       return state;
   }
 }
 
 const reducers = combineReducers({
+  user,
   budgetItems,
   menuOpen,
   form

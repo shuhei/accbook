@@ -3,6 +3,8 @@
 
 var path = require('path');
 var webpack = require('webpack');
+var dotenv = require('dotenv');
+dotenv.load();
 
 module.exports = {
   devtool: 'eval',
@@ -17,6 +19,10 @@ module.exports = {
     publicPath: '/static/'
   },
   plugins: [
+    new webpack.DefinePlugin({
+      PARSE_APP_ID: `'${process.env.PARSE_APP_ID}'`,
+      PARSE_JS_API_KEY: `'${process.env.PARSE_JS_API_KEY}'`
+    }),
     new webpack.HotModuleReplacementPlugin()
   ],
   module: {

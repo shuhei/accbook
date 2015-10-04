@@ -28,7 +28,7 @@ export default class BudgetItemList extends Component {
           <button className="button button--small" onClick={newItem}>New</button>
         </p>
         <div className="budget-item-list">
-          {items.map((item, i) => <BudgetItem key={item.uid} item={item} subtotal={this.totalUntil(i, items)} editItem={editItem} deleteItem={deleteItem} />)}
+          {items.map((item, i) => <BudgetItem key={item.id} item={item} subtotal={this.totalUntil(i, items)} editItem={editItem} deleteItem={deleteItem} />)}
         </div>
         <div className="grid-row budget-total">
           <div className="grid-1-6">Total</div>
