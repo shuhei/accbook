@@ -12,6 +12,10 @@
   },
   "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
   "license": "ISC",
+  "engines": {
+    "node": "4.x.x",
+    "npm": "3.x.x"
+  },
   "devDependencies": {
     "babel-core": "^5.8.25",
     "babel-eslint": "^4.1.3",
@@ -32,7 +36,7 @@
     "parse": "^1.6.4",
     "react": "^0.14.0-rc1",
     "react-dom": "^0.14.0-rc1",
-    "react-modal": "github:rogeliog/react-modal#react-14",
+    "react-modal": "github:shuhei/react-modal#react-14",
     "react-redux": "^3.0.1",
     "react-router": "^1.0.0-rc1",
     "redux": "^3.0.2",
