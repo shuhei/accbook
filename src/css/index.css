@@ -214,6 +214,24 @@ body {
   font-weight: bold;
 }
 
+/* login form */
+.login-form {
+  margin: 3rem auto;
+  width: 25rem;
+}
+
+.login-form button {
+  font-size: 20px;
+}
+
+.login-form input {
+  display: block;
+  font-size: 32px;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  width: 100%;
+}
+
 /* form */
 .invalid input {
   border: 1px solid rgb(202, 60, 60);

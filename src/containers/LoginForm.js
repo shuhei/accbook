@@ -23,14 +23,12 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <form className="pure-form">
-        <fieldset>
-          <legend>Log in</legend>
-          <input type="text" ref="username" />
-          <input type="password" ref="password" />
-          <button onClick={this.handleLogin.bind(this)}>Log in</button>
-          <button onClick={this.handleSignup.bind(this)}>Sign up</button>
-        </fieldset>
+      <form className="form login-form">
+        <h1>accbook</h1>
+        <input type="text" placeholder="Username" ref="username" />
+        <input type="password" placeholder="Password" ref="password" />
+        <button className="button" onClick={this.handleSignup.bind(this)}>Sign up</button>
+        <button className="button" onClick={this.handleLogin.bind(this)}>Log in</button>
       </form>
     );
   }
