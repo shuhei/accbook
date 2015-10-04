@@ -27,8 +27,8 @@ class LoginForm extends Component {
         <h1>accbook</h1>
         <input type="text" placeholder="Username" ref="username" />
         <input type="password" placeholder="Password" ref="password" />
-        <button className="button" onClick={this.handleSignup.bind(this)}>Sign up</button>
-        <button className="button" onClick={this.handleLogin.bind(this)}>Log in</button>
+        <button className="button button--secondary" onClick={this.handleSignup.bind(this)}>Sign up</button>
+        <button className="button button--primary" onClick={this.handleLogin.bind(this)}>Log in</button>
       </form>
     );
   }

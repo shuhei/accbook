@@ -2,12 +2,21 @@
 .button {
   display: inline-block;
   border: none;
-  padding: 0.5em 1em;
+  padding: 0.5rem 1rem;
+  margin-right: 0.4rem;
   user-select: none;
   cursor: pointer;
 }
 
+.button:hover {
+}
+
 /* button styles */
+.button--primary {
+  color: #fff;
+  background-color: rgb(30, 60, 202);
+}
+
 .button--danger {
   color: #fff;
   background-color: rgb(202, 60, 60);
@@ -15,7 +24,7 @@
 
 .button--block {
   display: block;
-  margin: 0.5em 0;
+  margin: 0.5rem 0;
 }
 
 /* button sizes */

@@ -14,9 +14,8 @@ module.exports = {
     './src/index'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'app.js',
-    publicPath: '/static/'
+    path: path.join(__dirname, 'public'),
+    filename: 'bundle.js'
   },
   plugins: [
     new webpack.DefinePlugin({

@@ -24,6 +24,11 @@ function formatDate(date) {
 }
 
 export default class BudgetForm extends Component {
+  setToday() {
+    const field = findDOMNode(this.refs.date);
+    field.value = formatDate(new Date());
+  }
+
   handleSave() {
     const { item, save } = this.props;
 
@@ -70,7 +75,8 @@ export default class BudgetForm extends Component {
         </p>
         <p>
           <button className="button button--small" type="button" onClick={cancel}>Cancel</button>
-          <button className="button button--small" type="button" onClick={this.handleSave.bind(this)}>Save</button>
+          <button className="button button--small" type="button" onClick={this.setToday.bind(this)}>Today</button>
+          <button className="button button--small button--primary" type="button" onClick={this.handleSave.bind(this)}>Save</button>
         </p>
       </form>
     );

@@ -1,16 +1,17 @@
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
+import express from 'express';
+import serveStatic from 'serve-static';
 
-new WebpackDevServer(webpack(config), {
-  publicPath: config.output.publicPath,
-  hot: true,
-  historyApiFallback: true
-}).listen(3000, 'localhost', function (err, result) {
+const PORT = process.env.PORT || 3000;
+const app = express();
+
+app.use(serveStatic('public'));
+
+const server = app.listen(PORT, '0.0.0.0', (err) => {
   if (err) {
-    console.log(err);
+    console.error(err);
     return;
   }
 
-  console.log('Listening at localhost:3000');
+  const { address, port } = server.address();
+  console.log('Listening at %s:%s', address, port);
 });
