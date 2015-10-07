@@ -7,7 +7,7 @@
     "start": "node -r ./node_modules/babel-core/register server.js",
     "dev": "node dev-server.js",
     "build": "webpack -p --config webpack.prod.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --compilers js:babel-core/register",
     "postinstall": "npm run build"
   },
   "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
@@ -24,6 +24,7 @@
     "dotenv": "^1.2.0",
     "eslint-plugin-react": "^3.5.1",
     "file-loader": "^0.8.4",
+    "mocha": "^2.3.3",
     "react-hot-loader": "^1.3.0",
     "redux-devtools": "^2.1.5",
     "style-loader": "^0.12.4",

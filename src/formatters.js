@@ -8,7 +8,7 @@ export function formatDate(date) {
 }
 
 export function formatNumber(num) {
-  if (!num) {
+  if (typeof num !== 'number') {
     return num;
   }
   const isMinus = num < 0;
