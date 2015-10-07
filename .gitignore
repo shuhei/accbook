@@ -1,4 +1,9 @@
 node_modules
 public/bundle.js
+public/*.eot
+public/*.woff2
+public/*.svg
+public/*.ttf
+public/*.woff
 npm-debug.log
 .env*
