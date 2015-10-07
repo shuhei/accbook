@@ -11,7 +11,7 @@ function user(state = null, { type, payload, error }) {
   switch (type) {
     case LOGIN:
       if (error) {
-        console.log(error);
+        console.error('Failed to login', payload);
         return null;
       } else {
         return payload;
@@ -20,7 +20,7 @@ function user(state = null, { type, payload, error }) {
       return null;
     case CURRENT_USER:
       if (error) {
-        console.log(error);
+        console.log('Failed to get current user', payload);
         return null;
       } else {
         return payload;
