@@ -7,6 +7,10 @@ body {
   font-size: 16px;
 }
 
+.text-right {
+  text-align: right;
+}
+
 /* -- layout -- */
 body {
   padding: 0;
@@ -15,13 +19,8 @@ body {
 
 .main {
   position: relative;
-  padding: 2em;
+  padding: 0;
   left: 0;
-  transition: margin-left 0.5s;
-}
-
-.wrapper--open .main {
-  margin-left: 160px;
 }
 
 .menu-bar {
@@ -32,6 +31,7 @@ body {
   bottom: 0;
   left: -160px;
   transition: left 0.5s;
+  z-index: 100;
 }
 
 .wrapper--open .menu-bar {
@@ -42,6 +42,7 @@ body {
 .grid-row {
   display: flex;
   flex-flow: row wrap;
+  padding: 0.3rem 0;
 }
 
 .grid-1-2,
@@ -109,7 +110,7 @@ body {
   top: 5px;
   transition: all 0.5s;
   width: 20px;
-  z-index: 10;
+  z-index: 1;
 }
 
 .wrapper--open .menu-link {
@@ -169,8 +170,24 @@ body {
   transform: rotate(-45deg);
 }
 
+/* budget list */
+.budget-header h1 {
+  font-size: 1.6rem;
+  margin: 0;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.budget-header__buttons {
+  position: absolute;
+  top: 1.5rem;
+  right: 0.8rem;
+  text-align: right;
+}
+
 /* budget item */
 .budget-item {
+  line-height: 2em;
   padding: 0.4em 0.8em;
 }
 
@@ -232,7 +249,27 @@ body {
   width: 100%;
 }
 
+/* budget item form */
+.budget-item-form input {
+  font-size: 1rem;
+  padding: 0.1rem 0.2rem;
+}
+
 /* form */
 .invalid input {
   border: 1px solid rgb(202, 60, 60);
+}
+
+@media screen and (min-width: 480px) {
+  .menu-bar {
+    left: 0;
+  }
+
+  .main {
+    margin-left: 160px;
+  }
+
+  .menu-link {
+    display: none;
+  }
 }

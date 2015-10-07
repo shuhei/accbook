@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
+
+import { budgetItemProps, errorProps } from '../props';
 
 function invalidClassName(name, errors) {
   return classnames({
@@ -52,33 +54,59 @@ export default class BudgetForm extends Component {
       date: formatDate(item.date)
     };
     return (
-      <form>
-        <p>
-          <label>
-            <input type="checkbox" ref="isIncome" defaultChecked={defaultItem.isIncome} /> Income
-          </label>
-        </p>
-        <p>
-          <label className={invalidClassName('label', errors)}>
-            Label <input type="text" ref="label" defaultValue={defaultItem.label} />
-          </label>
-        </p>
-        <p>
-          <label className={invalidClassName('amount', errors)}>
-            Amount <input type="number" ref="amount" defaultValue={defaultItem.amount} />
-          </label>
-        </p>
-        <p>
-          <label className={invalidClassName('date', errors)}>
-            Date <input type="date" ref="date" defaultValue={defaultItem.date} />
-          </label>
-        </p>
-        <p>
-          <button className="button button--small" type="button" onClick={cancel}>Cancel</button>
-          <button className="button button--small" type="button" onClick={this.setToday.bind(this)}>Today</button>
-          <button className="button button--small button--primary" type="button" onClick={this.handleSave.bind(this)}>Save</button>
-        </p>
+      <form className="budget-item-form">
+        <div className="grid-row">
+          <div className="grid-1-4"></div>
+          <div className="grid-3-4">
+            <label>
+              <input type="checkbox" ref="isIncome" defaultChecked={defaultItem.isIncome} /> Income
+            </label>
+          </div>
+        </div>
+        <div className="grid-row">
+          <div className="grid-1-4">
+            <label className={invalidClassName('label', errors)}>Label</label>
+          </div>
+          <div className="grid-3-4">
+            <input type="text" ref="label" defaultValue={defaultItem.label} />
+          </div>
+        </div>
+        <div className="grid-row">
+          <div className="grid-1-4">
+            <label className={invalidClassName('amount', errors)}>Amount</label>
+          </div>
+          <div className="grid-3-4">
+            <input type="number" ref="amount" defaultValue={defaultItem.amount} />
+          </div>
+        </div>
+        <div className="grid-row">
+          <div className="grid-1-4">
+            <label className={invalidClassName('date', errors)}>Date</label>
+          </div>
+          <div className="grid-3-4">
+            <input type="date" ref="date" defaultValue={defaultItem.date} />
+          </div>
+        </div>
+        <div className="grid-row">
+          <div className="grid-1-4"></div>
+          <div className="grid-3-4">
+            <button className="button button--small" type="button" onClick={cancel}>Cancel</button>
+            <button className="button button--small" type="button" onClick={this.setToday.bind(this)}>Today</button>
+            <button className="button button--small button--primary" type="button" onClick={this.handleSave.bind(this)}>Save</button>
+          </div>
+        </div>
       </form>
     );
   }
 }
+
+BudgetForm.propTypes = {
+  item: budgetItemProps,
+  errors: PropTypes.shape({
+    label: errorProps,
+    amount: errorProps,
+    date: errorProps
+  }).isRequired,
+  save: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired
+};

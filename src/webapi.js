@@ -53,6 +53,12 @@ function extractAttributes(parseObject) {
 }
 
 export function fetchItems() {
+  // return Promise.resolve([
+    // { id: '1', label: 'hello', amount: 3333, date: new Date() },
+    // { id: '2', label: 'hello', amount: 3333, date: new Date() },
+    // { id: '3', label: 'hello', amount: 3333, date: new Date() },
+    // { id: '4', label: 'hello', amount: 3333, date: new Date() }
+  // ]);
   return new Promise((resolve, reject) => {
     const query = new Query(BudgetItem);
     query.equalTo('user', User.current());

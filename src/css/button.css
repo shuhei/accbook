@@ -1,14 +1,21 @@
 /* button */
+
+button:focus {
+  outline: 0;
+}
+
 .button {
   display: inline-block;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.8rem;
   margin-right: 0.4rem;
   user-select: none;
   cursor: pointer;
+  transition: opacity 0.5s;
 }
 
 .button:hover {
+  opacity: 0.5;
 }
 
 /* button styles */

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
 const MenuLink = ({ toggleMenu, menuOpen }) => {
@@ -9,6 +9,11 @@ const MenuLink = ({ toggleMenu, menuOpen }) => {
       <span></span>
     </div>
   );
+};
+
+MenuLink.propTypes = {
+  menuOpen: PropTypes.bool.isRequired,
+  toggleMenu: PropTypes.func.isRequired
 };
 
 const MenuBar = ({ logout }) => (
@@ -22,7 +27,11 @@ const MenuBar = ({ logout }) => (
   </div>
 );
 
-export default function Wrapper({ children, logout, menuOpen, toggleMenu }) {
+MenuBar.propTypes = {
+  logout: PropTypes.func.isRequired
+};
+
+export default function Wrapper({ children, menuOpen, toggleMenu, logout }) {
   const className = classnames('wrapper', {
     'wrapper--open': menuOpen
   });
@@ -32,9 +41,14 @@ export default function Wrapper({ children, logout, menuOpen, toggleMenu }) {
       <MenuBar logout={logout} />
 
       <div className="main">
-        <h1>Accbook</h1>
         {children}
       </div>
     </div>
   );
 }
+
+Wrapper.propTypes = {
+  menuOpen: PropTypes.bool.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired
+};

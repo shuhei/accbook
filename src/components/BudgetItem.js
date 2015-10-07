@@ -1,14 +1,8 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
-const formatDate = (date) => {
-  if (!date) {
-    return '';
-  }
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${month}/${day}`;
-};
+import { budgetItemProps } from '../props';
+import { formatDate, formatNumber } from '../formatters';
 
 export default function BudgetItem({ item, subtotal, editItem, deleteItem }) {
   const className = classnames('grid-row', 'budget-item', {
@@ -19,17 +13,24 @@ export default function BudgetItem({ item, subtotal, editItem, deleteItem }) {
   return (
     <div className={className}>
       <div className="grid-1-6 budget-item__date">{formatDate(item.date)}</div>
-      <div className="grid-1-6 budget-item__amount">{item.amount}</div>
-      <div className="grid-1-6 budget-item__total">{subtotal}</div>
-      <div className="grid-1-4">{item.label}</div>
+      <div className="grid-1-6 budget-item__amount">{formatNumber(item.amount)}</div>
+      <div className="grid-1-6 budget-item__total">{formatNumber(subtotal)}</div>
+      <div className="grid-1-4 budget-item__label">{item.label}</div>
       <div className="grid-1-4 budget-item__tools">
         <button className="button button--small" onClick={() => editItem(item)}>
-          <i className="fa fa-pencil">Edit</i>
+          <i className="fa fa-pencil" />
         </button>
         <button className="button button--danger button--small" onClick={() => deleteItem(item)}>
-          <i className="fa fa-remove">Delete</i>
+          <i className="fa fa-remove" />
         </button>
       </div>
     </div>
   );
 }
+
+BudgetItem.propTypes = {
+  item: budgetItemProps.isRequired,
+  subtotal: PropTypes.number.isRequired,
+  editItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired
+};
