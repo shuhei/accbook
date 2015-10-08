@@ -11,6 +11,8 @@ import './css/index.css';
 import reducers from './reducers';
 import App from './containers/App';
 
+Parse.initialize(PARSE_APP_ID, PARSE_JS_API_KEY);
+
 const createStoreWithMiddleware = applyMiddleware(thunk, promise)(createStore);
 const store = createStoreWithMiddleware(reducers);
 

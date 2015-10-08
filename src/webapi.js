@@ -1,7 +1,5 @@
 import Parse, { User, Query } from 'parse';
 
-Parse.initialize(PARSE_APP_ID, PARSE_JS_API_KEY);
-
 const BudgetItem = Parse.Object.extend('BudgetItem');
 
 export function currentUser() {

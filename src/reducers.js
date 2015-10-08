@@ -7,7 +7,7 @@ import {
   CLOSE_FORM
 } from './actions';
 
-function user(state = null, { type, payload, error }) {
+export function user(state = null, { type, payload, error }) {
   switch (type) {
     case LOGIN:
       if (error) {
@@ -30,7 +30,7 @@ function user(state = null, { type, payload, error }) {
   }
 }
 
-function menuOpen(state = false, { type }) {
+export function menuOpen(state = false, { type }) {
   switch (type) {
     case TOGGLE_MENU:
       return !state;
@@ -39,7 +39,7 @@ function menuOpen(state = false, { type }) {
   }
 }
 
-function form(state = { item: null, errors: {} }, { type, payload, error }) {
+export function form(state = { item: null, errors: {} }, { type, payload, error }) {
   switch (type) {
     case NEW_ITEM: {
       const item = {
@@ -65,10 +65,11 @@ function form(state = { item: null, errors: {} }, { type, payload, error }) {
   }
 }
 
-function budgetItems(state = [], { type, payload, error }) {
+export function budgetItems(state = [], { type, payload, error }) {
   switch (type) {
     case FETCH_ITEMS: {
       if (error) {
+        // TODO: Set error.
         console.error('Failed to fetch items', payload);
         return state;
       } else {
@@ -77,6 +78,7 @@ function budgetItems(state = [], { type, payload, error }) {
     }
     case SAVE_ITEM: {
       if (error) {
+        // TODO: Set error.
         console.error('Failed to save item', payload);
         return state;
       } else {
