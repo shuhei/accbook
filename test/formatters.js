@@ -1,6 +1,6 @@
 import { strictEqual } from 'assert';
 
-import { formatDate, formatNumber } from '../src/formatters';
+import { formatDate, formatFullDate, formatNumber } from '../src/formatters';
 
 describe('formatDate', () => {
   it('formats date', () => {
@@ -11,6 +11,18 @@ describe('formatDate', () => {
   it('returns empty string for empty value', () => {
     strictEqual(formatDate(null), '');
     strictEqual(formatDate(undefined), '');
+  });
+});
+
+describe('formatFullDate', () => {
+  it('formats date', () => {
+    strictEqual(formatFullDate(new Date(2015, 3 - 1, 4)), '2015-03-04');
+    strictEqual(formatFullDate(new Date(2015, 12 - 1, 31)), '2015-12-31');
+  });
+
+  it('returns empty string for empty value', () => {
+    strictEqual(formatFullDate(null), '');
+    strictEqual(formatFullDate(undefined), '');
   });
 });
 

@@ -7,6 +7,16 @@ export function formatDate(date) {
   return `${month}/${day}`;
 }
 
+export function formatFullDate(date) {
+  if (!(date instanceof Date)) {
+    return '';
+  }
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  return `${pad(y, 4)}-${pad(m, 2)}-${pad(d, 2)}`;
+}
+
 export function formatNumber(num) {
   if (typeof num !== 'number') {
     return num;
@@ -26,4 +36,12 @@ export function formatNumber(num) {
     span = 3;
   }
   return (isMinus ? '-' : '') + parts.join(',');
+}
+
+function pad(num, size = 2) {
+  let s = num.toString();
+  if (s.length < size) {
+    s = '0' + s;
+  }
+  return s;
 }

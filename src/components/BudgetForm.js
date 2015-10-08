@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
 
 import { budgetItemProps, errorProps } from '../props';
+import { formatFullDate } from '../formatters';
 
 function invalidClassName(name, errors) {
   return classnames({
@@ -10,25 +11,10 @@ function invalidClassName(name, errors) {
   });
 }
 
-function pad(num, size = 2) {
-  let s = num.toString();
-  if (s.length < size) {
-    s = '0' + s;
-  }
-  return s;
-}
-
-function formatDate(date) {
-  const y = date.getFullYear();
-  const m = date.getMonth() + 1;
-  const d = date.getDate();
-  return `${pad(y, 4)}-${pad(m, 2)}-${pad(d, 2)}`;
-}
-
 export default class BudgetForm extends Component {
   setToday() {
     const field = findDOMNode(this.refs.date);
-    field.value = formatDate(new Date());
+    field.value = formatFullDate(new Date());
   }
 
   handleSave() {
@@ -51,7 +37,7 @@ export default class BudgetForm extends Component {
       ...item,
       isIncome: item.amount > 0,
       amount: Math.abs(item.amount),
-      date: formatDate(item.date)
+      date: formatFullDate(item.date)
     };
     return (
       <form className="budget-item-form">
