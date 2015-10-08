@@ -1,7 +1,14 @@
+@import './button.css';
+@import './ReactModal.css';
+
 /* -- base -- */
 body {
   font-family: sans-serif;
   font-size: 16px;
+}
+
+.text-right {
+  text-align: right;
 }
 
 /* -- layout -- */
@@ -10,28 +17,10 @@ body {
   margin: 0;
 }
 
-menu-link {
-  position: fixed;
-  display: block;
-  transition: left 0.5s;
-  top: 5px;
-  left: 5px;
-  z-index: 10;
-}
-
-.wrapper--open menu-link {
-  left: 165px;
-}
-
 .main {
   position: relative;
-  padding: 2em;
+  padding: 0;
   left: 0;
-  transition: left 0.5s;
-}
-
-.wrapper--open .main {
-  left: 160px;
 }
 
 .menu-bar {
@@ -42,6 +31,7 @@ menu-link {
   bottom: 0;
   left: -160px;
   transition: left 0.5s;
+  z-index: 100;
 }
 
 .wrapper--open .menu-bar {
@@ -52,6 +42,7 @@ menu-link {
 .grid-row {
   display: flex;
   flex-flow: row wrap;
+  padding: 0.3rem 0;
 }
 
 .grid-1-2,
@@ -85,24 +76,46 @@ menu-link {
 }
 
 .menu-bar__list {
+  list-style-type: none;
   padding: 0;
   margin: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.menu-bar__list:last-child {
+  border-bottom: none 0;
+}
+
+.menu-bar__item {
+  cursor: pointer;
+  padding: 0.5rem 0.5rem;
+}
+
+.menu-bar__item:hover {
+  color: #ccc;
+  background-color: #333;
 }
 
 /* menu link */
 .menu-link {
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 0px;
-  font-size: 15px;
-  width: 20px;
-  height: 0px;
-  padding: 20px 10px;
   cursor: pointer;
-  transition: border-radius 0.5s;
+  display: block;
+  font-size: 15px;
+  height: 0px;
+  left: 5px;
+  position: fixed;
+  padding: 20px 10px;
+  top: 5px;
+  transition: all 0.5s;
+  width: 20px;
+  z-index: 1;
 }
 
 .wrapper--open .menu-link {
   border-radius: 20px;
+  left: 165px;
 }
 
 .menu-link:hover,
@@ -157,13 +170,28 @@ menu-link {
   transform: rotate(-45deg);
 }
 
+/* budget list */
+.budget-header h1 {
+  font-size: 1.6rem;
+  margin: 0;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.budget-header__buttons {
+  position: absolute;
+  top: 1.5rem;
+  right: 0.8rem;
+  text-align: right;
+}
+
 /* budget item */
 .budget-item {
+  line-height: 2em;
   padding: 0.4em 0.8em;
 }
 
-/* HACK: Ignore <template> */
-.budget-item:nth-child(2) {
+.budget-item:first-child {
   border-top: 1px solid #ccc;
   padding-top: 0.8em;
 }
@@ -203,65 +231,45 @@ menu-link {
   font-weight: bold;
 }
 
-/* button */
-.button {
-  display: inline-block;
-  border: none;
-  padding: 0.5em 1em;
-  user-select: none;
-  cursor: pointer;
+/* login form */
+.login-form {
+  margin: 3rem auto;
+  width: 25rem;
 }
 
-/* button styles */
-.button--danger {
-  color: #fff;
-  background-color: rgb(202, 60, 60);
+.login-form button {
+  font-size: 20px;
 }
 
-.button--block {
+.login-form input {
   display: block;
-  margin: 0.5em 0;
-}
-
-/* button sizes */
-.button--xsmall {
-  font-size: 70%;
-}
-
-.button--small {
-  font-size: 85%;
-}
-
-/* modal */
-.modal-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
+  font-size: 32px;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.1);
-  cursor: pointer;
 }
 
-.modal-container {
-  position: absolute;
-  z-index: 80;
-
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  width: 300px;
-  height: 300px;
-
-  background-color: #fff;
-  border: 1px solid #000;
-  box-shadow: 0 4px 4px;
-
-  padding: 20px;
+/* budget item form */
+.budget-item-form input {
+  font-size: 1rem;
+  padding: 0.1rem 0.2rem;
 }
 
 /* form */
 .invalid input {
   border: 1px solid rgb(202, 60, 60);
+}
+
+@media screen and (min-width: 480px) {
+  .menu-bar {
+    left: 0;
+  }
+
+  .main {
+    margin-left: 160px;
+  }
+
+  .menu-link {
+    display: none;
+  }
 }

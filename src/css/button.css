@@ -1,0 +1,44 @@
+/* button */
+
+button:focus {
+  outline: 0;
+}
+
+.button {
+  display: inline-block;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  margin-right: 0.4rem;
+  user-select: none;
+  cursor: pointer;
+  transition: opacity 0.5s;
+}
+
+.button:hover {
+  opacity: 0.5;
+}
+
+/* button styles */
+.button--primary {
+  color: #fff;
+  background-color: rgb(30, 60, 202);
+}
+
+.button--danger {
+  color: #fff;
+  background-color: rgb(202, 60, 60);
+}
+
+.button--block {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+/* button sizes */
+.button--xsmall {
+  font-size: 70%;
+}
+
+.button--small {
+  font-size: 85%;
+}

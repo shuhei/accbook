@@ -4,29 +4,49 @@
   "private": true,
   "description": "Budget manager",
   "scripts": {
-    "start": "node index.js",
-    "postinstall": "make patch && make",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node -r ./node_modules/babel-core/register server.js",
+    "dev": "node dev-server.js",
+    "build": "webpack -p --config webpack.prod.config.js",
+    "test": "mocha --compilers js:babel-core/register",
+    "postinstall": "npm run build"
   },
   "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
   "license": "ISC",
+  "engines": {
+    "node": "4.x.x",
+    "npm": "3.x.x"
+  },
   "devDependencies": {
-    "babel-core": "^5.2.17",
-    "babel-eslint": "^3.1.1",
-    "babel-loader": "^5.0.0",
-    "babel-plugin-angular2-annotations": "^1.0.2",
-    "babel-plugin-type-assertion": "^0.1.1",
-    "eslint": "^0.21.0",
-    "parallelshell": "^1.1.1",
-    "watch": "^0.16.0",
-    "webpack": "^1.8.11"
+    "babel-core": "^5.8.25",
+    "babel-eslint": "^4.1.3",
+    "babel-loader": "^5.3.2",
+    "css-loader": "^0.19.0",
+    "dotenv": "^1.2.0",
+    "eslint-plugin-react": "^3.5.1",
+    "file-loader": "^0.8.4",
+    "mocha": "^2.3.3",
+    "react-hot-loader": "^1.3.0",
+    "redux-devtools": "^2.1.5",
+    "style-loader": "^0.12.4",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
-    "angular2": "^2.0.0-alpha.22",
-    "express": "^4.12.3",
-    "keymirror": "^0.1.1",
-    "reflect-metadata": "^0.1.0",
-    "rtts_assert": "^2.0.0-alpha.22",
-    "rx": "^2.5.2"
+    "classnames": "^2.1.5",
+    "exenv": "^1.2.0",
+    "express": "^4.13.3",
+    "font-awesome": "^4.4.0",
+    "parse": "^1.6.4",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-modal": "github:shuhei/react-modal#react-14",
+    "react-redux": "^3.0.1",
+    "react-router": "^1.0.0-rc1",
+    "redux": "^3.0.2",
+    "redux-actions": "^0.8.0",
+    "redux-promise": "^0.5.0",
+    "redux-thunk": "^1.0.0",
+    "serve-static": "^1.10.0"
   }
 }

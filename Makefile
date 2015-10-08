@@ -22,13 +22,9 @@ js:
 copy:
 	mkdir -p public
 	cp assets/* public/
-	cp node_modules/angular2/node_modules/zone.js/zone.js public/
 
 clean:
 	rm -rf public
 
 lint:
 	${NPM_BIN}/eslint **/*.{js,es6}
-
-patch:
-	sed -i '' "s/Rx.hasOwnProperty('default')/\!Rx.hasOwnProperty('Subject')/g" ./node_modules/angular2/es6/dev/src/facade/async.es6
