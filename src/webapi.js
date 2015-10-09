@@ -1,5 +1,6 @@
 import Parse, { User, Query } from 'parse';
 
+const Budget = Parse.Object.extend('Budget');
 const BudgetItem = Parse.Object.extend('BudgetItem');
 
 export function currentUser() {
@@ -50,20 +51,32 @@ function extractAttributes(parseObject) {
   return { ...parseObject.attributes, id: parseObject.id };
 }
 
-export function fetchItems() {
-  // return Promise.resolve([
-    // { id: '1', label: 'hello', amount: 3333, date: new Date() },
-    // { id: '2', label: 'hello', amount: 3333, date: new Date() },
-    // { id: '3', label: 'hello', amount: 3333, date: new Date() },
-    // { id: '4', label: 'hello', amount: 3333, date: new Date() }
-  // ]);
+export function fetchBudgets() {
+  return new Promise((resolve, reject) => {
+    const query = new Query(Budget);
+    query.find({
+      success(fetchedBudgets) {
+        resolve(fetchedBudgets.map(extractAttributes));
+      },
+      error(e) {
+        reject(e);
+      }
+    });
+  });
+}
+
+export function fetchItems(budget) {
   return new Promise((resolve, reject) => {
     const query = new Query(BudgetItem);
-    query.equalTo('user', User.current());
+    // TODO: Any clearner way?
+    query.equalTo('budget', {
+      __type: 'Pointer',
+      className: 'Budget',
+      objectId: budget.id
+    });
     query.find({
       success(fetchedItems) {
-        const items = fetchedItems.map(extractAttributes);
-        resolve(items);
+        resolve(fetchedItems.map(extractAttributes));
       },
       error(e) {
         reject(e);
@@ -75,7 +88,6 @@ export function fetchItems() {
 export function saveItem(item) {
   return new Promise((resolve, reject) => {
     const budgetItem = new BudgetItem({ ...item });
-    budgetItem.set('user', User.current());
     budgetItem.setACL(new Parse.ACL(User.current()));
     budgetItem.save(null, {
       success(saved) {

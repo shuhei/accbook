@@ -6,7 +6,8 @@ import Modal from 'react-modal';
 import {
   toggleMenu,
   logout,
-  fetchItemsIfNeeded, newItem, editItem, deleteItem, saveItem,
+  fetchBudgetsIfNeeded, selectBudgetAndItems,
+  newItem, editItem, deleteItem, saveItem,
   closeForm
 } from '../actions';
 import Wrapper from '../components/Wrapper';
@@ -15,18 +16,21 @@ import BudgetForm from '../components/BudgetForm';
 
 class Main extends Component {
   componentWillMount() {
-    this.props.dispatch(fetchItemsIfNeeded());
+    const { dispatch } = this.props;
+    dispatch(fetchBudgetsIfNeeded());
   }
 
   render() {
     const {
       dispatch,
-      budgetItems, menuOpen, form
+      budgets, budgetItems, menuOpen, form
     } = this.props;
 
     return (
       <Wrapper
+        budgets={budgets}
         menuOpen={menuOpen}
+        selectBudgetAndItems={(budget) => dispatch(selectBudgetAndItems(budget))}
         toggleMenu={() => dispatch(toggleMenu())}
         logout={() => dispatch(logout())}>
         <BudgetItemList

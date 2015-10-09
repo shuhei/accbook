@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import {
   LOGIN, LOGOUT, CURRENT_USER,
   TOGGLE_MENU,
+  FETCH_BUDGETS, SAVE_BUDGET, DELETE_BUDGET, SELECT_BUDGET,
   FETCH_ITEMS, NEW_ITEM, EDIT_ITEM, SAVE_ITEM, DELETE_ITEM,
   CLOSE_FORM
 } from './actions';
@@ -39,6 +40,7 @@ export function menuOpen(state = false, { type }) {
   }
 }
 
+// TODO: loading and error?
 export function form(state = { item: null, errors: {} }, { type, payload, error }) {
   switch (type) {
     case NEW_ITEM: {
@@ -65,6 +67,42 @@ export function form(state = { item: null, errors: {} }, { type, payload, error 
   }
 }
 
+export function selectedBudget(state = null, { type, payload }) {
+  switch (type) {
+    case SELECT_BUDGET:
+      return payload;
+    default:
+      return state;
+  }
+}
+
+// TODO: loading and error?
+export function budgets(state = [], { type, payload, error }) {
+  switch (type) {
+    case FETCH_BUDGETS: {
+      if (error) {
+        console.error('Failed to fetch budgets', payload);
+        return state;
+      } else {
+        return payload;
+      }
+    }
+    case SAVE_BUDGET: {
+      if (error) {
+        console.error('Failed to save budget', payload);
+        return state;
+      } else {
+        return state.concat(payload);
+      }
+    }
+    case DELETE_BUDGET:
+      return state.filter((budget) => budget.id !== payload.id);
+    default:
+      return state;
+  }
+}
+
+// TODO: itemsByBudget? loading and error?
 export function budgetItems(state = [], { type, payload, error }) {
   switch (type) {
     case FETCH_ITEMS: {
@@ -73,7 +111,7 @@ export function budgetItems(state = [], { type, payload, error }) {
         console.error('Failed to fetch items', payload);
         return state;
       } else {
-        return state.concat(payload)
+        return payload;
       }
     }
     case SAVE_ITEM: {
@@ -98,6 +136,8 @@ export function budgetItems(state = [], { type, payload, error }) {
 
 const reducers = combineReducers({
   user,
+  budgets,
+  selectedBudget,
   budgetItems,
   menuOpen,
   form

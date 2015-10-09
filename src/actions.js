@@ -8,6 +8,11 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const CURRENT_USER = 'CURRENT_USER';
 
+export const FETCH_BUDGETS = 'FETCH_BUDGETS';
+export const SAVE_BUDGET = 'SAVE_BUDGET';
+export const DELETE_BUDGET = 'DELETE_BUDGET';
+export const SELECT_BUDGET = 'SELECT_BUDGET';
+
 export const NEW_ITEM = 'NEW_ITEM';
 export const EDIT_ITEM = 'EDIT_ITEM';
 export const SAVE_ITEM = 'SAVE_ITEM';
@@ -28,21 +33,39 @@ export const editItem = createAction(EDIT_ITEM);
 export const deleteItem = createAction(DELETE_ITEM, webapi.deleteItem);
 export const saveItem = createAction(SAVE_ITEM, webapi.saveItem);
 
+const selectBudget = createAction(SELECT_BUDGET);
+
+const fetchBudgets = createAction(FETCH_BUDGETS, webapi.fetchBudgets);
 const fetchItems = createAction(FETCH_ITEMS, webapi.fetchItems);
 
-function shouldFetchItems({ budgetItems }) {
+function shouldFetchBudgets({ budgets }) {
   // TODO: Take care of loading state.
-  if (budgetItems.length > 0) {
-    return false;
-  } else {
-    return true;
-  }
+  return budgets.length === 0;
 }
 
-export function fetchItemsIfNeeded() {
+export function fetchBudgetsIfNeeded() {
   return (dispatch, getState) => {
+    if (shouldFetchBudgets(getState())) {
+      dispatch(fetchBudgets())
+        .then(({ payload: budgets }) => {
+          dispatch(selectBudgetAndItems(budgets[0]));
+        });
+    }
+  };
+}
+
+function shouldFetchItems({ selectedBudget, budgetItems }) {
+  // TODO: Take care of loading state.
+  // return !!selectedBudget && budgetItems.length === 0;
+  return true;
+}
+
+export function selectBudgetAndItems(budget) {
+  return (dispatch, getState) => {
+    dispatch(selectBudget(budget));
+
     if (shouldFetchItems(getState())) {
-      return dispatch(fetchItems());
+      dispatch(fetchItems(budget));
     }
   };
 }
