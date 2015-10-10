@@ -68,7 +68,7 @@ function select(state) {
   const { selectedBudget, budgetItems } = state;
   const selectedItems = state.budgetItems.filter((item) => {
     return selectedBudget && item.budgetId === selectedBudget.id;
-  });
+  }).sort((a, b) => a.date.getTime() - b.date.getTime());
   return {
     ...state,
     budgetItems: selectedItems
