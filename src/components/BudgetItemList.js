@@ -23,7 +23,7 @@ export default class BudgetItemList extends Component {
   }
 
   render() {
-    const { selectedBudget, items, newItem, editItem, deleteItem } = this.props;
+    const { selectedBudget, items, newItem, editItem } = this.props;
     return (
       <div>
         <div className="budget-header">
@@ -35,7 +35,7 @@ export default class BudgetItemList extends Component {
           </div>
         </div>
         <div className="budget-item-list">
-          {items.map((item, i) => <BudgetItem key={item.id} item={item} subtotal={this.totalUntil(i, items)} editItem={editItem} deleteItem={deleteItem} />)}
+          {items.map((item, i) => <BudgetItem key={item.id} item={item} subtotal={this.totalUntil(i, items)} editItem={editItem} />)}
         </div>
         <div className="grid-row budget-total">
           <div className="grid-1-6">Total</div>
@@ -51,6 +51,5 @@ BudgetItemList.propTypes = {
   selectedBudget: budgetProps.isRequired,
   items: PropTypes.arrayOf(budgetItemProps.isRequired).isRequired,
   newItem: PropTypes.func.isRequired,
-  editItem: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired
+  editItem: PropTypes.func.isRequired
 };

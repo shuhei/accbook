@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { budgetItemProps } from '../props';
 import { formatDate, formatNumber } from '../formatters';
 
-export default function BudgetItem({ item, subtotal, editItem, deleteItem }) {
+export default function BudgetItem({ item, subtotal, editItem }) {
   const className = classnames('grid-row', 'budget-item', {
     'budget-item--spending': item.amount < 0,
     'budget-item--income': item.amount > 0,
@@ -20,9 +20,6 @@ export default function BudgetItem({ item, subtotal, editItem, deleteItem }) {
         <button className="button button--small" onClick={() => editItem(item)}>
           <i className="fa fa-pencil" />
         </button>
-        <button className="button button--danger button--small" onClick={() => deleteItem(item)}>
-          <i className="fa fa-remove" />
-        </button>
       </div>
     </div>
   );
@@ -31,6 +28,5 @@ export default function BudgetItem({ item, subtotal, editItem, deleteItem }) {
 BudgetItem.propTypes = {
   item: budgetItemProps.isRequired,
   subtotal: PropTypes.number.isRequired,
-  editItem: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired
+  editItem: PropTypes.func.isRequired
 };

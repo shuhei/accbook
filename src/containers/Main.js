@@ -40,8 +40,7 @@ class Main extends Component {
             selectedBudget={selectedBudget}
             items={budgetItems}
             newItem={() => dispatch(newItem())}
-            editItem={(item) => dispatch(editItem(item))}
-            deleteItem={(item) => dispatch(deleteItem(item))} />
+            editItem={(item) => dispatch(editItem(item))} />
         }
 
         <Modal
@@ -51,7 +50,8 @@ class Main extends Component {
             item={form.item}
             errors={form.errors}
             save={(item) => dispatch(saveItem(item))}
-            cancel={() => dispatch(closeForm())} />
+            cancel={() => dispatch(closeForm())}
+            deleteItem={(item) => dispatch(deleteItem(item))} />
         </Modal>
       </Wrapper>
     );

@@ -5,7 +5,7 @@ button:focus {
 }
 
 .button {
-  background-color: transparent;
+  background-color: #eee;
   border: none;
   cursor: pointer;
   display: inline-block;

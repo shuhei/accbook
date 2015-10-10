@@ -32,7 +32,7 @@ export default class BudgetItemForm extends Component {
   }
 
   render() {
-    const { item, errors, cancel } = this.props;
+    const { item, errors, cancel, deleteItem } = this.props;
     const defaultItem = {
       ...item,
       isIncome: item.amount > 0,
@@ -78,6 +78,11 @@ export default class BudgetItemForm extends Component {
           <div className="grid-3-4">
             <button className="button button--small" type="button" onClick={cancel}>Cancel</button>
             <button className="button button--small" type="button" onClick={::this.setToday}>Today</button>
+            { item.id &&
+              <button className="button button--danger button--small" type="button" onClick={() => deleteItem(item)}>
+                Delete
+              </button>
+            }
             <button className="button button--small button--primary" type="button" onClick={::this.handleSave}>Save</button>
           </div>
         </div>
@@ -94,5 +99,6 @@ BudgetItemForm.propTypes = {
     date: errorProps
   }).isRequired,
   save: PropTypes.func.isRequired,
-  cancel: PropTypes.func.isRequired
+  cancel: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired
 };
