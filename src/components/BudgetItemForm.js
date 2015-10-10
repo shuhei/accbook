@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
 
-import { budgetItemProps, errorProps } from '../props';
+import { unsavedBudgetItemProps, errorProps } from '../props';
 import { formatFullDate } from '../formatters';
 
 function invalidClassName(name, errors) {
@@ -87,7 +87,7 @@ export default class BudgetItemForm extends Component {
 }
 
 BudgetItemForm.propTypes = {
-  item: budgetItemProps,
+  item: unsavedBudgetItemProps,
   errors: PropTypes.shape({
     label: errorProps,
     amount: errorProps,

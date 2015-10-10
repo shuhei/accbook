@@ -31,7 +31,19 @@ export const checkCurrentUser = createAction(CURRENT_USER, webapi.currentUser);
 export const newItem = createAction(NEW_ITEM);
 export const editItem = createAction(EDIT_ITEM);
 export const deleteItem = createAction(DELETE_ITEM, webapi.deleteItem);
-export const saveItem = createAction(SAVE_ITEM, webapi.saveItem);
+
+const saveItemPlain = createAction(SAVE_ITEM, webapi.saveItem);
+
+export function saveItem(item) {
+  return (dispatch, getState) => {
+    if (item.budgetId) {
+      dispatch(saveItemPlain(item));
+    } else {
+      const budgetId = getState().selectedBudget.id;
+      dispatch(saveItemPlain({ ...item, budgetId }));
+    }
+  };
+}
 
 export const selectBudget = createAction(SELECT_BUDGET);
 
