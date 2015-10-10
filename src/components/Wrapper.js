@@ -18,9 +18,9 @@ MenuLink.propTypes = {
   toggleMenu: PropTypes.func.isRequired
 };
 
-const MenuBar = ({ budgets, selectBudgetAndItems, logout }) => {
+const MenuBar = ({ budgets, selectBudget, logout }) => {
   const budgetList = budgets.map((budget) => {
-    return <li key={budget.id} className="menu-bar__item" onClick={() => selectBudgetAndItems(budget)}>{budget.label}</li>;
+    return <li key={budget.id} className="menu-bar__item" onClick={() => selectBudget(budget)}>{budget.label}</li>;
   });
   return (
     <div className="menu-bar">
@@ -38,19 +38,19 @@ const MenuBar = ({ budgets, selectBudgetAndItems, logout }) => {
 };
 
 MenuBar.propTypes = {
-  selectBudgetAndItems: PropTypes.func.isRequired,
+  selectBudget: PropTypes.func.isRequired,
   budgets: PropTypes.arrayOf(budgetProps),
   logout: PropTypes.func.isRequired
 };
 
-export default function Wrapper({ children, budgets, menuOpen, selectBudgetAndItems, toggleMenu, logout }) {
+export default function Wrapper({ children, budgets, menuOpen, selectBudget, toggleMenu, logout }) {
   const className = classnames('wrapper', {
     'wrapper--open': menuOpen
   });
   return (
     <div className={className}>
       <MenuLink toggleMenu={toggleMenu} menuOpen={menuOpen} />
-      <MenuBar budgets={budgets} selectBudgetAndItems={selectBudgetAndItems} logout={logout} />
+      <MenuBar budgets={budgets} selectBudget={selectBudget} logout={logout} />
 
       <div className="main">
         {children}
@@ -62,7 +62,7 @@ export default function Wrapper({ children, budgets, menuOpen, selectBudgetAndIt
 Wrapper.propTypes = {
   budgets: PropTypes.arrayOf(budgetProps).isRequired,
   menuOpen: PropTypes.bool.isRequired,
-  selectBudgetAndItems: PropTypes.func.isRequired,
+  selectBudget: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired
 };

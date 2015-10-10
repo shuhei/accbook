@@ -6,43 +6,48 @@ import Modal from 'react-modal';
 import {
   toggleMenu,
   logout,
-  fetchBudgetsIfNeeded, selectBudgetAndItems,
-  newItem, editItem, deleteItem, saveItem,
+  fetchBudgetsIfNeeded, selectBudget,
+  fetchItemsIfNeeded, newItem, editItem, deleteItem, saveItem,
   closeForm
 } from '../actions';
 import Wrapper from '../components/Wrapper';
 import BudgetItemList from '../components/BudgetItemList';
-import BudgetForm from '../components/BudgetForm';
+import BudgetItemForm from '../components/BudgetItemForm';
 
 class Main extends Component {
   componentWillMount() {
     const { dispatch } = this.props;
     dispatch(fetchBudgetsIfNeeded());
+    dispatch(fetchItemsIfNeeded());
   }
 
   render() {
     const {
       dispatch,
-      budgets, budgetItems, menuOpen, form
+      selectedBudget, budgets, budgetItems, menuOpen, form
     } = this.props;
 
     return (
       <Wrapper
         budgets={budgets}
         menuOpen={menuOpen}
-        selectBudgetAndItems={(budget) => dispatch(selectBudgetAndItems(budget))}
+        selectBudget={(budget) => dispatch(selectBudget(budget))}
         toggleMenu={() => dispatch(toggleMenu())}
         logout={() => dispatch(logout())}>
-        <BudgetItemList
-          items={budgetItems}
-          newItem={() => dispatch(newItem())}
-          editItem={(item) => dispatch(editItem(item))}
-          deleteItem={(item) => dispatch(deleteItem(item))} />
+
+        { selectedBudget &&
+          <BudgetItemList
+            selectedBudget={selectedBudget}
+            items={budgetItems}
+            newItem={() => dispatch(newItem())}
+            editItem={(item) => dispatch(editItem(item))}
+            deleteItem={(item) => dispatch(deleteItem(item))} />
+        }
 
         <Modal
           isOpen={!!form.item}
           onReqeustClose={() => dispatch(closeForm())}>
-          <BudgetForm
+          <BudgetItemForm
             item={form.item}
             errors={form.errors}
             save={(item) => dispatch(saveItem(item))}
@@ -60,7 +65,14 @@ Modal.setAppElement(document.getElementsByTagName('body')[0]);
 Modal.injectCSS();
 
 function select(state) {
-  return state;
+  const { selectedBudget, budgetItems } = state;
+  const selectedItems = state.budgetItems.filter((item) => {
+    return selectedBudget && item.budgetId === selectedBudget.id;
+  });
+  return {
+    ...state,
+    budgetItems: selectedItems
+  };
 }
 
 export default connect(select)(Main);

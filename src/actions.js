@@ -33,7 +33,7 @@ export const editItem = createAction(EDIT_ITEM);
 export const deleteItem = createAction(DELETE_ITEM, webapi.deleteItem);
 export const saveItem = createAction(SAVE_ITEM, webapi.saveItem);
 
-const selectBudget = createAction(SELECT_BUDGET);
+export const selectBudget = createAction(SELECT_BUDGET);
 
 const fetchBudgets = createAction(FETCH_BUDGETS, webapi.fetchBudgets);
 const fetchItems = createAction(FETCH_ITEMS, webapi.fetchItems);
@@ -43,29 +43,31 @@ function shouldFetchBudgets({ budgets }) {
   return budgets.length === 0;
 }
 
+function shouldSelectBudget({ selectedBudget }) {
+  return !selectedBudget;
+}
+
 export function fetchBudgetsIfNeeded() {
   return (dispatch, getState) => {
     if (shouldFetchBudgets(getState())) {
-      dispatch(fetchBudgets())
-        .then(({ payload: budgets }) => {
-          dispatch(selectBudgetAndItems(budgets[0]));
-        });
+      dispatch(fetchBudgets()).then(({ payload: budgets }) => {
+        if (shouldSelectBudget(getState())) {
+          dispatch(selectBudget(budgets[0]));
+        }
+      });
     }
   };
 }
 
 function shouldFetchItems({ selectedBudget, budgetItems }) {
   // TODO: Take care of loading state.
-  // return !!selectedBudget && budgetItems.length === 0;
-  return true;
+  return budgetItems.length === 0;
 }
 
-export function selectBudgetAndItems(budget) {
+export function fetchItemsIfNeeded() {
   return (dispatch, getState) => {
-    dispatch(selectBudget(budget));
-
     if (shouldFetchItems(getState())) {
-      dispatch(fetchItems(budget));
+      dispatch(fetchItems());
     }
   };
 }

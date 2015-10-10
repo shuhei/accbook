@@ -5,13 +5,14 @@ button:focus {
 }
 
 .button {
-  display: inline-block;
+  background-color: transparent;
   border: none;
+  cursor: pointer;
+  display: inline-block;
   padding: 0.5rem 0.8rem;
   margin-right: 0.4rem;
-  user-select: none;
-  cursor: pointer;
   transition: opacity 0.5s;
+  user-select: none;
 }
 
 .button:hover {

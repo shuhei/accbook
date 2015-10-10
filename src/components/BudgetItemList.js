@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
 import BudgetItem from '../components/BudgetItem';
-import { budgetItemProps } from '../props';
+import { budgetProps, budgetItemProps } from '../props';
 import { formatNumber } from '../formatters';
 
 export default class BudgetItemList extends Component {
@@ -23,11 +23,11 @@ export default class BudgetItemList extends Component {
   }
 
   render() {
-    const { items, newItem, editItem, deleteItem } = this.props;
+    const { selectedBudget, items, newItem, editItem, deleteItem } = this.props;
     return (
       <div>
         <div className="budget-header">
-          <h1>accbook</h1>
+          <h1>{selectedBudget.label}</h1>
           <div className="budget-header__buttons">
             <button className="button button--small" onClick={newItem}>
               <i className="fa fa-plus" />
@@ -48,6 +48,7 @@ export default class BudgetItemList extends Component {
 }
 
 BudgetItemList.propTypes = {
+  selectedBudget: budgetProps.isRequired,
   items: PropTypes.arrayOf(budgetItemProps.isRequired).isRequired,
   newItem: PropTypes.func.isRequired,
   editItem: PropTypes.func.isRequired,

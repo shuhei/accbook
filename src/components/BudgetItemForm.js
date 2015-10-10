@@ -11,7 +11,7 @@ function invalidClassName(name, errors) {
   });
 }
 
-export default class BudgetForm extends Component {
+export default class BudgetItemForm extends Component {
   setToday() {
     const field = findDOMNode(this.refs.date);
     field.value = formatFullDate(new Date());
@@ -77,8 +77,8 @@ export default class BudgetForm extends Component {
           <div className="grid-1-4"></div>
           <div className="grid-3-4">
             <button className="button button--small" type="button" onClick={cancel}>Cancel</button>
-            <button className="button button--small" type="button" onClick={this.setToday.bind(this)}>Today</button>
-            <button className="button button--small button--primary" type="button" onClick={this.handleSave.bind(this)}>Save</button>
+            <button className="button button--small" type="button" onClick={::this.setToday}>Today</button>
+            <button className="button button--small button--primary" type="button" onClick={::this.handleSave}>Save</button>
           </div>
         </div>
       </form>
@@ -86,7 +86,7 @@ export default class BudgetForm extends Component {
   }
 }
 
-BudgetForm.propTypes = {
+BudgetItemForm.propTypes = {
   item: budgetItemProps,
   errors: PropTypes.shape({
     label: errorProps,

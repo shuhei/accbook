@@ -102,7 +102,8 @@ export function budgets(state = [], { type, payload, error }) {
   }
 }
 
-// TODO: itemsByBudget? loading and error?
+// TODO: loading and error?
+// TODO: Use handleAction to destruct payload.
 export function budgetItems(state = [], { type, payload, error }) {
   switch (type) {
     case FETCH_ITEMS: {

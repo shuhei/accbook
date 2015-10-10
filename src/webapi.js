@@ -47,8 +47,20 @@ export function logout() {
   return Promise.resolve();
 }
 
+function flattenAttributes({ attributes }) {
+  return Object.keys(attributes).reduce((acc, key) => {
+    const value = attributes[key];
+    if (value && value.id) {
+      acc[`${key}Id`] = value.id;
+    } else {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+}
+
 function extractAttributes(parseObject) {
-  return { ...parseObject.attributes, id: parseObject.id };
+  return { ...flattenAttributes(parseObject), id: parseObject.id };
 }
 
 export function fetchBudgets() {
@@ -65,15 +77,9 @@ export function fetchBudgets() {
   });
 }
 
-export function fetchItems(budget) {
+export function fetchItems() {
   return new Promise((resolve, reject) => {
     const query = new Query(BudgetItem);
-    // TODO: Any clearner way?
-    query.equalTo('budget', {
-      __type: 'Pointer',
-      className: 'Budget',
-      objectId: budget.id
-    });
     query.find({
       success(fetchedItems) {
         resolve(fetchedItems.map(extractAttributes));

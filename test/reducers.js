@@ -54,11 +54,11 @@ describe('budgetItems', () => {
   });
 
   describe('FETCH_ITEMS', () => {
-    it('adds items', () => {
+    it('replaces items', () => {
       const state = [{ id: 123 }];
       const action = { type: FETCH_ITEMS, payload: [{ id: 234 }, { id: 345 }] };
 
-      deepEqual(budgetItems(state, action), [{ id: 123 }, { id: 234 }, { id: 345 }]);
+      deepEqual(budgetItems(state, action), [{ id: 234 }, { id: 345 }]);
     });
 
     it('does not change state if error', () => {
