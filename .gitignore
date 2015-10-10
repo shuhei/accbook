@@ -7,3 +7,4 @@ public/*.ttf
 public/*.woff
 npm-debug.log
 .env*
+coverage
