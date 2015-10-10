@@ -188,16 +188,14 @@ body {
 /* budget item */
 .budget-item {
   line-height: 2em;
-  padding: 0.4em 0.8em;
+  padding: 0.5em 0.8em;
 }
 
 .budget-item:first-child {
   border-top: 1px solid #ccc;
-  padding-top: 0.8em;
 }
 
 .budget-item:last-child {
-  padding-bottom: 0.8em;
 }
 
 .budget-item--deficit {
