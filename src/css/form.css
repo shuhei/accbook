@@ -1,0 +1,33 @@
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"] {
+  border-radius: 0;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  color: #666;
+  display: block;
+  font-size: 1.5rem;
+  padding: 0.2em 0.4em;
+  margin-bottom: 0.4em;
+  width: 100%;
+  -webkit-appearance: none;
+}
+
+input[type="date"] {
+  font-size: 1.4rem;
+  padding: 0.1em 0.4em;
+}
+
+input.input--large {
+  font-size: 1.8rem;
+}
+
+input[type="date"] {
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+.input-group {
+  margin: 1rem 0;
+}

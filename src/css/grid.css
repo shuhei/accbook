@@ -2,7 +2,6 @@
 .grid-row {
   display: flex;
   flex-flow: row wrap;
-  padding: 0.3rem 0;
 }
 
 .grid-1-2,
@@ -19,6 +18,10 @@
 
 .grid-1-3 {
   width: 33.3333%;
+}
+
+.grid-2-3 {
+  width: 66.6667%;
 }
 
 .grid-1-4 {

@@ -25,10 +25,12 @@ class LoginForm extends Component {
     return (
       <form className="form login-form">
         <h1>accbook</h1>
-        <input type="text" placeholder="Username" ref="username" />
-        <input type="password" placeholder="Password" ref="password" />
-        <button type="button" className="button button--secondary" onClick={::this.handleSignup}>Sign up</button>
-        <button type="button" className="button button--primary" onClick={::this.handleLogin}>Log in</button>
+
+        <input type="text" className="input--large" placeholder="Username" ref="username" />
+        <input type="password" className="input--large" placeholder="Password" ref="password" />
+
+        <button type="button" className="button button--secondary button--large" onClick={::this.handleSignup}>Sign up</button>
+        <button type="button" className="button button--primary button--large" onClick={::this.handleLogin}>Log in</button>
       </form>
     );
   }

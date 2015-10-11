@@ -27,12 +27,6 @@ class Main extends Component {
       selectedBudget, budgets, budgetItems, menuOpen, form
     } = this.props;
 
-    const modalStyles = {
-      left: '50%',
-      marginLeft: '-200px',
-      width: '400px'
-    };
-
     return (
       <Wrapper
         budgets={budgets}
@@ -51,7 +45,6 @@ class Main extends Component {
 
         <Modal
           isOpen={!!form.item}
-          style={modalStyles}
           onReqeustClose={() => dispatch(closeForm())}>
           <BudgetItemForm
             item={form.item}

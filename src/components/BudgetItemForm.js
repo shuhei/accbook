@@ -41,26 +41,32 @@ export default class BudgetItemForm extends Component {
     };
     return (
       <form className="budget-item-form">
-        <p>
+        <div className="input-group">
           <label>
             <input type="checkbox" ref="isIncome" defaultChecked={defaultItem.isIncome} /> Income
           </label>
-        </p>
-        <p>
+        </div>
+        <div className="input-group">
           <label className={invalidClassName('label', errors)}>Label</label>
           <input type="text" ref="label" defaultValue={defaultItem.label} />
-        </p>
-        <p>
+        </div>
+        <div className="input-group">
           <label className={invalidClassName('amount', errors)}>Amount</label>
           <input type="number" ref="amount" defaultValue={defaultItem.amount} />
-        </p>
-        <p>
+        </div>
+        <div className="input-group">
           <label className={invalidClassName('date', errors)}>Date</label>
-          <input type="date" ref="date" defaultValue={defaultItem.date} />
-        </p>
+          <div className="grid-row">
+            <div className="grid-2-3">
+              <input type="date" ref="date" defaultValue={defaultItem.date} />
+            </div>
+            <div className="grid-1-3 text-right">
+              <button className="button button--small" type="button" onClick={::this.setToday}>Today</button>
+            </div>
+          </div>
+        </div>
         <p>
           <button className="button button--small" type="button" onClick={cancel}>Cancel</button>
-          <button className="button button--small" type="button" onClick={::this.setToday}>Today</button>
           { item.id &&
             <button className="button button--danger button--small" type="button" onClick={() => deleteItem(item)}>
               Delete
