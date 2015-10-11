@@ -50,7 +50,7 @@ export default function Wrapper({ children, budgets, menuOpen, selectBudget, tog
   return (
     <div className={className}>
       <MenuLink toggleMenu={toggleMenu} menuOpen={menuOpen} />
-      <MenuBar budgets={budgets} selectBudget={selectBudget} logout={logout} />
+      <MenuBar budgets={budgets} selectBudget={selectBudget} toggleMenu={toggleMenu} logout={logout} />
 
       <div className="main">
         {children}

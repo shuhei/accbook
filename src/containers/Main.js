@@ -21,6 +21,12 @@ class Main extends Component {
     dispatch(fetchItemsIfNeeded());
   }
 
+  handleBudgetSelected(budget) {
+    const { dispatch } = this.props;
+    dispatch(selectBudget(budget));
+    dispatch(toggleMenu());
+  }
+
   render() {
     const {
       dispatch,
@@ -31,7 +37,7 @@ class Main extends Component {
       <Wrapper
         budgets={budgets}
         menuOpen={menuOpen}
-        selectBudget={(budget) => dispatch(selectBudget(budget))}
+        selectBudget={::this.handleBudgetSelected}
         toggleMenu={() => dispatch(toggleMenu())}
         logout={() => dispatch(logout())}>
 
