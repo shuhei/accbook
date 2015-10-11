@@ -39,8 +39,8 @@ export default class BudgetItemList extends Component {
         </div>
         <div className="grid-row budget-total">
           <div className="grid-1-6">Total</div>
-          <div className="grid-1-3 budget-item__amount">{formatNumber(this.total(items))}</div>
-          <div className="grid-1-2"></div>
+          <div className="grid-1-2 budget-item__amount">{formatNumber(this.total(items))}</div>
+          <div className="grid-1-3"></div>
         </div>
       </div>
     );
