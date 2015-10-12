@@ -96,7 +96,12 @@ export function budgets(state = [], { type, payload, error }) {
       }
     }
     case DELETE_BUDGET:
-      return state.filter((budget) => budget.id !== payload.id);
+      if (error) {
+        console.error('Failed to save budget', payload);
+        return state;
+      } else {
+        return state.filter((budget) => budget.id !== payload.id);
+      }
     default:
       return state;
   }
@@ -129,7 +134,12 @@ export function budgetItems(state = [], { type, payload, error }) {
       }
     }
     case DELETE_ITEM:
-      return state.filter((item) => item.id !== payload.id);
+      if (error) {
+        console.error('Failed to delete item', payload);
+        return state;
+      } else {
+        return state.filter((item) => item.id !== payload.id);
+      }
     default:
       return state;
   }

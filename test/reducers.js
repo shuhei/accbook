@@ -2,7 +2,7 @@ import { equal, deepEqual } from 'assert';
 
 import {
   TOGGLE_MENU,
-  FETCH_BUDGETS,
+  FETCH_BUDGETS, SAVE_BUDGET, DELETE_BUDGET,
   FETCH_ITEMS, SAVE_ITEM, DELETE_ITEM
 } from '../src/actions';
 import { user, menuOpen, budgets, budgetItems } from '../src/reducers';
@@ -66,6 +66,38 @@ describe('budgets', () => {
       const action = { type: FETCH_BUDGETS, error: true, payload: new Error('error') };
 
       equal(budgets(state, action), state);
+    });
+  });
+
+  describe('SAVE_BUDGET', () => {
+    it('adds a budget', () => {
+      const state = [{ id: 123 }];
+      const action = { type: SAVE_BUDGET, payload: { id: 234 } };
+
+      deepEqual(budgets(state, action), [{ id: 123 }, { id: 234 }]);
+    });
+
+    it('does not change state if error', () => {
+      const state = [{ id: 123 }];
+      const action = { type: SAVE_BUDGET, error: true, payload: new Error('error') };
+
+      deepEqual(budgets(state, action), [{ id: 123 }]);
+    });
+  });
+
+  describe('DELETE_BUDGET', () => {
+    it('deletes a budget', () => {
+      const state = [{ id: 123 }, { id: 234 }];
+      const action = { type: DELETE_BUDGET, payload: { id: 234 } };
+
+      deepEqual(budgets(state, action), [{ id: 123 }]);
+    });
+
+    it('does not change state if error', () => {
+      const state = [{ id: 123 }, { id: 234 }];
+      const action = { type: DELETE_BUDGET, error: true, payload: new Error('error') };
+
+      deepEqual(budgets(state, action), [{ id: 123 }, { id: 234 }]);
     });
   });
 });
