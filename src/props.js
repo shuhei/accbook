@@ -1,8 +1,14 @@
 import { PropTypes } from 'react';
 
-export const budgetProps = PropTypes.shape({
+const budgetBareProps = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired
+};
+
+export const budgetProps = PropTypes.shape(budgetBareProps);
+export const unsavedBudgetProps = PropTypes.shape({
+  ...budgetBareProps,
+  id: PropTypes.string
 });
 
 const itemProps = {

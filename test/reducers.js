@@ -2,10 +2,10 @@ import { equal, deepEqual } from 'assert';
 
 import {
   TOGGLE_MENU,
-  FETCH_BUDGETS, SAVE_BUDGET, DELETE_BUDGET,
+  SELECT_BUDGET, FETCH_BUDGETS, SAVE_BUDGET, DELETE_BUDGET,
   FETCH_ITEMS, SAVE_ITEM, DELETE_ITEM
 } from '../src/actions';
-import { user, menuOpen, budgets, budgetItems } from '../src/reducers';
+import { user, menuOpen, selectedBudgetId, budgets, budgetItems } from '../src/reducers';
 
 describe('user', () => {
   describe('edge cases', () => {
@@ -37,6 +37,26 @@ describe('menuOpen', () => {
     it('toggles the flag', () => {
       equal(menuOpen(false, { type: TOGGLE_MENU }), true);
       equal(menuOpen(true, { type: TOGGLE_MENU }), false);
+    });
+  });
+});
+
+describe('selectedBudgetId', () => {
+  describe('edge cases', () => {
+    it('defaults to null', () => {
+      equal(selectedBudgetId(undefined, {}), null);
+    });
+
+    it('passes through if unknown type', () => {
+      equal(selectedBudgetId('hello', {}), 'hello');
+    });
+  });
+
+  describe('SELECT_BUDGET', () => {
+    it('replaces with id property', () => {
+      const action = { type: SELECT_BUDGET, payload: { id: 'bar' } };
+
+      equal(selectedBudgetId('foo', action), 'bar');
     });
   });
 });

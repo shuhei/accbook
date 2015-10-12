@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
 
 import { unsavedBudgetItemProps, errorProps } from '../props';
@@ -13,17 +12,17 @@ function invalidClassName(name, errors) {
 
 export default class BudgetItemForm extends Component {
   setToday() {
-    const field = findDOMNode(this.refs.date);
+    const field = this.refs.date;
     field.value = formatFullDate(new Date());
   }
 
   handleSave() {
     const { item, save } = this.props;
 
-    const isIncome = findDOMNode(this.refs.isIncome).checked;
-    const label = findDOMNode(this.refs.label).value.trim();
-    const dateString = findDOMNode(this.refs.date).value;
-    const amountString = findDOMNode(this.refs.amount).value.trim();
+    const isIncome = this.refs.isIncome.checked;
+    const label = this.refs.label.value.trim();
+    const dateString = this.refs.date.value;
+    const amountString = this.refs.amount.value.trim();
 
     const date = dateString ? new Date(dateString) : null;
     const amount = parseInt(amountString || '0', 10) * (isIncome ? 1 : -1);

@@ -28,6 +28,19 @@ input[type="date"] {
   -webkit-appearance: none;
 }
 
+/* input group */
 .input-group {
   margin: 1rem 0;
+}
+
+.input-group label {
+  color: #666;
+  display: block;
+  font-weight: bold;
+  padding-bottom: 0.5rem;
+}
+
+/* errors */
+.invalid input {
+  border: 1px solid rgb(202, 60, 60);
 }

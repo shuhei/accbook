@@ -223,19 +223,6 @@ body {
   margin-right: 1rem;
 }
 
-/* budget item form */
-.budget-item-form label {
-  color: #666;
-  display: block;
-  font-weight: bold;
-  padding-bottom: 0.5rem;
-}
-
-/* form */
-.invalid input {
-  border: 1px solid rgb(202, 60, 60);
-}
-
 @media screen and (min-width: 480px) {
   .menu-bar {
     left: 0;

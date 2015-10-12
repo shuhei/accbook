@@ -23,12 +23,15 @@ export default class BudgetItemList extends Component {
   }
 
   render() {
-    const { selectedBudget, items, newItem, editItem } = this.props;
+    const { selectedBudget, items, editBudget, newItem, editItem } = this.props;
     return (
       <div>
         <div className="budget-header">
           <h1>{selectedBudget.label}</h1>
           <div className="budget-header__buttons">
+            <button className="button button--small" onClick={editBudget}>
+              <i className="fa fa-gear" />
+            </button>
             <button className="button button--small" onClick={newItem}>
               <i className="fa fa-plus" />
             </button>
@@ -50,6 +53,7 @@ export default class BudgetItemList extends Component {
 BudgetItemList.propTypes = {
   selectedBudget: budgetProps.isRequired,
   items: PropTypes.arrayOf(budgetItemProps.isRequired).isRequired,
+  editBudget: PropTypes.func.isRequired,
   newItem: PropTypes.func.isRequired,
   editItem: PropTypes.func.isRequired
 };

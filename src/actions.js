@@ -12,6 +12,8 @@ export const FETCH_BUDGETS = 'FETCH_BUDGETS';
 export const SAVE_BUDGET = 'SAVE_BUDGET';
 export const DELETE_BUDGET = 'DELETE_BUDGET';
 export const SELECT_BUDGET = 'SELECT_BUDGET';
+export const NEW_BUDGET = 'NEW_BUDGET';
+export const EDIT_BUDGET = 'EDIT_BUDGET';
 
 export const NEW_ITEM = 'NEW_ITEM';
 export const EDIT_ITEM = 'EDIT_ITEM';
@@ -19,7 +21,9 @@ export const SAVE_ITEM = 'SAVE_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 
+export const CLOSE_BUDGET_FORM = 'CLOSE_BUDGET_FORM';
 export const CLOSE_FORM = 'CLOSE_FORM';
+
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 
 // Action creators
@@ -32,6 +36,9 @@ export const newItem = createAction(NEW_ITEM);
 export const editItem = createAction(EDIT_ITEM);
 export const deleteItem = createAction(DELETE_ITEM, webapi.deleteItem);
 
+export const editBudget = createAction(EDIT_BUDGET);
+export const newBudget = createAction(NEW_BUDGET);
+
 const saveItemPlain = createAction(SAVE_ITEM, webapi.saveItem);
 
 export function saveItem(item) {
@@ -42,6 +49,14 @@ export function saveItem(item) {
       const budgetId = getState().selectedBudget.id;
       dispatch(saveItemPlain({ ...item, budgetId }));
     }
+  };
+}
+
+const saveBudgetPlain = createAction(SAVE_BUDGET, webapi.saveBudget);
+
+export function saveBudget(budget) {
+  return (dispatch, getState) => {
+    dispatch(saveBudgetPlain(budget));
   };
 }
 
@@ -84,5 +99,7 @@ export function fetchItemsIfNeeded() {
   };
 }
 
+export const closeBudgetForm = createAction(CLOSE_BUDGET_FORM);
 export const closeForm = createAction(CLOSE_FORM);
+
 export const toggleMenu = createAction(TOGGLE_MENU);

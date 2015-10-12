@@ -3,9 +3,9 @@ import { combineReducers } from 'redux';
 import {
   LOGIN, LOGOUT, CURRENT_USER,
   TOGGLE_MENU,
-  FETCH_BUDGETS, SAVE_BUDGET, DELETE_BUDGET, SELECT_BUDGET,
+  FETCH_BUDGETS, SAVE_BUDGET, DELETE_BUDGET, SELECT_BUDGET, EDIT_BUDGET,
   FETCH_ITEMS, NEW_ITEM, EDIT_ITEM, SAVE_ITEM, DELETE_ITEM,
-  CLOSE_FORM
+  CLOSE_BUDGET_FORM, CLOSE_FORM
 } from './actions';
 
 export function user(state = null, { type, payload, error }) {
@@ -40,8 +40,25 @@ export function menuOpen(state = false, { type }) {
   }
 }
 
+export function budgetForm(state = { budget: null, errors: {} }, { type, payload, error }) {
+  switch (type) {
+    case EDIT_BUDGET:
+      return { ...state, budget: payload };
+    case SAVE_BUDGET:
+      if (error) {
+        return state;
+      } else {
+        return { ...state, budget: null };
+      }
+    case CLOSE_BUDGET_FORM:
+      return { ...state, budget: null };
+    default:
+      return state;
+  }
+}
+
 // TODO: loading and error?
-export function form(state = { item: null, errors: {} }, { type, payload, error }) {
+export function budgetItemForm(state = { item: null, errors: {} }, { type, payload, error }) {
   switch (type) {
     case NEW_ITEM: {
       const item = {
@@ -67,10 +84,10 @@ export function form(state = { item: null, errors: {} }, { type, payload, error 
   }
 }
 
-export function selectedBudget(state = null, { type, payload }) {
+export function selectedBudgetId(state = null, { type, payload }) {
   switch (type) {
     case SELECT_BUDGET:
-      return payload;
+      return payload.id;
     default:
       return state;
   }
@@ -92,7 +109,11 @@ export function budgets(state = [], { type, payload, error }) {
         console.error('Failed to save budget', payload);
         return state;
       } else {
-        return state.concat(payload);
+        if (state.filter((budget) => budget.id === payload.id).length > 0) {
+          return state.map((budget) => budget.id === payload.id ? payload : budget);
+        } else {
+          return state.concat([payload]);
+        }
       }
     }
     case DELETE_BUDGET:
@@ -148,10 +169,11 @@ export function budgetItems(state = [], { type, payload, error }) {
 const reducers = combineReducers({
   user,
   budgets,
-  selectedBudget,
+  selectedBudgetId,
   budgetItems,
   menuOpen,
-  form
+  budgetForm,
+  budgetItemForm
 });
 
 export default reducers;
