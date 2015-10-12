@@ -40,6 +40,7 @@ export default class BudgetItemForm extends Component {
     };
     return (
       <form className="budget-item-form">
+        <legend>Budget Item</legend>
         <div className="input-group">
           <label>
             <input type="checkbox" ref="isIncome" defaultChecked={defaultItem.isIncome} /> Income

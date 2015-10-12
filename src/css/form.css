@@ -1,3 +1,12 @@
+legend {
+  box-sizing: border-box;
+  display: block;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
 input[type="text"],
 input[type="password"],
 input[type="number"],

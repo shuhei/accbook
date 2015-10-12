@@ -18,6 +18,7 @@ export default class BudgetForm extends Component {
 
     return (
       <form className="budget-form">
+        <legend>Budget</legend>
         <div className="input-group">
           <label>Label</label>
           <input type="text" ref="label" defaultValue={defaultBudget.label} />
