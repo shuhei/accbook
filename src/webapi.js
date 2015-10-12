@@ -91,10 +91,14 @@ export function fetchItems() {
   });
 }
 
+function setACL(obj) {
+  obj.setACL(new Parse.ACL(User.current()));
+}
+
 export function saveItem(item) {
   return new Promise((resolve, reject) => {
     const budgetItem = new BudgetItem({ ...item });
-    budgetItem.setACL(new Parse.ACL(User.current()));
+    setACL(budgetItem);
     budgetItem.save(null, {
       success(saved) {
         resolve(extractAttributes(saved));
@@ -122,5 +126,20 @@ export function deleteItem(item) {
     } else {
       resolve();
     }
+  });
+}
+
+export function saveBudget(budget) {
+  return new Promise((resolve, reject) => {
+    const parseBudget = new Budget({ ...budget });
+    setACL(parseBudget);
+    parseBudget.save(null, {
+      success(saved) {
+        resolve(extractAttributes(saved));
+      },
+      error(failed, error) {
+        reject(error);
+      }
+    });
   });
 }

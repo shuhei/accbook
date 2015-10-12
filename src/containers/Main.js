@@ -11,6 +11,7 @@ import {
   closeForm
 } from '../actions';
 import Wrapper from '../components/Wrapper';
+import MenuBar from '../components/MenuBar';
 import BudgetItemList from '../components/BudgetItemList';
 import BudgetItemForm from '../components/BudgetItemForm';
 
@@ -33,14 +34,15 @@ class Main extends Component {
       selectedBudget, budgets, budgetItems, menuOpen, form
     } = this.props;
 
-    return (
-      <Wrapper
-        budgets={budgets}
-        menuOpen={menuOpen}
-        selectBudget={::this.handleBudgetSelected}
-        toggleMenu={() => dispatch(toggleMenu())}
-        logout={() => dispatch(logout())}>
+    const sidebar = <MenuBar budgets={budgets}
+                             selectBudget={::this.handleBudgetSelected}
+                             logout={() => dispatch(logout())} />;
 
+    return (
+      <Wrapper menuOpen={menuOpen}
+               toggleMenu={() => dispatch(toggleMenu())}
+               logout={() => dispatch(logout())}
+               sidebar={sidebar}>
         { selectedBudget &&
           <BudgetItemList
             selectedBudget={selectedBudget}
