@@ -5,7 +5,7 @@ import {
   TOGGLE_MENU,
   FETCH_BUDGETS, SAVE_BUDGET, DELETE_BUDGET, SELECT_BUDGET, EDIT_BUDGET,
   FETCH_ITEMS, NEW_ITEM, EDIT_ITEM, SAVE_ITEM, DELETE_ITEM,
-  CLOSE_BUDGET_FORM, CLOSE_FORM
+  CLOSE_BUDGET_FORM, CLOSE_ITEM_FORM
 } from './actions';
 
 export function user(state = null, { type, payload, error }) {
@@ -43,15 +43,16 @@ export function menuOpen(state = false, { type }) {
 export function budgetForm(state = { budget: null, errors: {} }, { type, payload, error }) {
   switch (type) {
     case EDIT_BUDGET:
-      return { ...state, budget: payload };
+      return { budget: payload, errors: {} };
     case SAVE_BUDGET:
       if (error) {
+        // TODO: Add error.
         return state;
       } else {
-        return { ...state, budget: null };
+        return { budget: null, errors: {} };
       }
     case CLOSE_BUDGET_FORM:
-      return { ...state, budget: null };
+      return { budget: null, errors: {} };
     default:
       return state;
   }
@@ -66,19 +67,27 @@ export function budgetItemForm(state = { item: null, errors: {} }, { type, paylo
         label: '',
         date: new Date()
       };
-      return { ...state, item };
+      return { item, errors: {} };
     }
     case EDIT_ITEM: {
-      return { ...state, item: payload };
+      return { item: payload, errors: {} };
     }
     case SAVE_ITEM:
       if (error) {
+        // TODO: Add error.
         return state;
       } else {
-        return { ...state, item: null };
+        return { item: null, errors: {} };
       }
-    case CLOSE_FORM:
-      return { ...state, item: null };
+    case DELETE_ITEM:
+      if (error) {
+        // TODO: Add error.
+        return state;
+      } else {
+        return { item: null, errors: {} };
+      }
+    case CLOSE_ITEM_FORM:
+      return { item: null, errors: {} };
     default:
       return state;
   }

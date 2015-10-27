@@ -3,9 +3,17 @@ import { equal, deepEqual } from 'assert';
 import {
   TOGGLE_MENU,
   SELECT_BUDGET, FETCH_BUDGETS, SAVE_BUDGET, DELETE_BUDGET,
-  FETCH_ITEMS, SAVE_ITEM, DELETE_ITEM
+  FETCH_ITEMS, SAVE_ITEM, DELETE_ITEM,
+  CLOSE_ITEM_FORM
 } from '../src/actions';
-import { user, menuOpen, selectedBudgetId, budgets, budgetItems } from '../src/reducers';
+import {
+  user,
+  menuOpen,
+  budgetItemForm,
+  selectedBudgetId,
+  budgets,
+  budgetItems
+} from '../src/reducers';
 
 describe('user', () => {
   describe('edge cases', () => {
@@ -17,6 +25,63 @@ describe('user', () => {
       const state = { id: 123 };
 
       equal(user(state, {}), state);
+    });
+  });
+});
+
+describe('budgetItemForm', () => {
+  describe('edge cases', () => {
+    it('defaults to no item or no errors', () => {
+      const { item, errors } = budgetItemForm(undefined, {});
+
+      equal(item, null);
+      deepEqual(errors, {});
+    });
+
+    it('passes through if unknown type', () => {
+      const state = { item: null, errors: {} };
+
+      equal(budgetItemForm(state, {}), state);
+    });
+  });
+
+  describe('DELETE_ITEM', () => {
+    it('closes form if no error', () => {
+      const state = {
+        budget: { id: 123 },
+        errors: ['error']
+      }
+
+      const { item, errors } = budgetItemForm(state, { type: DELETE_ITEM });
+      equal(item, null);
+      deepEqual(errors, {});
+    });
+
+    it('passes through if error', () => {
+      const state = {
+        budget: { id: 123 },
+        errors: ['error']
+      }
+      const action = {
+        type: DELETE_ITEM,
+        error: true,
+        payload: new Error('error')
+      };
+
+      equal(budgetItemForm(state, action), state);
+    });
+  });
+
+  describe('CLOSE_ITEM_FORM', () => {
+    it('closes form', () => {
+      const state = {
+        budget: { id: 123 },
+        errors: ['error']
+      }
+
+      const { item, errors } = budgetItemForm(state, { type: CLOSE_ITEM_FORM });
+      equal(item, null);
+      deepEqual(errors, {});
     });
   });
 });

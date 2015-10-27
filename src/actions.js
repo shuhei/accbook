@@ -22,7 +22,7 @@ export const DELETE_ITEM = 'DELETE_ITEM';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 
 export const CLOSE_BUDGET_FORM = 'CLOSE_BUDGET_FORM';
-export const CLOSE_FORM = 'CLOSE_FORM';
+export const CLOSE_ITEM_FORM = 'CLOSE_ITEM_FORM';
 
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 
@@ -100,6 +100,6 @@ export function fetchItemsIfNeeded() {
 }
 
 export const closeBudgetForm = createAction(CLOSE_BUDGET_FORM);
-export const closeForm = createAction(CLOSE_FORM);
+export const closeForm = createAction(CLOSE_ITEM_FORM);
 
 export const toggleMenu = createAction(TOGGLE_MENU);
