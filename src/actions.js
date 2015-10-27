@@ -46,7 +46,7 @@ export function saveItem(item) {
     if (item.budgetId) {
       dispatch(saveItemPlain(item));
     } else {
-      const budgetId = getState().selectedBudget.id;
+      const budgetId = getState().selectedBudgetId;
       dispatch(saveItemPlain({ ...item, budgetId }));
     }
   };
@@ -70,8 +70,8 @@ function shouldFetchBudgets({ budgets }) {
   return budgets.length === 0;
 }
 
-function shouldSelectBudget({ selectedBudget }) {
-  return !selectedBudget;
+function shouldSelectBudget({ selectedBudgetId }) {
+  return !selectedBudgetId;
 }
 
 export function fetchBudgetsIfNeeded() {
@@ -86,7 +86,7 @@ export function fetchBudgetsIfNeeded() {
   };
 }
 
-function shouldFetchItems({ selectedBudget, budgetItems }) {
+function shouldFetchItems({ selectedBudgetId, budgetItems }) {
   // TODO: Take care of loading state.
   return budgetItems.length === 0;
 }
