@@ -5,14 +5,16 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Signal exposing (Signal, Address)
 import Date exposing (Date)
-import Debug
 import String
 
--- Model
+import BudgetItemForm
+
+-- MODEL
 
 type alias Model =
   { uid : Int
   , budgetItems : List BudgetItem
+  , budgetItemForm : BudgetItemForm.Model
   }
 
 type alias BudgetItem =
@@ -22,18 +24,11 @@ type alias BudgetItem =
   , date : Date.Date
   }
 
-newBudgetItem : Int -> String -> Int -> Date.Date -> BudgetItem
-newBudgetItem id label amount date =
-  { id = id
-  , label = label
-  , amount = amount
-  , date = date
-  }
-
-emptyModel : Model
-emptyModel =
+init : Model
+init =
   { uid = 0
   , budgetItems = []
+  , budgetItemForm = BudgetItemForm.init
   }
 
 -- UPDATE
@@ -42,18 +37,21 @@ type Action
   = NoOp
   | Add String Int
   | Delete Int
+  | BudgetItemFormAction BudgetItemForm.Action
 
 update : Action -> Model -> Model
 update action model =
-  case (Debug.log "action" action) of
-    NoOp -> model
+  case action of
     Add label amount ->
       { model |
         uid = model.uid + 1
-      , budgetItems = model.budgetItems ++ [ newBudgetItem model.uid label amount (Date.fromTime 1462172198819) ]
+      , budgetItems = model.budgetItems ++ [ BudgetItem model.uid label amount (Date.fromTime 1462172198819) ]
       }
     Delete id ->
       { model | budgetItems = List.filter (\i -> i.id /= id) model.budgetItems }
+    BudgetItemFormAction act ->
+      { model | budgetItemForm = BudgetItemForm.update act model.budgetItemForm }
+    _ -> model
 
 -- VIEW
 
@@ -61,18 +59,11 @@ iconButton : String -> List Attribute -> Html
 iconButton name attrs =
   button
     (class "btn waves-effect waves-light" :: attrs)
-    [ i
-        [ class "material-icons" ]
-        [ text name ]
-    ]
+    [ i [ class "material-icons" ] [ text name ] ]
 
 formatDate : Date.Date -> String
 formatDate d =
-  let components =
-    [ Date.year d
-    , Date.month d |> numericMonth
-    , Date.day d
-    ]
+  let components = [ Date.year d, Date.month d |> numericMonth, Date.day d ]
   in components |> List.map toString |> String.join "-"
 
 numericMonth : Date.Month -> Int
@@ -91,10 +82,18 @@ numericMonth m =
     Date.Nov -> 11
     Date.Dec -> 12
 
+css : String -> Html
+css path =
+  node "link"
+    [ attribute "rel" "stylesheet"
+    , type' "text/css"
+    , href path
+    ]
+    []
+
 budgetItem : Address Action -> BudgetItem -> Html
 budgetItem address item =
-  tr
-    []
+  tr []
     [ td [] [ text (formatDate item.date) ]
     , td [] [ text item.label ]
     , td [] [ text (toString item.amount) ]
@@ -110,15 +109,12 @@ budgetItemList address model =
         , div
             [ class "budget-header__buttons" ]
             [ iconButton "settings" [ onClick address NoOp ]
-            , iconButton "add" [ onClick address (Add "test" 100) ]
+            , iconButton "add" [ onClick address NoOp ]
             ]
         ]
-    , table
-        []
-        [ thead
-            []
-            [ tr
-                []
+    , table []
+        [ thead []
+            [ tr []
                 [ th [] [ text "Date" ]
                 , th [] [ text "Label" ]
                 , th [] [ text "Amount" ]
@@ -129,23 +125,13 @@ budgetItemList address model =
         ]
     ]
 
-css : String -> Html
-css path =
-  node
-    "link"
-    [ attribute "rel" "stylesheet"
-    , type' "text/css"
-    , href path
-    ]
-    []
-
 view : Address Action -> Model -> Html
 view address model =
-  div
-    [ class "container" ]
+  div [ class "container" ]
     [ css "http://fonts.googleapis.com/icon?family=Material+Icons"
     , css "node_modules/materialize-css/dist/css/materialize.css"
     , budgetItemList address model
+    , BudgetItemForm.view (Signal.forwardTo address BudgetItemFormAction) model.budgetItemForm
     ]
 
 -- MAIN
@@ -156,7 +142,7 @@ main =
 
 modelSignal : Signal Model
 modelSignal =
-  Signal.foldp update emptyModel actions.signal
+  Signal.foldp update init actions.signal
 
 actions : Signal.Mailbox Action
 actions =
