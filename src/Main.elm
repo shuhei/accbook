@@ -11,10 +11,13 @@ import Models exposing (..)
 import Update exposing (update)
 import View exposing (view)
 import Routing
+import BudgetItems.Effects
 
 init : (AppModel, Effects Action)
 init =
-  (initialModel, Effects.none)
+  let fxs = [ Effects.map BudgetItemsAction BudgetItems.Effects.fetchAll ]
+      fx = Effects.batch fxs
+  in (initialModel, fx)
 
 routerSignal : Signal Action
 routerSignal =

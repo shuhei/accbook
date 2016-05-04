@@ -16,5 +16,9 @@ update action model =
       (model.budgetItems, Effects.none)
     Delete id ->
       (List.filter (\x -> x.id /= id) model.budgetItems, Effects.none)
-    _ ->
-      (model.budgetItems, Effects.none)
+    FetchAllDone result ->
+      case result of
+        Ok budgetItems ->
+          (budgetItems, Effects.none)
+        Err error ->
+          (model.budgetItems, Effects.none)
