@@ -3,7 +3,6 @@ module View (..) where
 import Signal exposing (Signal, Address)
 import Html exposing (..)
 import Html.Attributes exposing (..)
--- import Html.Events exposing (..)
 
 import Actions exposing (..)
 import Models exposing (..)
@@ -28,6 +27,7 @@ view address model =
     div [ class "container" ]
       [ css "http://fonts.googleapis.com/icon?family=Material+Icons"
       , css "../node_modules/materialize-css/dist/css/materialize.css"
+      , flash address model
       , page address model
       ]
 
@@ -67,3 +67,13 @@ notFoundView =
     [ h2 [] [ text "Not Found" ]
     , a [ href "#/budgetItems" ] [ text "Budget Items" ]
     ]
+
+flash : Address Action -> AppModel -> Html
+flash address model =
+  case model.errorMessage of
+    Nothing ->
+     span [] []
+    Just message ->
+      div
+        [ class "card-panel red" ]
+        [ span [ class "white-text" ] [ text message ] ]

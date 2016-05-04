@@ -4,6 +4,7 @@ import Effects exposing (Effects)
 
 import Actions exposing (..)
 import Models exposing (..)
+import Mailboxes exposing (..)
 import Routing
 import BudgetItems.Update
 import Debug
@@ -15,7 +16,9 @@ update action model =
       let (updatedRouting, fx) = Routing.update act model.routing
       in ({ model | routing = updatedRouting }, Effects.map RoutingAction fx)
     BudgetItemsAction act ->
-      let updateModel = { budgetItems = model.budgetItems }
+      let updateModel = { budgetItems = model.budgetItems
+                        , showErrorAddress = Signal.forwardTo actionsMailbox.address ShowError
+                        }
           (updatedItems, fx) = BudgetItems.Update.update act updateModel
       in ({ model | budgetItems = updatedItems }, Effects.map BudgetItemsAction fx)
     -- Add label amount ->
@@ -38,5 +41,7 @@ update action model =
           -- noEffects { model | budgetItemForm = formModel }
     -- RouteAction route ->
       -- noEffects { model | route = route }
+    ShowError message ->
+      ({ model | errorMessage = Just message }, Effects.none)
     _ ->
       (model, Effects.none)

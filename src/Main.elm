@@ -10,6 +10,7 @@ import Actions exposing (..)
 import Models exposing (..)
 import Update exposing (update)
 import View exposing (view)
+import Mailboxes exposing (..)
 import Routing
 import BudgetItems.Effects
 
@@ -29,7 +30,7 @@ app =
     { init = init
     , view = view
     , update = update
-    , inputs = [ routerSignal ]
+    , inputs = [ routerSignal, actionsMailbox.signal ]
     }
 
 main : Signal Html

@@ -7,3 +7,4 @@ type Action
   = NoOp
   | RoutingAction Routing.Action
   | BudgetItemsAction BudgetItems.Actions.Action
+  | ShowError String

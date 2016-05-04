@@ -7,6 +7,7 @@ import BudgetItems.Models exposing (..)
 
 type alias UpdateModel =
   { budgetItems : List BudgetItem
+  , showErrorAddress : Signal.Address String
   }
 
 update : Action -> UpdateModel -> (List BudgetItem, Effects Action)
@@ -21,4 +22,10 @@ update action model =
         Ok budgetItems ->
           (budgetItems, Effects.none)
         Err error ->
-          (model.budgetItems, Effects.none)
+          let errorMessage = toString error
+              fx = Signal.send model.showErrorAddress errorMessage
+                |> Effects.task
+                |> Effects.map TaskDone
+          in (model.budgetItems, fx)
+    TaskDone () ->
+      (model.budgetItems, Effects.none)
