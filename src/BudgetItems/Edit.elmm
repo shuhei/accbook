@@ -1,4 +1,4 @@
-module BudgetItemForm (..) where
+module BudgetItems.Edit (..) where
 
 -- import Date exposing (Date)
 import Html exposing (..)
@@ -41,6 +41,7 @@ type Action
   = NoOp
   | FormAction Form.Action
   | Save
+  | Cancel
 
 update : Action -> Model -> Model
 update action ({form} as model) =
@@ -51,8 +52,10 @@ update action ({form} as model) =
       { model | form = Form.update formAction form }
     Save ->
       case Form.getOutput (Debug.log "output" form) of
-        Just output -> model
+        Just output -> init
         Nothing -> model
+    Cancel ->
+      init
 
 -- VIEW
 
@@ -73,7 +76,8 @@ view address {form} =
        , textField formAddress amount "number"
        , textField formAddress date "date"
        , inputField
-           [ button [ class "btn" , onClick address Save ] [ text "Save" ] ]
+           [ button [ class "btn", onClick address Cancel ] [ text "Cancel" ]
+           , button [ class "btn", onClick address Save ] [ text "Save" ] ]
        ]
 
 inputField : List Html -> Html
@@ -90,7 +94,8 @@ errorFor : FieldState e a -> Html
 errorFor field =
   case field.liveError of
     Just error ->
-      div [ class "error" ] [ text <| toString error ]
+      -- TODO: Style with CSS
+      div [ style [ ("color", "#F44336") ] ] [ text <| toString error ]
     Nothing ->
       text ""
 
