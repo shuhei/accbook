@@ -20,8 +20,8 @@ view address model =
     [ h1 [] [ text "accbook" ]
     , div
         []
-        [ iconButton "settings" [ onClick address <| NoOp ]
-        -- , iconButton "add" [ onClick address <| RouteAction NewBudgetItem ]
+        [ iconButton "settings" [ onClick address NoOp ]
+        , iconButton "add" [ onClick address Create ]
         ]
     , table []
         [ thead []

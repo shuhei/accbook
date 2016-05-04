@@ -16,8 +16,10 @@ update action model =
       let (updatedRouting, fx) = Routing.update act model.routing
       in ({ model | routing = updatedRouting }, Effects.map RoutingAction fx)
     BudgetItemsAction act ->
-      let updateModel = { budgetItems = model.budgetItems
-                        , showErrorAddress = Signal.forwardTo actionsMailbox.address ShowError
+      let makeAddress = Signal.forwardTo actionsMailbox.address
+          updateModel = { budgetItems = model.budgetItems
+                        , showErrorAddress = makeAddress ShowError
+                        , navigateAddress = makeAddress <| RoutingAction << Routing.NavigateTo
                         }
           (updatedItems, fx) = BudgetItems.Update.update act updateModel
       in ({ model | budgetItems = updatedItems }, Effects.map BudgetItemsAction fx)
