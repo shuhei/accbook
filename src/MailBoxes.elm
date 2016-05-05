@@ -8,3 +8,7 @@ import Actions exposing (..)
 actionsMailbox : Mailbox Action
 actionsMailbox =
   Signal.mailbox NoOp
+
+confirmationMailbox : Signal.Mailbox (Int, String)
+confirmationMailbox =
+  Signal.mailbox (0, "")

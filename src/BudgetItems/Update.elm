@@ -13,6 +13,7 @@ type alias UpdateModel =
   { budgetItems : List BudgetItem
   , showErrorAddress : Address String
   , navigateAddress : Address String
+  , confirmationAddress : Address (BudgetItemId, String)
   }
 
 update : Action -> UpdateModel -> (List BudgetItem, Effects Action)
@@ -41,9 +42,11 @@ update action model =
     Edit id ->
       navigateTo model <| "#/budgetItems/" ++ (toString id) ++ "/edit"
     DeleteIntent item ->
-      (model.budgetItems, Effects.none)
+      let message = "Are you sure you want to delete " ++ item.label ++ "?"
+          fx = makeSendFx model.confirmationAddress (item.id, message)
+      in (model.budgetItems, fx)
     Delete id ->
-      (model.budgetItems, Effects.none)
+      (model.budgetItems, delete id)
     DeleteDone id result ->
       case result of
         Ok () ->
@@ -63,8 +66,8 @@ navigateTo : UpdateModel -> String -> (List BudgetItem, Effects Action)
 navigateTo model path =
   (model.budgetItems, makeSendFx model.navigateAddress path)
 
-makeSendFx : Address String -> String -> Effects Action
-makeSendFx address str =
-  Signal.send address str
+makeSendFx : Address a -> a -> Effects Action
+makeSendFx address x =
+  Signal.send address x
     |> Effects.task
     |> Effects.map TaskDone

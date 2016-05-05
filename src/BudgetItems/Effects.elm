@@ -2,7 +2,7 @@ module BudgetItems.Effects (..) where
 
 import Effects exposing (Effects)
 import Http
-import Task
+import Task exposing (Task)
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import DateHelpers exposing (..)
@@ -13,9 +13,7 @@ import BudgetItems.Models exposing (..)
 fetchAll : Effects Action
 fetchAll =
   Http.get collectionDecoder fetchAllUrl
-    |> Task.toResult
-    |> Task.map FetchAllDone
-    |> Effects.task
+    |> toEffects FetchAllDone
 
 fetchAllUrl : String
 fetchAllUrl =
@@ -35,13 +33,34 @@ create item =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
-       |> Task.toResult
-       |> Task.map CreateDone
-       |> Effects.task
+       |> toEffects CreateDone
 
 createUrl : String
-createUrl = "http://localhost:3000/budgetItems"
+createUrl =
+  "http://localhost:3000/budgetItems"
 
+delete : BudgetItemId -> Effects Action
+delete id =
+  let config =
+        { verb = "DELETE"
+        , headers = [ ("Content-Type", "application/json") ]
+        , url = deleteUrl id
+        , body = Http.empty
+        }
+  in Http.send Http.defaultSettings config
+       |> Http.fromJson (Decode.succeed ())
+       |> toEffects (DeleteDone id)
+
+deleteUrl : BudgetItemId -> String
+deleteUrl id =
+  "http://localhost:3000/budgetItems/" ++ (toString id)
+
+toEffects : (Result Http.Error x -> a) -> Task Http.Error x -> Effects a
+toEffects makeAction task =
+  task
+    |> Task.toResult
+    |> Task.map makeAction
+    |> Effects.task
 
 -- Encoder/Decoder
 
