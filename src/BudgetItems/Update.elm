@@ -20,8 +20,8 @@ update action model =
   case action of
     NoOp ->
       (model.budgetItems, Effects.none)
-    Delete id ->
-      (List.filter (\x -> x.id /= id) model.budgetItems, Effects.none)
+    ListAll ->
+      navigateTo model "#/budgetItems"
     FetchAllDone result ->
       case result of
         Ok budgetItems ->
@@ -39,9 +39,17 @@ update action model =
         Err error ->
           sendError model error
     Edit id ->
-      let path = "#/budgetItems/" ++ (toString id) ++ "/edit"
-          fx = makeSendFx model.navigateAddress path
-      in (model.budgetItems, fx)
+      navigateTo model <| "#/budgetItems/" ++ (toString id) ++ "/edit"
+    DeleteIntent item ->
+      (model.budgetItems, Effects.none)
+    Delete id ->
+      (model.budgetItems, Effects.none)
+    DeleteDone id result ->
+      case result of
+        Ok () ->
+          (List.filter (\x -> x.id /= id) model.budgetItems, Effects.none)
+        Err error ->
+          sendError model error
     TaskDone () ->
       (model.budgetItems, Effects.none)
 
@@ -50,6 +58,10 @@ sendError model error =
   let message = toString error
       fx = makeSendFx model.showErrorAddress message
   in (model.budgetItems, fx)
+
+navigateTo : UpdateModel -> String -> (List BudgetItem, Effects Action)
+navigateTo model path =
+  (model.budgetItems, makeSendFx model.navigateAddress path)
 
 makeSendFx : Address String -> String -> Effects Action
 makeSendFx address str =

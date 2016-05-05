@@ -1,7 +1,7 @@
 module BudgetItems.Edit (..) where
 
 import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Signal exposing (Address)
 import BudgetItems.Actions exposing (..)
 import BudgetItems.Models exposing (..)
@@ -26,5 +26,5 @@ form' address model =
   div []
     [ h1 [] [ text "Edit budget item" ]
     , div []
-        [ textButton "cancel" [ href "#/budgetItems" ] ]
+        [ textButton "cancel" [ onClick address ListAll ] ]
     ]

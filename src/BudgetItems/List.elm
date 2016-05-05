@@ -1,11 +1,10 @@
 module BudgetItems.List (view, ViewModel) where
 
 import Html exposing (..)
-import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Signal exposing (Address)
 
-import Helpers exposing (..)
+import DateHelpers exposing (..)
 import BudgetItems.Actions exposing (..)
 import BudgetItems.Models exposing (BudgetItem)
 import Materialize exposing (..)
@@ -43,7 +42,7 @@ budgetItemRow address item =
     , td [] [ text item.label ]
     , td [] [ text (toString item.amount) ]
     , td []
-        [ iconButton "edit" [ href <| "#/budgetItems/" ++ (toString item.id) ++ "/edit" ]
+        [ iconButton "edit" [ onClick address (Edit item.id) ]
         , iconButton "delete" [ onClick address (Delete item.id) ]
         ]
     ]

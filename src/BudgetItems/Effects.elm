@@ -3,10 +3,9 @@ module BudgetItems.Effects (..) where
 import Effects exposing (Effects)
 import Http
 import Task
-import Json.Decode as Decode exposing ((:=), int, string)
+import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
-import Date
-import Date.Extra.Format
+import DateHelpers exposing (..)
 
 import BudgetItems.Actions exposing (..)
 import BudgetItems.Models exposing (..)
@@ -54,13 +53,10 @@ memberDecoder : Decode.Decoder BudgetItem
 memberDecoder =
   Decode.object4
     BudgetItem
-    ("id" := int)
-    ("label" := string)
-    ("amount" := int)
-    ("date" := date)
-
-date : Decode.Decoder Date.Date
-date = Decode.customDecoder string Date.fromString
+    ("id" := Decode.int)
+    ("label" := Decode.string)
+    ("amount" := Decode.int)
+    ("date" := decodeDate)
 
 encodeMember : BudgetItem -> Encode.Value
 encodeMember item =
@@ -68,7 +64,6 @@ encodeMember item =
         [ ("id", Encode.int item.id)
         , ("label", Encode.string item.label)
         , ("amount", Encode.int item.amount)
-        -- FIXME: Make ISO string
-        , ("date", Encode.string (Date.Extra.Format.utcIsoDateString item.date))
+        , ("date", encodeDate item.date)
         ]
   in Encode.object list

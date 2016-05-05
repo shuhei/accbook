@@ -1,7 +1,10 @@
-module Helpers (..) where
+module DateHelpers (..) where
 
 import Date exposing (Date)
 import String
+import Json.Decode as Decode
+import Json.Encode as Encode
+import Date.Extra.Format
 
 formatDate : Date.Date -> String
 formatDate d =
@@ -23,3 +26,9 @@ numericMonth m =
     Date.Oct -> 10
     Date.Nov -> 11
     Date.Dec -> 12
+
+decodeDate : Decode.Decoder Date.Date
+decodeDate = Decode.customDecoder Decode.string Date.fromString
+
+encodeDate : Date.Date -> Decode.Value
+encodeDate = Encode.string << Date.Extra.Format.utcIsoDateString

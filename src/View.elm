@@ -59,7 +59,6 @@ budgetEditPage address model itemId =
     Nothing ->
       notFoundView
 
-
 notFoundView : Html
 notFoundView =
   div
