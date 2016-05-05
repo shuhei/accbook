@@ -11,23 +11,12 @@ import BudgetItems.Edit
 import BudgetItems.Models exposing (BudgetItemId)
 import Routing
 
-css : String -> Html
-css path =
-  node "link"
-    [ attribute "rel" "stylesheet"
-    , type' "text/css"
-    , href path
-    ]
-    []
-
 view : Address Action -> AppModel -> Html
 view address model =
   let _ = Debug.log "model" model
   in
     div [ class "container" ]
-      [ css "http://fonts.googleapis.com/icon?family=Material+Icons"
-      , css "../node_modules/materialize-css/dist/css/materialize.css"
-      , flash address model
+      [ flash address model
       , page address model
       ]
 
@@ -54,7 +43,7 @@ budgetEditPage address model itemId =
           |> List.head
   in case maybeItem of
     Just item ->
-      let viewModel = { form = model.budgetItems.form }
+      let viewModel = { form = model.budgetItems.form, item = item }
       in BudgetItems.Edit.view (Signal.forwardTo address BudgetItemsAction) viewModel
     Nothing ->
       notFoundView

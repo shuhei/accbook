@@ -13,15 +13,17 @@ import Form.Input as Input
 
 type alias ViewModel =
   { form : Form () BudgetItem
+  , item : BudgetItem
   }
 
 initialViewModel : ViewModel
 initialViewModel =
   { form = Form.initial [] validate
+  , item = BudgetItems.Models.new
   }
 
 view : Address Action -> ViewModel -> Html
-view address {form} =
+view address {form, item} =
   let formAddress = Signal.forwardTo address FormAction
       income = Form.getFieldAsBool "income" form
       label' = Form.getFieldAsString "label" form
@@ -38,6 +40,7 @@ view address {form} =
        , textField formAddress date "date"
        , inputField
            [ button [ class "btn", onClick address ListAll ] [ text "Cancel" ]
+           , button [ class "btn red", onClick address (DeleteIntent item) ] [ text "Delete" ]
            , button [ class "btn", onClick address Save ] [ text "Save" ] ]
        ]
 

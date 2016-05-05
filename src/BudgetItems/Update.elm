@@ -57,7 +57,8 @@ update action ({budgetItems} as model) =
         Ok () ->
           let updatedCollection =
                 List.filter (\x -> x.id /= id) budgetItems.items
-          in ({ budgetItems | items = updatedCollection }, Effects.none)
+              fx = Task.succeed ListAll |> Effects.task
+          in ({ budgetItems | items = updatedCollection }, fx)
         Err error ->
           sendError model error
     FormAction formAction ->
