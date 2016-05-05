@@ -43,18 +43,18 @@ page address model =
 
 budgetItemsPage : Address Action -> AppModel -> Html
 budgetItemsPage address model =
-  let viewModel = { budgetItems = model.budgetItems }
+  let viewModel = { budgetItems = model.budgetItems.items }
   in BudgetItems.List.view (Signal.forwardTo address BudgetItemsAction) viewModel
 
 budgetEditPage : Address Action -> AppModel -> BudgetItemId -> Html
 budgetEditPage address model itemId =
   let maybeItem =
-        model.budgetItems
+        model.budgetItems.items
           |> List.filter (\x -> x.id == itemId)
           |> List.head
   in case maybeItem of
     Just item ->
-      let viewModel = { budgetItem = item }
+      let viewModel = { form = model.budgetItems.form }
       in BudgetItems.Edit.view (Signal.forwardTo address BudgetItemsAction) viewModel
     Nothing ->
       notFoundView

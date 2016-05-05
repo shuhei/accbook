@@ -22,6 +22,7 @@
       "id": 1,
       "budgetId": 1,
       "label": "Salary",
+      "isIncome": true,
       "amount": 100000,
       "date": "2016-05-03T04:44:00.114Z"
     },
@@ -29,13 +30,15 @@
       "id": 2,
       "budgetId": 1,
       "label": "Lunch",
-      "amount": -1000,
+      "isIncome": false,
+      "amount": 1000,
       "date": "2016-05-04T04:44:00.114Z"
     },
     {
       "id": 3,
       "budgetId": 2,
       "label": "Saving",
+      "isIncome": true,
       "amount": 100000,
       "date": "2016-05-05T04:44:00.114Z"
     },
@@ -43,6 +46,7 @@
       "id": 4,
       "budgetId": 2,
       "label": "Saving",
+      "isIncome": true,
       "amount": 100000,
       "date": "2016-06-05T04:44:00.114Z"
     },
@@ -50,6 +54,7 @@
       "id": 5,
       "budgetId": 2,
       "label": "Saving",
+      "isIncome": true,
       "amount": 100000,
       "date": "2016-06-05T04:44:00.114Z"
     }

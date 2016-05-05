@@ -6,54 +6,61 @@ import Task exposing (Task)
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import DateHelpers exposing (..)
+import String
 
 import BudgetItems.Actions exposing (..)
 import BudgetItems.Models exposing (..)
 
+collectionUrl : String
+collectionUrl =
+  "http://localhost:3000/budgetItems"
+
+memberUrl : BudgetItemId -> String
+memberUrl id =
+  String.join "/" [ collectionUrl, (toString id) ]
+
 fetchAll : Effects Action
 fetchAll =
-  Http.get collectionDecoder fetchAllUrl
+  Http.get collectionDecoder collectionUrl
     |> toEffects FetchAllDone
-
-fetchAllUrl : String
-fetchAllUrl =
-  "http://localhost:3000/budgetItems"
 
 create : BudgetItem -> Effects Action
 create item =
-  let body =
-        encodeMember item
-          |> Encode.encode 0
-          |> Http.string
+  let body = memberBody item
       config =
         { verb = "POST"
         , headers = [ ("Content-Type", "application/json") ]
-        , url = createUrl
+        , url = collectionUrl
         , body = body
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
        |> toEffects CreateDone
 
-createUrl : String
-createUrl =
-  "http://localhost:3000/budgetItems"
-
 delete : BudgetItemId -> Effects Action
 delete id =
   let config =
         { verb = "DELETE"
         , headers = [ ("Content-Type", "application/json") ]
-        , url = deleteUrl id
+        , url = memberUrl id
         , body = Http.empty
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson (Decode.succeed ())
        |> toEffects (DeleteDone id)
 
-deleteUrl : BudgetItemId -> String
-deleteUrl id =
-  "http://localhost:3000/budgetItems/" ++ (toString id)
+save : BudgetItem -> Effects Action
+save item =
+  let body = memberBody item
+      config =
+        { verb = "PATCH"
+        , headers = [ ("Content-Type", "application/json") ]
+        , url = memberUrl item.id
+        , body = body
+        }
+  in Http.send Http.defaultSettings config
+       |> Http.fromJson memberDecoder
+       |> toEffects SaveDone
 
 toEffects : (Result Http.Error x -> a) -> Task Http.Error x -> Effects a
 toEffects makeAction task =
@@ -70,12 +77,19 @@ collectionDecoder =
 
 memberDecoder : Decode.Decoder BudgetItem
 memberDecoder =
-  Decode.object4
+  Decode.object5
     BudgetItem
     ("id" := Decode.int)
     ("label" := Decode.string)
+    ("isIncome" := Decode.bool)
     ("amount" := Decode.int)
     ("date" := decodeDate)
+
+memberBody : BudgetItem -> Http.Body
+memberBody item =
+  encodeMember item
+    |> Encode.encode 0
+    |> Http.string
 
 encodeMember : BudgetItem -> Encode.Value
 encodeMember item =

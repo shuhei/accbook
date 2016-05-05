@@ -38,11 +38,11 @@ view address model =
 budgetItemRow : Address Action -> BudgetItem -> Html
 budgetItemRow address item =
   tr []
-    [ td [] [ text (formatDate item.date) ]
+    [ td [] [ text (humanDate item.date) ]
     , td [] [ text item.label ]
     , td [] [ text (toString item.amount) ]
     , td []
         [ iconButton "delete" [ onClick address (DeleteIntent item) ]
-        , iconButton "edit" [ onClick address (Edit item.id) ]
+        , iconButton "edit" [ onClick address (Edit item) ]
         ]
     ]

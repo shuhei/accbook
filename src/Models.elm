@@ -4,14 +4,14 @@ import BudgetItems.Models exposing (..)
 import Routing
 
 type alias AppModel =
-  { budgetItems : List BudgetItem
+  { budgetItems : BudgetItems.Models.Model
   , routing : Routing.Model
   , errorMessage : Maybe String
   }
 
 initialModel : AppModel
 initialModel =
-  { budgetItems = []
+  { budgetItems = BudgetItems.Models.initialModel
   , routing = Routing.initialModel
   , errorMessage = Nothing
   }

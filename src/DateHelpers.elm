@@ -1,15 +1,20 @@
 module DateHelpers (..) where
 
 import Date exposing (Date)
-import String
 import Json.Decode as Decode
 import Json.Encode as Encode
-import Date.Extra.Format
+import Date.Extra.Format as Format
+import Date.Extra.Config.Config_en_us exposing (config)
 
-formatDate : Date.Date -> String
-formatDate d =
-  let components = [ Date.year d, Date.month d |> numericMonth, Date.day d ]
-  in components |> List.map toString |> String.join "-"
+-- YYYY/m/d
+humanDate : Date.Date -> String
+humanDate d =
+  Format.format config "%Y/%-m/%-d" d
+
+-- YYYY-mm-dd
+formatIsoDate : Date.Date -> String
+formatIsoDate d =
+  Format.format config Format.isoDateFormat d
 
 numericMonth : Date.Month -> Int
 numericMonth m =
@@ -31,4 +36,4 @@ decodeDate : Decode.Decoder Date.Date
 decodeDate = Decode.customDecoder Decode.string Date.fromString
 
 encodeDate : Date.Date -> Decode.Value
-encodeDate = Encode.string << Date.Extra.Format.utcIsoDateString
+encodeDate = Encode.string << Format.utcIsoDateString

@@ -4,29 +4,31 @@ import Signal exposing (Address)
 import Effects exposing (Effects)
 import Task
 import Http
+import Form exposing (Form)
 
 import BudgetItems.Actions exposing (..)
 import BudgetItems.Models exposing (..)
 import BudgetItems.Effects exposing (..)
 
+-- FIXME: Unintuitive name: budgetItems.
 type alias UpdateModel =
-  { budgetItems : List BudgetItem
+  { budgetItems : Model
   , showErrorAddress : Address String
   , navigateAddress : Address String
   , confirmationAddress : Address (BudgetItemId, String)
   }
 
-update : Action -> UpdateModel -> (List BudgetItem, Effects Action)
-update action model =
+update : Action -> UpdateModel -> (Model, Effects Action)
+update action ({budgetItems} as model) =
   case action of
     NoOp ->
-      (model.budgetItems, Effects.none)
+      (budgetItems, Effects.none)
     ListAll ->
-      navigateTo model "#/budgetItems"
+      (model.budgetItems, makeSendFx model.navigateAddress "#/budgetItems")
     FetchAllDone result ->
       case result of
-        Ok budgetItems ->
-          (budgetItems, Effects.none)
+        Ok fetchedItems ->
+          ({ budgetItems | items = fetchedItems }, Effects.none)
         Err error ->
           sendError model error
     Create ->
@@ -34,13 +36,16 @@ update action model =
     CreateDone result ->
       case result of
         Ok item ->
-          let updatedCollection = item :: model.budgetItems
-              fx = Task.succeed (Edit item.id) |> Effects.task
-          in (updatedCollection, fx)
+          let updatedCollection = item :: budgetItems.items
+              fx = Task.succeed (Edit item) |> Effects.task
+          in ({ budgetItems | items = updatedCollection }, fx)
         Err error ->
           sendError model error
-    Edit id ->
-      navigateTo model <| "#/budgetItems/" ++ (toString id) ++ "/edit"
+    Edit item ->
+      let path = "#/budgetItems/" ++ (toString item.id) ++ "/edit"
+          -- TODO: Do this in routing so that this works with only URL change.
+          updatedModel = { budgetItems | form = makeForm item }
+      in (updatedModel, makeSendFx model.navigateAddress path)
     DeleteIntent item ->
       let message = "Are you sure you want to delete " ++ item.label ++ "?"
           fx = makeSendFx model.confirmationAddress (item.id, message)
@@ -50,21 +55,37 @@ update action model =
     DeleteDone id result ->
       case result of
         Ok () ->
-          (List.filter (\x -> x.id /= id) model.budgetItems, Effects.none)
+          let updatedCollection =
+                List.filter (\x -> x.id /= id) budgetItems.items
+          in ({ budgetItems | items = updatedCollection }, Effects.none)
+        Err error ->
+          sendError model error
+    FormAction formAction ->
+      ({ budgetItems | form = Form.update formAction budgetItems.form }, Effects.none)
+    Save ->
+      case Form.getOutput (Debug.log "form output" budgetItems.form) of
+        -- TODO: Clear form?
+        Just item ->
+          (model.budgetItems, save item)
+        Nothing ->
+          (model.budgetItems, Effects.none)
+    SaveDone result ->
+      case result of
+        Ok item ->
+          let update x = if x.id == item.id then item else x
+              updatedCollection = List.map update budgetItems.items
+          in ( { budgetItems | items = updatedCollection }
+             , makeSendFx model.navigateAddress "#/budgetItems")
         Err error ->
           sendError model error
     TaskDone () ->
       (model.budgetItems, Effects.none)
 
-sendError : UpdateModel -> Http.Error -> (List BudgetItem, Effects Action)
+sendError : UpdateModel -> Http.Error -> (Model, Effects Action)
 sendError model error =
   let message = toString error
       fx = makeSendFx model.showErrorAddress message
   in (model.budgetItems, fx)
-
-navigateTo : UpdateModel -> String -> (List BudgetItem, Effects Action)
-navigateTo model path =
-  (model.budgetItems, makeSendFx model.navigateAddress path)
 
 makeSendFx : Address a -> a -> Effects Action
 makeSendFx address x =
