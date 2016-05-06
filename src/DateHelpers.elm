@@ -36,4 +36,4 @@ decodeDate : Decode.Decoder Date.Date
 decodeDate = Decode.customDecoder Decode.string Date.fromString
 
 encodeDate : Date.Date -> Decode.Value
-encodeDate = Encode.string << Format.utcIsoDateString
+encodeDate = Encode.string << Format.utcIsoString

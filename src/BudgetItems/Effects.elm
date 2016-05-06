@@ -96,6 +96,7 @@ encodeMember item =
   let list =
         [ ("id", Encode.int item.id)
         , ("label", Encode.string item.label)
+        , ("isIncome", Encode.bool item.isIncome)
         , ("amount", Encode.int item.amount)
         , ("date", encodeDate item.date)
         ]
