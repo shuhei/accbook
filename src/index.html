@@ -7,7 +7,37 @@
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="../node_modules/materialize-css/dist/css/materialize.css">
     <style>
-      .budget-item-table--total {
+      /* layout */
+      @media only screen and (min-width: 993px) {
+        .page-header,
+        .page-main {
+          padding-left: 240px;
+        }
+      }
+      @media only screen and (max-width: 992px) {
+        .page-header,
+        .page-main {
+          padding-left: 0;
+        }
+        .side-nav {
+          transform: translateX(-100%);
+        }
+      }
+
+      /* Side nav */
+      .side-nav {
+        background-color: #fcfcfc;
+      }
+      .side-nav a {
+        display: block;
+        padding: 0 30px;
+      }
+
+      /* Budget item table */
+      .budget-item-table--item-row {
+        cursor: pointer;
+      }
+      .budget-item-table--total-row {
         border-top: 1px solid #d0d0d0;
         font-weight: bold;
       }

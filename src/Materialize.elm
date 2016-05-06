@@ -14,3 +14,9 @@ textButton name attrs =
   button
     (class "btn waves-effect waves-light" :: attrs)
     [ text name ]
+
+floatingActionButton : String -> List Attribute -> Html
+floatingActionButton name attrs =
+  a
+    (class "btn-floating btn-large waves-effect waves-light red" :: attrs)
+    [ i [ class "material-icons" ] [ text name ] ]

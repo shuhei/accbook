@@ -30,8 +30,7 @@ view address {form, item} =
       amount = Form.getFieldAsString "amount" form
       date = Form.getFieldAsString "date" form
   in div []
-       [ h4 [] [ text "New Budget Item" ]
-       , inputField
+       [ inputField
            [ Input.checkboxInput income formAddress [ id "item-income" ]
            , label [ for "item-income" ] [ text "Income" ]
            ]

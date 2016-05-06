@@ -19,53 +19,51 @@ type alias ViewModel =
 view : Address Action -> ViewModel -> Html
 view address model =
   div []
-    [ h1 [] [ text "accbook" ]
-    , div
-        []
-        [ iconButton "settings" [ onClick address NoOp ]
-        , iconButton "add" [ onClick address Create ]
-        ]
-    , table []
+    [ table []
         [ thead []
             [ tr []
                 [ th [] [ text "Date" ]
                 , th [] [ text "Label" ]
                 , th [ class "right-align" ] [ text "Amount" ]
-                , th [ class "right-align" ] [ text "Total" ]
+                , th [ class "right-align" ] [ text "Balance" ]
                 ]
             ]
         , tbody [] <| rows address model.budgetItems
+        ]
+    , div [ class "fixed-action-btn" ]
+        [ floatingActionButton "add" [ onClick address Create ]
         ]
     ]
 
 rows : Address Action -> List BudgetItem -> List Html
 rows address items =
-  let maybeCurrents = List.tail <| List.scanl (\item x -> x + netAmount item) 0 items
-  in case maybeCurrents of
-       Just currents ->
-         let itemRows = List.map (budgetItemRow address) <| zip items currents
+  let maybeBalances = List.tail <| List.scanl (\item x -> x + netAmount item) 0 items
+  in case maybeBalances of
+       Just balances ->
+         let itemRows = List.map (budgetItemRow address) <| zip items balances
          in itemRows ++ [ totalRow items ]
        -- Never be Nothing because `scanl f 0 []` returns `[0]`.
        Nothing ->
          []
 
 budgetItemRow : Address Action -> (BudgetItem, Int) -> Html
-budgetItemRow address (item, current) =
+budgetItemRow address (item, balance) =
   let amountClass = if item.isIncome then "green-text right-align" else "red-text right-align"
-      currentClass = if current >= 0 then "right-align" else "red-text right-align"
-  in tr [ onClick address (Edit item) ]
+      balanceClass = if balance >= 0 then "right-align" else "red-text right-align"
+  in tr [ class "budget-item-table--item-row", onClick address (Edit item) ]
        [ td [] [ text <| humanDate item.date ]
        , td [] [ text item.label ]
        , td [ class amountClass ] [ text <| Format.prettyInt ',' <| netAmount item ]
-       , td [ class currentClass ] [ text <| Format.prettyInt ',' current ]
+       , td [ class balanceClass ] [ text <| Format.prettyInt ',' balance ]
        ]
 
 totalRow : List BudgetItem -> Html
 totalRow items =
   let total = List.sum <| List.map netAmount items
-  in tr [ class "budget-item-table--total" ]
-       [ td [ colspan 3 ] []
-       , td [] [ text <| Format.prettyInt ',' total ]
+  in tr [ class "budget-item-table--total-row" ]
+       [ th [] [ text "Total" ]
+       , td [ colspan 2 ] []
+       , td [ class "right-align" ] [ text <| Format.prettyInt ',' total ]
        ]
 
 netAmount : BudgetItem -> Int
