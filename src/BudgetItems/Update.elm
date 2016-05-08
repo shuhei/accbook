@@ -10,83 +10,81 @@ import BudgetItems.Actions exposing (..)
 import BudgetItems.Models exposing (..)
 import BudgetItems.Effects exposing (..)
 
--- FIXME: Unintuitive name: budgetItems.
-type alias UpdateModel =
-  { budgetItems : Model
-  , showErrorAddress : Address String
+type alias Context =
+  { showErrorAddress : Address String
   , navigateAddress : Address String
   , confirmationAddress : Address (BudgetItemId, String)
   }
 
-update : Action -> UpdateModel -> (Model, Effects Action)
-update action ({budgetItems} as model) =
+update : Context -> Action -> Model -> (Model, Effects Action)
+update ctx action model =
   case action of
     NoOp ->
-      (budgetItems, Effects.none)
+      (model, Effects.none)
     ListAll ->
-      (model.budgetItems, makeSendFx model.navigateAddress "#/budgetItems")
+      (model, makeSendFx ctx.navigateAddress "#/budgetItems")
     FetchAllDone result ->
       case result of
         Ok fetchedItems ->
-          ({ budgetItems | items = fetchedItems }, Effects.none)
+          ({ model | items = fetchedItems }, Effects.none)
         Err error ->
-          sendError model error
+          sendError ctx model error
     Create ->
-      (model.budgetItems, create new)
+      (model, create new)
     CreateDone result ->
       case result of
         Ok item ->
-          let updatedCollection = item :: budgetItems.items
+          let updatedCollection = item :: model.items
               fx = Task.succeed (Edit item) |> Effects.task
-          in ({ budgetItems | items = updatedCollection }, fx)
+          in ({ model | items = updatedCollection }, fx)
         Err error ->
-          sendError model error
+          sendError ctx model error
     Edit item ->
       let path = "#/budgetItems/" ++ (toString item.id) ++ "/edit"
           -- TODO: Do this in routing so that this works with only URL change.
-          updatedModel = { budgetItems | form = makeForm item }
-      in (updatedModel, makeSendFx model.navigateAddress path)
+          updatedModel = { model | form = makeForm item }
+      in (updatedModel, makeSendFx ctx.navigateAddress path)
     DeleteIntent item ->
       let message = "Are you sure you want to delete " ++ item.label ++ "?"
-          fx = makeSendFx model.confirmationAddress (item.id, message)
-      in (model.budgetItems, fx)
+          fx = makeSendFx ctx.confirmationAddress (item.id, message)
+      in (model, fx)
     Delete id ->
-      (model.budgetItems, delete id)
+      (model, delete id)
     DeleteDone id result ->
       case result of
         Ok () ->
           let updatedCollection =
-                List.filter (\x -> x.id /= id) budgetItems.items
+                List.filter (\x -> x.id /= id) model.items
               fx = Task.succeed ListAll |> Effects.task
-          in ({ budgetItems | items = updatedCollection }, fx)
+          in ({ model | items = updatedCollection }, fx)
         Err error ->
-          sendError model error
+          sendError ctx model error
     FormAction formAction ->
-      ({ budgetItems | form = Form.update formAction budgetItems.form }, Effects.none)
+      ({ model | form = Form.update formAction model.form }, Effects.none)
     Save ->
-      case Form.getOutput (Debug.log "form output" budgetItems.form) of
+      case Form.getOutput (Debug.log "form output" model.form) of
         -- TODO: Clear form?
         Just item ->
-          (model.budgetItems, save item)
+          (model, save item)
         Nothing ->
-          (model.budgetItems, Effects.none)
+          (model, Effects.none)
     SaveDone result ->
       case result of
         Ok item ->
           let update x = if x.id == item.id then item else x
-              updatedCollection = List.map update budgetItems.items
-          in ( { budgetItems | items = updatedCollection }
-             , makeSendFx model.navigateAddress "#/budgetItems")
+              updatedCollection = List.map update model.items
+          in ( { model | items = updatedCollection }
+             , makeSendFx ctx.navigateAddress "#/budgetItems")
         Err error ->
-          sendError model error
+          sendError ctx model error
     TaskDone () ->
-      (model.budgetItems, Effects.none)
+      (model, Effects.none)
 
-sendError : UpdateModel -> Http.Error -> (Model, Effects Action)
-sendError model error =
+sendError : Context -> Model -> Http.Error -> (Model, Effects Action)
+sendError ctx model error =
   let message = toString error
-      fx = makeSendFx model.showErrorAddress message
-  in (model.budgetItems, fx)
+      fx = makeSendFx ctx.showErrorAddress message
+  in (model, fx)
 
 makeSendFx : Address a -> a -> Effects Action
 makeSendFx address x =

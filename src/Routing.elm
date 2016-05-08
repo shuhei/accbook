@@ -3,6 +3,7 @@ module Routing (..) where
 
 import Task exposing (Task)
 import Effects exposing (Effects, Never)
+import Signal exposing (Address)
 import Hop
 import Hop.Types exposing (Config, Location, PathMatcher, Router, newLocation)
 import Hop.Navigate exposing (navigateTo)
@@ -11,7 +12,8 @@ import Hop.Matchers exposing (match1, match2, match3, int)
 import BudgetItems.Models exposing (BudgetItemId)
 
 type Route
-  = BudgetItemsRoute
+  = HomeRoute
+  | BudgetItemsRoute
   | BudgetItemEditRoute BudgetItemId
   | NotFoundRoute
 
@@ -19,6 +21,7 @@ type Action
   = HopAction ()
   | ApplyRoute (Route, Location)
   | NavigateTo String
+  | TaskDone ()
 
 type alias Model =
   { location : Location
@@ -39,19 +42,32 @@ routerConfig =
   , notFound = NotFoundRoute
   }
 
-update : Action -> Model -> (Model, Effects Action)
-update action model =
+type alias Context =
+  { navigateAddress : Address String }
+
+update : Context -> Action -> Model -> (Model, Effects Action)
+update ctx action model =
   case action of
     NavigateTo path ->
       (model, Effects.map HopAction (navigateTo routerConfig path))
     ApplyRoute (route, location) ->
-      ({ model | route = route, location = location }, Effects.none)
+      case route of
+        -- Redirect
+        HomeRoute ->
+          let fx = Signal.send ctx.navigateAddress "#/budgetItems"
+                     |> Effects.task
+                     |> Effects.map TaskDone
+          in (model, fx)
+        _ ->
+          ({ model | route = route, location = location }, Effects.none)
     HopAction () ->
+      (model, Effects.none)
+    TaskDone () ->
       (model, Effects.none)
 
 indexMatcher : PathMatcher Route
 indexMatcher =
-  match1 BudgetItemsRoute "/"
+  match1 HomeRoute "/"
 
 budgetItemsMatcher : PathMatcher Route
 budgetItemsMatcher =

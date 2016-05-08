@@ -46,6 +46,8 @@ sideNav address model =
 titleAndPage : Address Action -> AppModel -> (String, Html)
 titleAndPage address model =
   case model.routing.route of
+    Routing.HomeRoute ->
+      ("Budget Items", budgetItemsPage address model)
     Routing.BudgetItemsRoute ->
       ("Budget Items", budgetItemsPage address model)
     Routing.BudgetItemEditRoute itemId ->
