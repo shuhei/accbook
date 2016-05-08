@@ -25,7 +25,7 @@ initialViewModel =
 view : Address Action -> ViewModel -> Html
 view address {form, item} =
   let formAddress = Signal.forwardTo address FormAction
-      income = Form.getFieldAsBool "income" form
+      income = Form.getFieldAsBool "isIncome" form
       label' = Form.getFieldAsString "label" form
       amount = Form.getFieldAsString "amount" form
       date = Form.getFieldAsString "date" form
