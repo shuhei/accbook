@@ -12,12 +12,15 @@ import Update exposing (update)
 import View exposing (view)
 import Mailboxes exposing (..)
 import Routing
+import Budgets.Effects
 import BudgetItems.Effects
 import BudgetItems.Actions
 
 init : (AppModel, Effects Action)
 init =
-  let fxs = [ Effects.map BudgetItemsAction BudgetItems.Effects.fetchAll ]
+  let fxs = [ Effects.map BudgetsAction Budgets.Effects.fetchAll
+            , Effects.map BudgetItemsAction BudgetItems.Effects.fetchAll
+            ]
       fx = Effects.batch fxs
   in (initialModel, fx)
 

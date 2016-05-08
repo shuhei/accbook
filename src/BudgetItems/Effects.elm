@@ -2,7 +2,6 @@ module BudgetItems.Effects (..) where
 
 import Effects exposing (Effects)
 import Http
-import Task exposing (Task)
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import DateHelpers exposing (..)
@@ -10,6 +9,7 @@ import String
 
 import BudgetItems.Actions exposing (..)
 import BudgetItems.Models exposing (..)
+import EffectsHelper exposing (..)
 
 collectionUrl : String
 collectionUrl =
@@ -61,13 +61,6 @@ save item =
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
        |> toEffects SaveDone
-
-toEffects : (Result Http.Error x -> a) -> Task Http.Error x -> Effects a
-toEffects makeAction task =
-  task
-    |> Task.toResult
-    |> Task.map makeAction
-    |> Effects.task
 
 -- Encoder/Decoder
 

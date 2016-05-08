@@ -20,3 +20,11 @@ floatingActionButton name attrs =
   a
     (class "btn-floating btn-large waves-effect waves-light red" :: attrs)
     [ i [ class "material-icons" ] [ text name ] ]
+
+listItem : String -> List Attribute -> Html
+listItem name attrs =
+  li []
+    [ a
+        (class "waves-effect waves-teal" :: attrs)
+        [ text name ]
+    ]

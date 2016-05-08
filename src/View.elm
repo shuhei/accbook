@@ -7,10 +7,12 @@ import Html.Events exposing (..)
 
 import Actions exposing (..)
 import Models exposing (..)
+import Budgets.List
 import BudgetItems.List
 import BudgetItems.Edit
 import BudgetItems.Models exposing (BudgetItemId)
 import Routing
+import Materialize exposing (..)
 
 view : Address Action -> AppModel -> Html
 view address model =
@@ -33,15 +35,11 @@ view address model =
 
 sideNav : Address Action -> AppModel -> Html
 sideNav address model =
-  ul [ class "side-nav fixed" ]
-    [ li []
-        [ a
-            [ class "waves-effect waves-teal"
-            , onClick address <| RoutingAction (Routing.NavigateTo "#/budgetItems")
-            ]
-            [ text "Accbook" ]
-        ]
-    ]
+  let appName =
+        listItem "Accbook"
+          [ onClick address <| RoutingAction (Routing.NavigateTo "#/budgetItems") ]
+      budgets = Budgets.List.view (Signal.forwardTo address BudgetsAction) model.budgets
+  in ul [ class "side-nav fixed" ] (appName :: budgets)
 
 titleAndPage : Address Action -> AppModel -> (String, Html)
 titleAndPage address model =
