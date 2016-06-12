@@ -1,4 +1,5 @@
-export function formatDate(date) {
+/* @flow */
+export function formatDate(date: Date): string {
   if (!date) {
     return '';
   }
@@ -7,7 +8,7 @@ export function formatDate(date) {
   return `${month}/${day}`;
 }
 
-export function formatFullDate(date) {
+export function formatFullDate(date: Date): string {
   if (!(date instanceof Date)) {
     return '';
   }
@@ -17,7 +18,7 @@ export function formatFullDate(date) {
   return `${pad(y, 4)}-${pad(m, 2)}-${pad(d, 2)}`;
 }
 
-export function formatNumber(num) {
+export function formatNumber(num: number): string {
   if (typeof num !== 'number') {
     return num;
   }
@@ -38,7 +39,7 @@ export function formatNumber(num) {
   return (isMinus ? '-' : '') + parts.join(',');
 }
 
-function pad(num, size = 2) {
+function pad(num: number, size: number = 2): string {
   let s = num.toString();
   if (s.length < size) {
     s = '0' + s;

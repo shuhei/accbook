@@ -1,3 +1,4 @@
+/* @flow */
 import { PropTypes } from 'react';
 
 const budgetBareProps = {
