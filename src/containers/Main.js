@@ -8,7 +8,7 @@ import {
   toggleMenu,
   logout,
   selectBudget, editBudget,
-  newItem, editItem, deleteItem,
+  newItem, editItem,
   closeForm, closeBudgetForm,
 } from '../actions';
 import Wrapper from '../components/Wrapper';
@@ -68,7 +68,7 @@ class Main extends Component {
             errors={budgetItemForm.errors}
             save={budgetItem => dispatch({ type: 'BUDGET_ITEM_SAVE_REQUESTED', budgetItem })}
             cancel={() => dispatch(closeForm())}
-            deleteItem={item => dispatch(deleteItem(item))} />
+            deleteItem={budgetItem => dispatch({ type: 'BUDGET_ITEM_DELETE_REQUESTED', budgetItem })} />
         </Modal>
         <Modal
           key="budget-form"
