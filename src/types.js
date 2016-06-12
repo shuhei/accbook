@@ -5,12 +5,12 @@ export type BudgetForm = {
 };
 
 export type Budget = {
-  id: number,
+  id: string,
   label: string
 };
 
 export type BudgetItem = {
-  id: number,
+  id: string,
   amount: number,
   label: string,
   date: Date
@@ -42,18 +42,22 @@ export type Action
   | { type: 'BUDGET_SAVE_REQUESTED', budget: Budget }
   | { type: 'BUDGET_SAVE_SUCCEEDED', budget: Budget }
   | { type: 'BUDGET_SAVE_FAILED', error: Error }
-  | { type: 'DELETE_BUDGET', error: boolean, payload: Budget }
+  | { type: 'BUDGET_DELETE_REQUESTED', budget: Budget }
+  | { type: 'BUDGET_DELETE_SUCCEEDED', budget: Budget }
+  | { type: 'BUDGET_DELETE_FAILED', error: Error }
   | { type: 'NEW_BUDGET' }
   | { type: 'EDIT_BUDGET', payload: Budget }
 
-  | { type: 'NEW_ITEM' }
-  | { type: 'EDIT_ITEM', payload: BudgetItem }
-  | { type: 'DELETE_ITEM', error: boolean, payload: BudgetItem }
+  | { type: 'BUDGET_ITEMS_FETCH_SUCCEEDED', budgetItems: BudgetItem[] }
+  | { type: 'BUDGET_ITEMS_FETCH_FAILED', error: Error }
   | { type: 'BUDGET_ITEM_SAVE_REQUESTED', budgetItem: BudgetItem }
   | { type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem: BudgetItem }
   | { type: 'BUDGET_ITEM_SAVE_FAILED', error: Error }
-  | { type: 'BUDGET_ITEMS_FETCH_SUCCEEDED', budgetItems: BudgetItem[] }
-  | { type: 'BUDGET_ITEMS_FETCH_FAILED', error: Error }
+  | { type: 'BUDGET_ITEM_DELETE_REQUESTED', budgetItem: BudgetItem }
+  | { type: 'BUDGET_ITEM_DELETE_SUCCEEDED', budgetItem: BudgetItem }
+  | { type: 'BUDGET_ITEM_DELETE_FAILED', error: Error }
+  | { type: 'NEW_ITEM' }
+  | { type: 'EDIT_ITEM', payload: BudgetItem }
 
   | { type: 'CLOSE_BUDGET_FORM' }
   | { type: 'CLOSE_ITEM_FORM' }

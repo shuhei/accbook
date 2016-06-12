@@ -72,13 +72,10 @@ export function budgetItemForm(state: BudgetItemForm = { item: null, errors: {} 
     }
     case 'BUDGET_ITEM_SAVE_SUCCEEDED':
       return { item: null, errors: {} };
-    case 'DELETE_ITEM':
-      if (action.error) {
-        // TODO: Add error.
-        return state;
-      } else {
-        return { item: null, errors: {} };
-      }
+    case 'BUDGET_ITEM_DELETE_SUCCEEDED':
+      return { item: null, errors: {} };
+    case 'BUDGET_ITEM_DELETE_FAILED':
+      return state;
     case 'CLOSE_ITEM_FORM':
       return { item: null, errors: {} };
     default:
@@ -86,7 +83,7 @@ export function budgetItemForm(state: BudgetItemForm = { item: null, errors: {} 
   }
 }
 
-export function selectedBudgetId(state: ?number = null, action: Action): ?number {
+export function selectedBudgetId(state: ?string = null, action: Action): ?string {
   switch (action.type) {
     case 'BUDGET_SELECTED':
       return action.budget.id;
@@ -114,14 +111,13 @@ export function budgets(state: Budget[] = [], action: Action): Budget[] {
     case 'BUDGET_SAVE_FAILED':
       console.error('Failed to save budget');
       return state;
-    case 'DELETE_BUDGET':
-      if (action.error) {
-        console.error('Failed to save budget');
-        return state;
-      } else {
-        const deleted = action.payload;
-        return state.filter((budget) => budget.id !== deleted.id);
-      }
+    case 'BUDGET_DELETE_SUCCEEDED': {
+      const deleted = action.budget;
+      return state.filter((budget) => budget.id !== deleted.id);
+    }
+    case 'BUDGET_DELETE_FAILED':
+      console.error('Failed to save budget');
+      return state;
     default:
       return state;
   }
@@ -147,14 +143,13 @@ export function budgetItems(state: BudgetItem[] = [], action: Action): BudgetIte
     case 'BUDGET_ITEM_SAVE_FAILED':
       console.error('Failed to save item', action.error);
       return state;
-    case 'DELETE_ITEM':
-      if (action.error) {
-        console.error('Failed to delete item');
-        return state;
-      } else {
-        const deleted = action.payload;
-        return state.filter(item => item.id !== deleted.id);
-      }
+    case 'BUDGET_ITEM_DELETE_SUCCEEDED': {
+      const deleted = action.budgetItem;
+      return state.filter(item => item.id !== deleted.id);
+    }
+    case 'BUDGET_ITEM_DELETE_FAILED':
+      console.error('Failed to delete item');
+      return state;
     default:
       return state;
   }
