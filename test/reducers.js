@@ -32,16 +32,6 @@ function makeBudgetItem(id: string): BudgetItem {
   };
 }
 
-describe('user', () => {
-  describe('edge cases', () => {
-    it('passes through if unknown type', () => {
-      const state = { id: 123 };
-
-      equal(user(state, { type: 'SIGNUP' }), state);
-    });
-  });
-});
-
 describe('budgetItemForm', () => {
   describe('BUDGET_ITEM_DELETE_SUCCEEDED', () => {
     it('closes form', () => {
@@ -56,21 +46,6 @@ describe('budgetItemForm', () => {
 
       const { item, errors } = budgetItemForm(state, action);
       equal(item, null);
-    });
-  });
-
-  describe('BUDGET_ITEM_DELETE_FAILED', () => {
-    it('passes through', () => {
-      const state = {
-        item: { id: 123 },
-        errors: {}
-      };
-      const action = {
-        type: 'BUDGET_ITEM_DELETE_FAILED',
-        error: new Error('error')
-      };
-
-      equal(budgetItemForm(state, action), state);
     });
   });
 
@@ -122,18 +97,6 @@ describe('budgets', () => {
     });
   });
 
-  describe('BUDGETS_FETCH_FAILED', () => {
-    it('does not change state', () => {
-      const state = [makeBudget('123')];
-      const action = {
-        type: 'BUDGETS_FETCH_FAILED',
-        error: new Error('error')
-      };
-
-      equal(budgets(state, action), state);
-    });
-  });
-
   describe('BUDGET_SAVE_SUCCEEDED', () => {
     it('adds a budget', () => {
       const state = [makeBudget('123')];
@@ -143,18 +106,6 @@ describe('budgets', () => {
       };
 
       deepEqual(budgets(state, action), [makeBudget('123'), makeBudget('234')]);
-    });
-  });
-
-  describe('BUDGET_SAVE_FAILED', () => {
-    it('does not change state if error', () => {
-      const state = [makeBudget('123')];
-      const action = {
-        type: 'BUDGET_SAVE_FAILED',
-        error: new Error('error')
-      };
-
-      deepEqual(budgets(state, action), [makeBudget('123')]);
     });
   });
 
@@ -169,18 +120,6 @@ describe('budgets', () => {
       deepEqual(budgets(state, action), [makeBudget('123')]);
     });
   });
-
-  describe('BUDGET_DELETE_FAILED', () => {
-    it('does not change state', () => {
-      const state = [makeBudget('123'), makeBudget('234')];
-      const action = {
-        type: 'BUDGET_DELETE_FAILED',
-        error: new Error('error')
-      };
-
-      deepEqual(budgets(state, action), [makeBudget('123'), makeBudget('234')]);
-    });
-  });
 });
 
 describe('budgetItems', () => {
@@ -193,18 +132,6 @@ describe('budgetItems', () => {
       };
 
       deepEqual(budgetItems(state, action), [makeBudgetItem('234'), makeBudgetItem('345')]);
-    });
-  });
-
-  describe('BUDGET_ITEMS_FETCH_FAILED', () => {
-    it('does not change state', () => {
-      const state = [makeBudgetItem('123')];
-      const action = {
-        type: 'BUDGET_ITEMS_FETCH_FAILED',
-        error: new Error('error')
-      };
-
-      equal(budgetItems(state, action), state);
     });
   });
 
@@ -236,18 +163,6 @@ describe('budgetItems', () => {
     });
   });
 
-  describe('BUDGET_ITEM_SAVE_FAILED', () => {
-    it('does not change state', () => {
-      const state = [makeBudgetItem('123'), makeBudgetItem('234')];
-      const action = {
-        type: 'BUDGET_ITEM_SAVE_FAILED',
-        error: new Error('error')
-      };
-
-      equal(budgetItems(state, action), state);
-    });
-  });
-
   describe('BUDGET_ITEM_DELETE_SUCCEEDED', () => {
     it('deletes item', () => {
       const state = [makeBudgetItem('123'), makeBudgetItem('234')];
@@ -256,18 +171,6 @@ describe('budgetItems', () => {
         budgetItem: makeBudgetItem('123')
       };
       deepEqual(budgetItems(state, action), [makeBudgetItem('234')]);
-    });
-  });
-
-  describe('BUDGET_ITEM_DELETE_SUCCEEDED', () => {
-    it('does not change state', () => {
-      const state = [makeBudgetItem('123')];
-      const action = {
-        type: 'BUDGET_ITEM_DELETE_FAILED',
-        error: new Error('error')
-      };
-
-      deepEqual(budgetItems(state, action), [makeBudgetItem('123')]);
     });
   });
 });
