@@ -35,53 +35,6 @@ export function saveItem(item) {
   };
 }
 
-const saveBudgetPlain = createAction(SAVE_BUDGET, webapi.saveBudget);
-
-export function saveBudget(budget) {
-  return (dispatch, getState) => {
-    dispatch(saveBudgetPlain(budget));
-  };
-}
-
-export const selectBudget = createAction('SELECT_BUDGET');
-
-const fetchBudgets = createAction('FETCH_BUDGETS', webapi.fetchBudgets);
-const fetchItems = createAction('FETCH_ITEMS', webapi.fetchItems);
-
-function shouldFetchBudgets({ budgets }) {
-  // TODO: Take care of loading state.
-  return budgets.length === 0;
-}
-
-function shouldSelectBudget({ selectedBudgetId }) {
-  return !selectedBudgetId;
-}
-
-export function fetchBudgetsIfNeeded() {
-  return (dispatch, getState) => {
-    if (shouldFetchBudgets(getState())) {
-      dispatch(fetchBudgets()).then(({ payload: budgets }) => {
-        if (shouldSelectBudget(getState())) {
-          dispatch(selectBudget(budgets[0]));
-        }
-      });
-    }
-  };
-}
-
-function shouldFetchItems({ selectedBudgetId, budgetItems }) {
-  // TODO: Take care of loading state.
-  return budgetItems.length === 0;
-}
-
-export function fetchItemsIfNeeded() {
-  return (dispatch, getState) => {
-    if (shouldFetchItems(getState())) {
-      dispatch(fetchItems());
-    }
-  };
-}
-
 export const closeBudgetForm = createAction('CLOSE_BUDGET_FORM');
 export const closeForm = createAction('CLOSE_ITEM_FORM');
 

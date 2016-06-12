@@ -1,10 +1,17 @@
-import Parse, { User, Query } from 'parse';
+/* @flow */
+import Parse, { User as ParseUser, Query } from 'parse';
+import type {
+  Auth,
+  User,
+  Budget,
+  BudgetItem
+} from './types';
 
-const Budget = Parse.Object.extend('Budget');
-const BudgetItem = Parse.Object.extend('BudgetItem');
+const ParseBudget = Parse.Object.extend('Budget');
+const ParseBudgetItem = Parse.Object.extend('BudgetItem');
 
-export function currentUser() {
-  const user = User.current();
+export function currentUser(): Promise<User> {
+  const user: ?User = ParseUser.current();
   if (user) {
     return Promise.resolve(user);
   } else {
@@ -12,14 +19,14 @@ export function currentUser() {
   }
 }
 
-export function signup({ username, password }) {
+export function signup({ username, password }: Auth): Promise<User> {
   return new Promise((resolve, reject) => {
     // TODO: Automatically login or show message.
-    const user = new User();
+    const user = new ParseUser();
     user.set('username', username);
     user.set('password', password);
     user.signUp(null, {
-      success(user) {
+      success(user: User) {
         resolve(user);
       },
       error(user, error) {
@@ -29,9 +36,9 @@ export function signup({ username, password }) {
   });
 }
 
-export function login({ username, password }) {
+export function login({ username, password }: Auth): Promise<User> {
   return new Promise((resolve, reject) => {
-    User.logIn(username, password, {
+    ParseUser.logIn(username, password, {
       success(user) {
         resolve(user);
       },
@@ -42,8 +49,8 @@ export function login({ username, password }) {
   });
 }
 
-export function logout() {
-  User.logOut();
+export function logout(): Promise<void> {
+  ParseUser.logOut();
   return Promise.resolve();
 }
 
@@ -63,9 +70,9 @@ function extractAttributes(parseObject) {
   return { ...flattenAttributes(parseObject), id: parseObject.id };
 }
 
-export function fetchBudgets() {
+export function fetchBudgets(): Promise<Budget[]> {
   return new Promise((resolve, reject) => {
-    const query = new Query(Budget);
+    const query = new Query(ParseBudget);
     query.find({
       success(fetchedBudgets) {
         resolve(fetchedBudgets.map(extractAttributes));
@@ -77,9 +84,9 @@ export function fetchBudgets() {
   });
 }
 
-export function fetchItems() {
+export function fetchItems(): Promise<BudgetItem[]> {
   return new Promise((resolve, reject) => {
-    const query = new Query(BudgetItem);
+    const query = new Query(ParseBudgetItem);
     query.find({
       success(fetchedItems) {
         resolve(fetchedItems.map(extractAttributes));
@@ -92,16 +99,17 @@ export function fetchItems() {
 }
 
 function setACL(obj) {
-  obj.setACL(new Parse.ACL(User.current()));
+  obj.setACL(new Parse.ACL(ParseUser.current()));
 }
 
-export function saveItem(item) {
+export function saveItem(item: BudgetItem): Promise<BudgetItem> {
   return new Promise((resolve, reject) => {
-    const budgetItem = new BudgetItem({ ...item });
+    const budgetItem = new ParseBudgetItem({ ...item });
     setACL(budgetItem);
     budgetItem.save(null, {
       success(saved) {
-        resolve(extractAttributes(saved));
+        const item: BudgetItem = extractAttributes(saved);
+        resolve(item);
       },
       error(failed, error) {
         reject(error);
@@ -110,10 +118,10 @@ export function saveItem(item) {
   });
 }
 
-export function deleteItem(item) {
+export function deleteItem(item: BudgetItem): Promise<BudgetItem> {
   return new Promise((resolve, reject) => {
     if (item.id) {
-      const obj = new BudgetItem({ ...item, id: undefined });
+      const obj = new ParseBudgetItem({ ...item, id: undefined });
       obj.id = item.id;
       obj.destroy({
         success() {
@@ -124,14 +132,14 @@ export function deleteItem(item) {
         }
       });
     } else {
-      resolve();
+      reject(new Error('No id on BudgetItem'));
     }
   });
 }
 
-export function saveBudget(budget) {
+export function saveBudget(budget: Budget): Promise<Budget> {
   return new Promise((resolve, reject) => {
-    const parseBudget = new Budget({ ...budget });
+    const parseBudget = new ParseBudget({ ...budget });
     setACL(parseBudget);
     parseBudget.save(null, {
       success(saved) {

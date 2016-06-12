@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
@@ -6,8 +7,8 @@ import Modal from 'react-modal';
 import {
   toggleMenu,
   logout,
-  fetchBudgetsIfNeeded, selectBudget, editBudget, saveBudget,
-  fetchItemsIfNeeded, newItem, editItem, deleteItem, saveItem,
+  selectBudget, editBudget,
+  newItem, editItem, deleteItem,
   closeForm, closeBudgetForm,
 } from '../actions';
 import Wrapper from '../components/Wrapper';
@@ -19,13 +20,12 @@ import BudgetItemForm from '../components/BudgetItemForm';
 class Main extends Component {
   componentWillMount() {
     const { dispatch } = this.props;
-    dispatch(fetchBudgetsIfNeeded());
-    dispatch(fetchItemsIfNeeded());
+    dispatch({ type: 'BUDGETS_FETCH_REQUESTED' });
   }
 
   handleBudgetSelected(budget) {
     const { dispatch } = this.props;
-    dispatch(selectBudget(budget));
+    dispatch({ type: 'BUDGET_SELECTED', budget: budget });
     dispatch(toggleMenu());
   }
 
@@ -38,9 +38,11 @@ class Main extends Component {
       budgetForm, budgetItemForm
     } = this.props;
 
-    const sidebar = <MenuBar budgets={budgets}
-                             selectBudget={::this.handleBudgetSelected}
-                             logout={() => dispatch(logout())} />;
+    const sidebar = <MenuBar
+      budgets={budgets}
+      selectBudget={this.handleBudgetSelected.bind(this)}
+      logout={() => dispatch(logout())}
+    />;
 
     return (
       <Wrapper
@@ -54,7 +56,7 @@ class Main extends Component {
             items={budgetItems}
             editBudget={() => dispatch(editBudget(selectedBudget))}
             newItem={() => dispatch(newItem())}
-            editItem={(item) => dispatch(editItem(item))} />
+            editItem={item => dispatch(editItem(item))} />
         }
 
         <Modal
@@ -64,9 +66,9 @@ class Main extends Component {
           <BudgetItemForm
             item={budgetItemForm.item}
             errors={budgetItemForm.errors}
-            save={(item) => dispatch(saveItem(item))}
+            save={budgetItem => dispatch({ type: 'BUDGET_ITEM_SAVE_REQUESTED', budgetItem })}
             cancel={() => dispatch(closeForm())}
-            deleteItem={(item) => dispatch(deleteItem(item))} />
+            deleteItem={item => dispatch(deleteItem(item))} />
         </Modal>
         <Modal
           key="budget-form"
@@ -75,7 +77,7 @@ class Main extends Component {
           <BudgetForm
             budget={budgetForm.budget}
             errors={budgetForm.errors}
-            save={(budget) => dispatch(saveBudget(budget))}
+            save={budget => dispatch({ type: 'BUDGET_SAVE_REQUESTED', budget })}
             cancel={() => dispatch(closeBudgetForm())} />
         </Modal>
       </Wrapper>
@@ -91,10 +93,10 @@ Modal.injectCSS();
 
 function select(state) {
   const { selectedBudgetId, budgets, budgetItems } = state;
-  const selectedBudget = budgets.filter((budget) => {
+  const selectedBudget = budgets.filter(budget => {
     return  selectedBudgetId && budget.id === selectedBudgetId;
   })[0];
-  const selectedItems = budgetItems.filter((item) => {
+  const selectedItems = budgetItems.filter(item => {
     return selectedBudgetId && item.budgetId === selectedBudgetId;
   }).sort((a, b) => a.date.getTime() - b.date.getTime());
   return {
