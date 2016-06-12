@@ -1,6 +1,6 @@
 /* @flow */
 import { takeEvery } from 'redux-saga';
-import { call, put, fork } from 'redux-saga/effects';
+import { call, put, fork, select } from 'redux-saga/effects';
 import * as webapi from './webapi';
 
 import type {
@@ -43,7 +43,10 @@ function *saveBudget(action) {
 
 function *saveBudgetItem(action) {
   try {
-    const budgetItem: any = yield call(webapi.saveItem, action.budgetItem);
+    const state: any = yield select();
+    const item = action.budgetItem;
+    const itemWithBudgetId = item.id ? item : { ...item, budgetId: state.selectedBudgetId };
+    const budgetItem: any = yield call(webapi.saveItem, itemWithBudgetId);
     yield put({ type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem });
   } catch (error) {
     yield put({ type: 'BUDGET_ITEM_SAVE_FAILED', error });
