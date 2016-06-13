@@ -14,18 +14,18 @@ The app itself is to keep my budget under control. There are many accounting app
 
 Install dependencies and build assets:
 
-```
+```sh
 npm install
 ```
 
 Develop:
 
-```
+```sh
 npm run dev
 ```
 
 Test:
 
-```
+```sh
 npm test
 ```
