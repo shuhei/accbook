@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
@@ -29,8 +30,14 @@ class LoginForm extends Component {
         <input type="text" className="input--large" placeholder="Username" ref="username" />
         <input type="password" className="input--large" placeholder="Password" ref="password" />
 
-        <button type="button" className="button button--secondary button--large" onClick={::this.handleSignup}>Sign up</button>
-        <button type="button" className="button button--primary button--large" onClick={::this.handleLogin}>Log in</button>
+        <button
+          type="button"
+          className="button button--secondary button--large"
+          onClick={() => this.handleSignup()}>Sign up</button>
+        <button
+          type="button"
+          className="button button--primary button--large"
+          onClick={() => this.handleLogin()}>Log in</button>
       </form>
     );
   }

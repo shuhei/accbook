@@ -1,10 +1,18 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
-import { budgetItemProps } from '../props';
 import { formatDate, formatNumber } from '../formatters';
 
-export default function BudgetItem({ item, subtotal, editItem }) {
+import type { BudgetItem as BudgetItemType } from '../types';
+
+type Props = {
+  item: BudgetItemType,
+  subtotal: number,
+  editItem: (item: BudgetItem) => void
+};
+
+export default function BudgetItem({ item, subtotal, editItem }: Props) {
   const className = classnames('grid-row', 'budget-item', {
     'budget-item--spending': item.amount < 0,
     'budget-item--income': item.amount > 0,
@@ -19,9 +27,3 @@ export default function BudgetItem({ item, subtotal, editItem }) {
     </div>
   );
 }
-
-BudgetItem.propTypes = {
-  item: budgetItemProps.isRequired,
-  subtotal: PropTypes.number.isRequired,
-  editItem: PropTypes.func.isRequired
-};

@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
@@ -24,8 +25,14 @@ export default class BudgetForm extends Component {
           <input type="text" ref="label" defaultValue={defaultBudget.label} />
         </div>
         <p>
-          <button className="button button--small" type="button" onClick={cancel}>Cancel</button>
-          <button className="button button--small button--primary" type="button" onClick={::this.handleSave}>Save</button>
+          <button
+            className="button button--small"
+            type="button"
+            onClick={cancel}>Cancel</button>
+          <button
+            className="button button--small button--primary"
+            type="button"
+            onClick={() => this.handleSave()}>Save</button>
         </p>
       </form>
     );

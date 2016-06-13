@@ -4,5 +4,8 @@
 [include]
 
 [libs]
+interfaces/globals.js
 
 [options]
+module.file_ext=.js
+module.name_mapper.extension='css' -> '<PROJECT_ROOT>/interfaces/CSSModule.js'

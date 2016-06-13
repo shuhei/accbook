@@ -1,11 +1,21 @@
+/* @flow */
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
-import { budgetProps } from '../props';
+import type { Budget } from '../types';
 
-export default function MenuBar({ budgets, selectBudget, logout }) {
+type Props = {
+  budgets: Budget[],
+  selectBudget: (budget: Budget) => void,
+  logout: () => void
+};
+
+export default function MenuBar({ budgets, selectBudget, logout }: Props) {
   const budgetList = budgets.map((budget) => {
-    return <li key={budget.id} className="menu-bar__item" onClick={() => selectBudget(budget)}>{budget.label}</li>;
+    return <li
+      key={budget.id}
+      className="menu-bar__item"
+      onClick={() => selectBudget(budget)}>{budget.label}</li>;
   });
 
   return (
@@ -22,9 +32,3 @@ export default function MenuBar({ budgets, selectBudget, logout }) {
     </div>
   );
 }
-
-MenuBar.propTypes = {
-  budgets: PropTypes.arrayOf(budgetProps),
-  selectBudget: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired
-};

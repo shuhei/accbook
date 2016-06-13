@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 import {
   toggleMenu,
   logout,
-  selectBudget, editBudget,
+  editBudget,
   newItem, editItem,
   closeForm, closeBudgetForm,
 } from '../actions';
