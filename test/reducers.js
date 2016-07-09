@@ -14,9 +14,6 @@ import type {
   BudgetItem
 } from '../src/types';
 
-declare function describe(description: string, spec: () => void): void;
-declare function it(description: string, spec: () => void): void;
-
 function makeBudget(id: string): Budget {
   return {
     id,

@@ -1,3 +1,4 @@
+/* @flow */
 import { strictEqual } from 'assert';
 
 import { formatDate, formatFullDate, formatNumber } from '../src/formatters';

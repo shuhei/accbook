@@ -1,5 +1,5 @@
 /* @flow */
-export function formatDate(date: Date): string {
+export function formatDate(date: ?Date): string {
   if (!date) {
     return '';
   }
@@ -8,7 +8,7 @@ export function formatDate(date: Date): string {
   return `${month}/${day}`;
 }
 
-export function formatFullDate(date: Date): string {
+export function formatFullDate(date: ?Date): string {
   if (!(date instanceof Date)) {
     return '';
   }

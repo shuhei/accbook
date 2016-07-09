@@ -10,7 +10,7 @@ import type {
 
 // -- Subroutines
 
-function *fetchBudgets(action) {
+export function *fetchBudgets(): Generator {
   yield fork(fetchBudgetItems);
   try {
     const budgets: any = yield call(webapi.fetchBudgets);
@@ -23,16 +23,19 @@ function *fetchBudgets(action) {
   }
 }
 
-function *fetchBudgetItems(action) {
+export function *fetchBudgetItems(): Generator {
   try {
     const budgetItems: any = yield call(webapi.fetchItems);
     yield put({ type: 'BUDGET_ITEMS_FETCH_SUCCEEDED', budgetItems });
   } catch (error) {
-    yield put({ type: 'BUDGET_ITEMS_FETCH_REQUESTED', error });
+    yield put({ type: 'BUDGET_ITEMS_FETCH_FAILED', error });
   }
 }
 
-function *saveBudget(action) {
+export function *saveBudget(action: Action): Generator {
+  if (action.type !== 'BUDGET_SAVE_REQUESTED') {
+    return;
+  }
   try {
     const budget: any = yield call(webapi.saveBudget, action.budget);
     yield put({ type: 'BUDGET_SAVE_SUCCEEDED', budget });
@@ -41,7 +44,10 @@ function *saveBudget(action) {
   }
 }
 
-function *saveBudgetItem(action) {
+export function *saveBudgetItem(action: Action): Generator {
+  if (action.type !== 'BUDGET_ITEM_SAVE_REQUESTED') {
+    return;
+  }
   try {
     const state: any = yield select();
     const item = action.budgetItem;
@@ -55,19 +61,19 @@ function *saveBudgetItem(action) {
 
 // -- Watchers
 
-function *watchBudgetsFetch(): any {
+function *watchBudgetsFetch(): Generator {
   yield* takeEvery('BUDGETS_FETCH_REQUESTED', fetchBudgets);
 }
 
-function *watchBudgetSave(): any {
+function *watchBudgetSave(): Generator {
   yield* takeEvery('BUDGET_SAVE_REQUESTED', saveBudget);
 }
 
-function *watchBudgetItemSave(): any {
+function *watchBudgetItemSave(): Generator {
   yield* takeEvery('BUDGET_ITEM_SAVE_REQUESTED', saveBudgetItem);
 }
 
-export default function *root(): any {
+export default function *root(): Generator {
   yield [
     fork(watchBudgetsFetch),
     fork(watchBudgetSave),
