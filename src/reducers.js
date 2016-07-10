@@ -63,7 +63,8 @@ export function budgetItemForm(state: BudgetItemForm = { item: null, errors: {} 
         id: null,
         amount: 0,
         label: '',
-        date: new Date()
+        date: new Date(),
+        budgetId: null
       };
       return { item, errors: {} };
     }

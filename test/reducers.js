@@ -25,7 +25,8 @@ function makeBudgetItem(id: string): BudgetItem {
     id,
     label: 'dummy item',
     amount: 12300,
-    date: new Date(2015, 3, 4)
+    date: new Date(2015, 3, 4),
+    budgetId: null
   };
 }
 
@@ -33,12 +34,12 @@ describe('budgetItemForm', () => {
   describe('BUDGET_ITEM_DELETE_SUCCEEDED', () => {
     it('closes form', () => {
       const state = {
-        item: { id: 123 },
+        item: { id: '123' },
         errors: {}
       };
       const action = {
         type: 'BUDGET_ITEM_DELETE_SUCCEEDED',
-        budgetItem: { id: 123, label: '', amount: 0, date: new Date() }
+        budgetItem: { id: '123', label: '', amount: 0, date: new Date(), budgetId: null }
       };
 
       const { item, errors } = budgetItemForm(state, action);
@@ -49,7 +50,7 @@ describe('budgetItemForm', () => {
   describe('CLOSE_ITEM_FORM', () => {
     it('closes form', () => {
       const state = {
-        item: { id: 123 },
+        item: { id: '123' },
         errors: {}
       };
 
@@ -150,12 +151,12 @@ describe('budgetItems', () => {
       const state = [makeBudgetItem('123'), makeBudgetItem('234')];
       const action = {
         type: 'BUDGET_ITEM_SAVE_SUCCEEDED',
-        budgetItem: { id: '234', amount: 99999, label: 'foo', date: new Date(2000, 5, 5) }
+        budgetItem: { id: '234', amount: 99999, label: 'foo', date: new Date(2000, 5, 5), budgetId: '567' }
       };
 
       deepEqual(budgetItems(state, action), [
         makeBudgetItem('123'),
-        { id: '234', amount: 99999, label: 'foo', date: new Date(2000, 5, 5) }
+        { id: '234', amount: 99999, label: 'foo', date: new Date(2000, 5, 5), budgetId: '567' }
       ]);
     });
   });

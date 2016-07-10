@@ -13,7 +13,8 @@ export type BudgetItem = {
   id: string,
   amount: number,
   label: string,
-  date: Date
+  date: Date,
+  budgetId: ?string
 };
 
 export type BudgetItemForm = {
