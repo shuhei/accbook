@@ -59,6 +59,18 @@ export function *saveBudgetItem(action: Action): Generator {
   }
 }
 
+export function *deleteBudgetItem(action: Action): Generator {
+  if (action.type !== 'BUDGET_ITEM_DELETE_REQUESTED') {
+    return;
+  }
+  try {
+    const deletedItem = yield call(webapi.deleteItem, action.budgetItem);
+    yield put({ type: 'BUDGET_ITEM_DELETE_SUCCEEDED', budgetItem: deletedItem });
+  } catch (error) {
+    yield put({ type: 'BUDGET_ITEM_DELETE_FAILED', error });
+  }
+}
+
 // -- Watchers
 
 function *watchBudgetsFetch(): Generator {
@@ -73,10 +85,15 @@ function *watchBudgetItemSave(): Generator {
   yield* takeEvery('BUDGET_ITEM_SAVE_REQUESTED', saveBudgetItem);
 }
 
+function *watchBudgetItemDelete(): Generator {
+  yield* takeEvery('BUDGET_ITEM_DELETE_REQUESTED', deleteBudgetItem);
+}
+
 export default function *root(): Generator {
   yield [
     fork(watchBudgetsFetch),
     fork(watchBudgetSave),
-    fork(watchBudgetItemSave)
+    fork(watchBudgetItemSave),
+    fork(watchBudgetItemDelete)
   ];
 }
