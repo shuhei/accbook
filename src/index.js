@@ -15,6 +15,7 @@ import './css/index.css';
 import reducers from './reducers';
 import sagas from './sagas';
 import App from './containers/App';
+import { checkCurrentUser } from './actions';
 
 Parse.initialize(PARSE_APP_ID, PARSE_JS_API_KEY);
 
@@ -25,6 +26,7 @@ const enhancer = compose(
 );
 const store = createStore(reducers, enhancer);
 sagaMiddleware.run(sagas);
+store.dispatch(checkCurrentUser());
 
 ReactDOM.render(
   <Provider store={store}>

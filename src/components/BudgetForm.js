@@ -1,6 +1,5 @@
 /* @flow */
 import React, { Component, PropTypes } from 'react';
-import classnames from 'classnames';
 
 import { unsavedBudgetProps, errorProps } from '../props';
 
@@ -28,11 +27,13 @@ export default class BudgetForm extends Component {
           <button
             className="button button--small"
             type="button"
-            onClick={cancel}>Cancel</button>
+            onClick={cancel}
+          >Cancel</button>
           <button
             className="button button--small button--primary"
             type="button"
-            onClick={() => this.handleSave()}>Save</button>
+            onClick={() => this.handleSave()}
+          >Save</button>
         </p>
       </form>
     );
@@ -42,8 +43,8 @@ export default class BudgetForm extends Component {
 BudgetForm.propTypes = {
   budget: unsavedBudgetProps,
   errors: PropTypes.shape({
-    label: errorProps
+    label: errorProps,
   }).isRequired,
   save: PropTypes.func.isRequired,
-  cancel: PropTypes.func.isRequired
+  cancel: PropTypes.func.isRequired,
 };

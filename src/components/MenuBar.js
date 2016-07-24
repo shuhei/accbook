@@ -1,6 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
-import classnames from 'classnames';
+import React from 'react';
 
 import type { Budget } from '../types';
 
@@ -11,12 +10,13 @@ type Props = {
 };
 
 export default function MenuBar({ budgets, selectBudget, logout }: Props) {
-  const budgetList = budgets.map((budget) => {
-    return <li
+  const budgetList = budgets.map(budget => (
+    <li
       key={budget.id}
       className="menu-bar__item"
-      onClick={() => selectBudget(budget)}>{budget.label}</li>;
-  });
+      onClick={() => selectBudget(budget)}
+    >{budget.label}</li>
+  ));
 
   return (
     <div className="menu-bar">
