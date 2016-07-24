@@ -1,7 +1,14 @@
-import React, { PropTypes } from 'react';
+/* @flow */
+/* global ReactClass */
+import React from 'react';
 import classnames from 'classnames';
 
-const MenuLink = ({ toggleMenu, menuOpen }) => {
+type MenuLinkProps = {
+  menuOpen: boolean,
+  toggleMenu: Function,
+};
+
+const MenuLink = ({ toggleMenu, menuOpen }: MenuLinkProps) => {
   const className = classnames('menu-link', {
     'menu-link--open': menuOpen });
   return (
@@ -11,14 +18,16 @@ const MenuLink = ({ toggleMenu, menuOpen }) => {
   );
 };
 
-MenuLink.propTypes = {
-  menuOpen: PropTypes.bool.isRequired,
-  toggleMenu: PropTypes.func.isRequired
+type Props = {
+  children: ReactClass[],
+  menuOpen: boolean,
+  toggleMenu: Function,
+  sidebar: ReactClass
 };
 
-export default function Wrapper({ children, menuOpen, toggleMenu, sidebar }) {
+export default function Wrapper({ children, menuOpen, toggleMenu, sidebar }: Props) {
   const className = classnames('wrapper', {
-    'wrapper--open': menuOpen
+    'wrapper--open': menuOpen,
   });
   return (
     <div className={className}>
@@ -31,9 +40,3 @@ export default function Wrapper({ children, menuOpen, toggleMenu, sidebar }) {
     </div>
   );
 }
-
-Wrapper.propTypes = {
-  menuOpen: PropTypes.bool.isRequired,
-  toggleMenu: PropTypes.func.isRequired,
-  sidebar: PropTypes.element.isRequired
-};

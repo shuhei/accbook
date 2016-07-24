@@ -1,3 +1,5 @@
+/* eslint no-console: "off" */
+
 import express from 'express';
 import serveStatic from 'serve-static';
 

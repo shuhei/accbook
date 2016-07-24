@@ -1,8 +1,13 @@
-import React, { PropTypes } from 'react';
+/* @flow */
+import React from 'react';
 
 import BudgetItem from '../components/BudgetItem';
-import { budgetProps, budgetItemProps } from '../props';
 import { formatNumber } from '../formatters';
+
+import type {
+  Budget,
+  BudgetItem as BudgetItemType,
+} from '../types';
 
 function totalAmount(items): number {
   return items.reduce((acc: number, { amount }) => acc + amount, 0);
@@ -15,7 +20,17 @@ function totalUntil(index: number, items): number {
   );
 }
 
-export default function BudgetItemList({ selectedBudget, items, editBudget, newItem, editItem }) {
+type Props = {
+  selectedBudget: Budget,
+  items: BudgetItemType[],
+  editBudget: Function,
+  newItem: Function,
+  editItem: Function
+};
+
+export default function BudgetItemList(
+  { selectedBudget, items, editBudget, newItem, editItem }: Props
+) {
   return (
     <div>
       <div className="budget-header">
@@ -47,11 +62,3 @@ export default function BudgetItemList({ selectedBudget, items, editBudget, newI
     </div>
   );
 }
-
-BudgetItemList.propTypes = {
-  selectedBudget: budgetProps.isRequired,
-  items: PropTypes.arrayOf(budgetItemProps.isRequired).isRequired,
-  editBudget: PropTypes.func.isRequired,
-  newItem: PropTypes.func.isRequired,
-  editItem: PropTypes.func.isRequired,
-};

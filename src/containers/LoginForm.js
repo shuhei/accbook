@@ -6,6 +6,12 @@ import { connect } from 'react-redux';
 import { signup, login } from '../actions';
 
 class LoginForm extends Component {
+  getAuth() {
+    const username = findDOMNode(this.refs.username).value;
+    const password = findDOMNode(this.refs.password).value;
+    return { username, password };
+  }
+
   handleSignup() {
     const { dispatch } = this.props;
     dispatch(signup(this.getAuth()));
@@ -14,12 +20,6 @@ class LoginForm extends Component {
   handleLogin() {
     const { dispatch } = this.props;
     dispatch(login(this.getAuth()));
-  }
-
-  getAuth() {
-    const username = findDOMNode(this.refs.username).value;
-    const password = findDOMNode(this.refs.password).value;
-    return { username, password };
   }
 
   render() {
@@ -33,11 +33,13 @@ class LoginForm extends Component {
         <button
           type="button"
           className="button button--secondary button--large"
-          onClick={() => this.handleSignup()}>Sign up</button>
+          onClick={() => this.handleSignup()}
+        >Sign up</button>
         <button
           type="button"
           className="button button--primary button--large"
-          onClick={() => this.handleLogin()}>Log in</button>
+          onClick={() => this.handleLogin()}
+        >Log in</button>
       </form>
     );
   }

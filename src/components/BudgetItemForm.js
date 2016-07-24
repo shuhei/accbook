@@ -6,7 +6,7 @@ import { formatFullDate } from '../formatters';
 
 function invalidClassName(name, errors) {
   return classnames({
-    invalid: errors[name] && errors[name].length > 0
+    invalid: errors[name] && errors[name].length > 0,
   });
 }
 
@@ -36,7 +36,7 @@ export default class BudgetItemForm extends Component {
       ...item,
       isIncome: item.amount > 0,
       amount: Math.abs(item.amount),
-      date: formatFullDate(item.date)
+      date: formatFullDate(item.date),
     };
     return (
       <form className="budget-item-form">
@@ -61,18 +61,28 @@ export default class BudgetItemForm extends Component {
               <input type="date" ref="date" defaultValue={defaultItem.date} />
             </div>
             <div className="grid-1-3 text-right">
-              <button className="button button--small" type="button" onClick={::this.setToday}>Today</button>
+              <button
+                className="button button--small"
+                type="button"
+                onClick={::this.setToday}
+              >Today</button>
             </div>
           </div>
         </div>
         <p>
           <button className="button button--small" type="button" onClick={cancel}>Cancel</button>
-          { item.id &&
-            <button className="button button--danger button--small" type="button" onClick={() => deleteItem(item)}>
-              Delete
-            </button>
+          {item.id &&
+            <button
+              className="button button--danger button--small"
+              type="button"
+              onClick={() => deleteItem(item)}
+            >Delete</button>
           }
-          <button className="button button--small button--primary" type="button" onClick={::this.handleSave}>Save</button>
+          <button
+            className="button button--small button--primary"
+            type="button"
+            onClick={::this.handleSave}
+          >Save</button>
         </p>
       </form>
     );
@@ -84,9 +94,9 @@ BudgetItemForm.propTypes = {
   errors: PropTypes.shape({
     label: errorProps,
     amount: errorProps,
-    date: errorProps
+    date: errorProps,
   }).isRequired,
   save: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired
+  deleteItem: PropTypes.func.isRequired,
 };
