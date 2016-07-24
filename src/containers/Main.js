@@ -17,15 +17,9 @@ import BudgetForm from '../components/BudgetForm';
 import BudgetItemForm from '../components/BudgetItemForm';
 
 class Main extends Component {
+  // TODO: Move to somewhere.
   componentWillMount() {
-    const { dispatch } = this.props;
-    dispatch({ type: 'BUDGETS_FETCH_REQUESTED' });
-  }
-
-  handleBudgetSelected(budget) {
-    const { dispatch } = this.props;
-    dispatch({ type: 'BUDGET_SELECTED', budget });
-    dispatch(toggleMenu());
+    this.props.fetchBudgets();
   }
 
   render() {
@@ -34,13 +28,16 @@ class Main extends Component {
       selectedBudget, budgets,
       budgetItems,
       menuOpen,
-      budgetForm, budgetItemForm
+      budgetForm,
+      budgetItemForm,
+      selectBudget,
+      deleteItem,
     } = this.props;
 
     const sidebar = (
       <MenuBar
         budgets={budgets}
-        selectBudget={this.handleBudgetSelected.bind(this)}
+        selectBudget={selectBudget}
         logout={() => dispatch(logout())}
       />
     );
@@ -72,7 +69,7 @@ class Main extends Component {
             errors={budgetItemForm.errors}
             save={budgetItem => dispatch({ type: 'BUDGET_ITEM_SAVE_REQUESTED', budgetItem })}
             cancel={() => dispatch(closeForm())}
-            deleteItem={budgetItem => dispatch({ type: 'BUDGET_ITEM_DELETE_REQUESTED', budgetItem })}
+            deleteItem={deleteItem}
           />
         </Modal>
         <Modal
@@ -98,7 +95,7 @@ class Main extends Component {
 Modal.setAppElement(document.getElementsByTagName('body')[0]);
 Modal.injectCSS();
 
-function select(state) {
+const mapStateToProps = state => {
   const { selectedBudgetId, budgets, budgetItems } = state;
   const selectedBudget = budgets
     .find(budget => selectedBudgetId && budget.id === selectedBudgetId);
@@ -110,6 +107,19 @@ function select(state) {
     selectedBudget,
     budgetItems: selectedItems,
   };
-}
+};
 
-export default connect(select)(Main);
+const mapDispatchToProps = dispatch => ({
+  fetchBudgets() {
+    dispatch({ type: 'BUDGETS_FETCH_REQUESTED' });
+  },
+  selectBudget(budget) {
+    dispatch({ type: 'BUDGET_SELECTED', budget });
+    dispatch(toggleMenu());
+  },
+  deleteItem(budgetItem) {
+    dispatch({ type: 'BUDGET_ITEM_DELETE_REQUESTED', budgetItem });
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
