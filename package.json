@@ -55,6 +55,7 @@
     "react-modal": "github:shuhei/react-modal#react-14",
     "react-redux": "^4.4.5",
     "react-router": "^2.6.0",
+    "recompose": "^0.20.2",
     "redux": "^3.5.2",
     "redux-actions": "^0.10.1",
     "redux-promise": "^0.5.3",

@@ -16,6 +16,3 @@ export const editBudget = createAction('EDIT_BUDGET');
 export const newBudget = createAction('NEW_BUDGET');
 
 export const closeBudgetForm = createAction('CLOSE_BUDGET_FORM');
-export const closeForm = createAction('CLOSE_ITEM_FORM');
-
-export const toggleMenu = createAction('TOGGLE_MENU');
