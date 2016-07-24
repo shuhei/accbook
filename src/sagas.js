@@ -1,14 +1,21 @@
 /* @flow */
+/* global Generator */
 import { takeEvery } from 'redux-saga';
 import { call, put, fork, select } from 'redux-saga/effects';
 import * as webapi from './webapi';
 
-import type {
-  Action,
-  Budget
-} from './types';
+import type { Action } from './types';
 
 // -- Subroutines
+
+export function *fetchBudgetItems(): Generator {
+  try {
+    const budgetItems: any = yield call(webapi.fetchItems);
+    yield put({ type: 'BUDGET_ITEMS_FETCH_SUCCEEDED', budgetItems });
+  } catch (error) {
+    yield put({ type: 'BUDGET_ITEMS_FETCH_FAILED', error });
+  }
+}
 
 export function *fetchBudgets(): Generator {
   yield fork(fetchBudgetItems);
@@ -20,15 +27,6 @@ export function *fetchBudgets(): Generator {
     }
   } catch (error) {
     yield put({ type: 'BUDGETS_FETCH_FAILED', error });
-  }
-}
-
-export function *fetchBudgetItems(): Generator {
-  try {
-    const budgetItems: any = yield call(webapi.fetchItems);
-    yield put({ type: 'BUDGET_ITEMS_FETCH_SUCCEEDED', budgetItems });
-  } catch (error) {
-    yield put({ type: 'BUDGET_ITEMS_FETCH_FAILED', error });
   }
 }
 
@@ -94,6 +92,6 @@ export default function *root(): Generator {
     fork(watchBudgetsFetch),
     fork(watchBudgetSave),
     fork(watchBudgetItemSave),
-    fork(watchBudgetItemDelete)
+    fork(watchBudgetItemDelete),
   ];
 }

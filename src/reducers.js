@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint no-console: "off" */
 import { combineReducers } from 'redux';
 
 import type {
@@ -7,7 +8,7 @@ import type {
   BudgetForm,
   BudgetItem,
   BudgetItemForm,
-  User
+  User,
 } from './types';
 
 export function user(state: ?User = null, action: Action): ?Object {
@@ -16,18 +17,16 @@ export function user(state: ?User = null, action: Action): ?Object {
       if (action.error) {
         console.error('Failed to login');
         return null;
-      } else {
-        return action.payload;
       }
+      return action.payload;
     case 'LOGOUT':
       return null;
     case 'CURRENT_USER':
       if (action.error) {
         console.log('Failed to get current user', action.payload);
         return null;
-      } else {
-        return action.payload;
       }
+      return action.payload;
     default:
       return state;
   }
@@ -42,7 +41,10 @@ export function menuOpen(state: boolean = false, { type }: Action): boolean {
   }
 }
 
-export function budgetForm(state: BudgetForm = { budget: null, errors: {} }, action: Action): BudgetForm {
+export function budgetForm(
+  state: BudgetForm = { budget: null, errors: {} },
+  action: Action
+): BudgetForm {
   switch (action.type) {
     case 'BUDGET_SAVE_SUCCEEDED':
       return { budget: null, errors: {} };
@@ -56,7 +58,10 @@ export function budgetForm(state: BudgetForm = { budget: null, errors: {} }, act
 }
 
 // TODO: loading and error?
-export function budgetItemForm(state: BudgetItemForm = { item: null, errors: {} }, action: Action): BudgetItemForm {
+export function budgetItemForm(
+  state: BudgetItemForm = { item: null, errors: {} },
+  action: Action
+): BudgetItemForm {
   switch (action.type) {
     case 'NEW_ITEM': {
       const item = {
@@ -64,7 +69,7 @@ export function budgetItemForm(state: BudgetItemForm = { item: null, errors: {} 
         amount: 0,
         label: '',
         date: new Date(),
-        budgetId: null
+        budgetId: null,
       };
       return { item, errors: {} };
     }
@@ -104,10 +109,9 @@ export function budgets(state: Budget[] = [], action: Action): Budget[] {
     case 'BUDGET_SAVE_SUCCEEDED': {
       const saved = action.budget;
       if (state.find(budget => budget.id === saved.id)) {
-        return state.map(budget => budget.id === saved.id ? saved : budget);
-      } else {
-        return state.concat([saved]);
+        return state.map(budget => (budget.id === saved.id ? saved : budget));
       }
+      return state.concat([saved]);
     }
     case 'BUDGET_SAVE_FAILED':
       console.error('Failed to save budget');
@@ -136,10 +140,9 @@ export function budgetItems(state: BudgetItem[] = [], action: Action): BudgetIte
     case 'BUDGET_ITEM_SAVE_SUCCEEDED': {
       const saved = action.budgetItem;
       if (state.filter(item => item.id === saved.id).length > 0) {
-        return state.map(item => item.id === saved.id ? saved : item);
-      } else {
-        return state.concat([action.budgetItem]);
+        return state.map(item => (item.id === saved.id ? saved : item));
       }
+      return state.concat([action.budgetItem]);
     }
     case 'BUDGET_ITEM_SAVE_FAILED':
       console.error('Failed to save item', action.error);
@@ -163,7 +166,7 @@ const reducers = combineReducers({
   budgetItems,
   menuOpen,
   budgetForm,
-  budgetItemForm
+  budgetItemForm,
 });
 
 export default reducers;

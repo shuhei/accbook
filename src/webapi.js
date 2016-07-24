@@ -4,7 +4,7 @@ import type {
   Auth,
   User,
   Budget,
-  BudgetItem
+  BudgetItem,
 } from './types';
 
 const ParseBudget = Parse.Object.extend('Budget');
@@ -12,26 +12,25 @@ const ParseBudgetItem = Parse.Object.extend('BudgetItem');
 
 export function currentUser(): Promise<User> {
   const user: ?User = ParseUser.current();
-  if (user) {
-    return Promise.resolve(user);
-  } else {
+  if (!user) {
     return Promise.reject(new Error('No current user'));
   }
+  return Promise.resolve(user);
 }
 
 export function signup({ username, password }: Auth): Promise<User> {
   return new Promise((resolve, reject) => {
     // TODO: Automatically login or show message.
-    const user = new ParseUser();
-    user.set('username', username);
-    user.set('password', password);
-    user.signUp(null, {
+    const parseUser = new ParseUser();
+    parseUser.set('username', username);
+    parseUser.set('password', password);
+    parseUser.signUp(null, {
       success(user: User) {
         resolve(user);
       },
       error(user, error) {
         reject(error);
-      }
+      },
     });
   });
 }
@@ -44,7 +43,7 @@ export function login({ username, password }: Auth): Promise<User> {
       },
       error(user, error) {
         reject(error);
-      }
+      },
     });
   });
 }
@@ -79,7 +78,7 @@ export function fetchBudgets(): Promise<Budget[]> {
       },
       error(e) {
         reject(e);
-      }
+      },
     });
   });
 }
@@ -93,7 +92,7 @@ export function fetchItems(): Promise<BudgetItem[]> {
       },
       error(e) {
         reject(e);
-      }
+      },
     });
   });
 }
@@ -108,12 +107,12 @@ export function saveItem(item: BudgetItem): Promise<BudgetItem> {
     setACL(budgetItem);
     budgetItem.save(null, {
       success(saved) {
-        const item: BudgetItem = extractAttributes(saved);
-        resolve(item);
+        const newItem: BudgetItem = extractAttributes(saved);
+        resolve(newItem);
       },
       error(failed, error) {
         reject(error);
-      }
+      },
     });
   });
 }
@@ -129,7 +128,7 @@ export function deleteItem(item: BudgetItem): Promise<BudgetItem> {
         },
         error(failed, error) {
           reject(error);
-        }
+        },
       });
     } else {
       reject(new Error('No id on BudgetItem'));
@@ -147,7 +146,7 @@ export function saveBudget(budget: Budget): Promise<Budget> {
       },
       error(failed, error) {
         reject(error);
-      }
+      },
     });
   });
 }

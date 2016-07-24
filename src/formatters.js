@@ -1,4 +1,12 @@
 /* @flow */
+
+function pad(num: number, size: number = 2): string {
+  const s = num.toString();
+  const shortage = Math.max(size - s.length, 0);
+  const prefix = '0'.repeat(shortage);
+  return `${prefix}${s}`;
+}
+
 export function formatDate(date: ?Date): string {
   if (!date) {
     return '';
@@ -37,12 +45,4 @@ export function formatNumber(num: number): string {
     span = 3;
   }
   return (isMinus ? '-' : '') + parts.join(',');
-}
-
-function pad(num: number, size: number = 2): string {
-  let s = num.toString();
-  if (s.length < size) {
-    s = '0' + s;
-  }
-  return s;
 }

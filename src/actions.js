@@ -1,13 +1,6 @@
 /* @flow */
 import { createAction } from 'redux-actions';
 
-import type {
-  Action,
-  Budget,
-  BudgetForm,
-  BudgetItem,
-  BudgetItemForm
-} from './types';
 import * as webapi from './webapi';
 
 // Action creators

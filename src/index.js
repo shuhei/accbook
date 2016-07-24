@@ -1,4 +1,5 @@
 /* @flow */
+/* global PARSE_APP_ID, PARSE_JS_API_KEY */
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';

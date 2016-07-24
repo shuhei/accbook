@@ -9,7 +9,8 @@
     "build": "webpack -p --config webpack.prod.config.js",
     "test": "mocha --compilers js:babel-core/register",
     "cover": "babel-node node_modules/.bin/isparta cover --report text _mocha -- --reporter dot",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "lint": "eslint ."
   },
   "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
   "license": "ISC",
@@ -27,6 +28,10 @@
     "babel-preset-stage-0": "^6.5.0",
     "css-loader": "^0.23.1",
     "dotenv": "^2.0.0",
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.11.1",
+    "eslint-plugin-jsx-a11y": "^1.5.5",
     "eslint-plugin-react": "^5.2.2",
     "file-loader": "^0.9.0",
     "isparta": "^4.0.0",

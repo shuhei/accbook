@@ -1,20 +1,15 @@
 /* @flow */
 import 'babel-polyfill';
 import { call, put, select, fork } from 'redux-saga/effects';
-import { equal, deepEqual } from 'assert';
+import { deepEqual } from 'assert';
 
 import {
   fetchBudgets,
   fetchBudgetItems,
   saveBudget,
-  saveBudgetItem
+  saveBudgetItem,
 } from '../src/sagas';
 import * as webapi from '../src/webapi';
-
-import type {
-  Budget,
-  BudgetItem
-} from '../src/types';
 
 describe('fetchBudgets', () => {
   it('fetches budgets and select first one', () => {
@@ -22,7 +17,7 @@ describe('fetchBudgets', () => {
 
     const budgets = [
       { id: '1', label: 'first' },
-      { id: '2', label: 'second' }
+      { id: '2', label: 'second' },
     ];
     deepEqual(generator.next().value, fork(fetchBudgetItems));
     deepEqual(generator.next().value, call(webapi.fetchBudgets));
@@ -38,7 +33,10 @@ describe('fetchBudgetItems', () => {
 
     const budgetItems = [];
     deepEqual(generator.next().value, call(webapi.fetchItems));
-    deepEqual(generator.next(budgetItems).value, put({ type: 'BUDGET_ITEMS_FETCH_SUCCEEDED', budgetItems }));
+    deepEqual(
+      generator.next(budgetItems).value,
+      put({ type: 'BUDGET_ITEMS_FETCH_SUCCEEDED', budgetItems })
+    );
     deepEqual(generator.next(), { done: true, value: undefined });
   });
 
@@ -83,11 +81,11 @@ describe('saveBudgetItem', () => {
       label: 'hello',
       amount: 1230,
       date: new Date(2016, 3, 4),
-      budgetId: null
+      budgetId: null,
     };
     const action = {
       type: 'BUDGET_ITEM_SAVE_REQUESTED',
-      budgetItem
+      budgetItem,
     };
     const generator = saveBudgetItem(action);
 
@@ -96,7 +94,10 @@ describe('saveBudgetItem', () => {
     const expectedItem = { ...budgetItem, budgetId: 'abc' };
     deepEqual(generator.next(state).value, call(webapi.saveItem, expectedItem));
     const savedItem = { ...expectedItem, id: 'bcd' };
-    deepEqual(generator.next(savedItem).value, put({ type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem: savedItem }));
+    deepEqual(
+      generator.next(savedItem).value,
+      put({ type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem: savedItem })
+    );
     deepEqual(generator.next(), { done: true, value: undefined });
   });
 
@@ -106,18 +107,21 @@ describe('saveBudgetItem', () => {
       label: 'hello',
       amount: 1230,
       date: new Date(2016, 3, 4),
-      budgetId: 'existing'
+      budgetId: 'existing',
     };
     const action = {
       type: 'BUDGET_ITEM_SAVE_REQUESTED',
-      budgetItem
+      budgetItem,
     };
     const generator = saveBudgetItem(action);
 
     deepEqual(generator.next().value, select());
     const state = { selectedBudgetId: 'abc' };
     deepEqual(generator.next(state).value, call(webapi.saveItem, budgetItem));
-    deepEqual(generator.next(budgetItem).value, put({ type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem }));
+    deepEqual(
+      generator.next(budgetItem).value,
+      put({ type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem })
+    );
     deepEqual(generator.next(), { done: true, value: undefined });
   });
 });
