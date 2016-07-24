@@ -1,7 +1,8 @@
 /* @flow */
+import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
@@ -17,8 +18,11 @@ import App from './containers/App';
 Parse.initialize(PARSE_APP_ID, PARSE_JS_API_KEY);
 
 const sagaMiddleware = createSagaMiddleware();
-const createStoreWithMiddleware = applyMiddleware(thunk, promise, sagaMiddleware)(createStore);
-const store = createStoreWithMiddleware(reducers);
+const enhancer = compose(
+  applyMiddleware(thunk, promise, sagaMiddleware),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+);
+const store = createStore(reducers, enhancer);
 sagaMiddleware.run(sagas);
 
 ReactDOM.render(

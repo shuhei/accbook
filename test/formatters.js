@@ -1,4 +1,5 @@
 /* @flow */
+import 'babel-polyfill';
 import { strictEqual } from 'assert';
 
 import { formatDate, formatFullDate, formatNumber } from '../src/formatters';

@@ -1,4 +1,5 @@
 /* @flow */
+import 'babel-polyfill';
 import { call, put, select, fork } from 'redux-saga/effects';
 import { equal, deepEqual } from 'assert';
 

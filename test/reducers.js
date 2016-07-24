@@ -1,4 +1,5 @@
 /* @flow */
+import 'babel-polyfill';
 import { equal, deepEqual } from 'assert';
 
 import {
