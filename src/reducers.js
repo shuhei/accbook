@@ -1,6 +1,7 @@
 /* @flow */
 /* eslint no-console: "off" */
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 
 import type {
   Action,
@@ -167,6 +168,7 @@ const reducers = combineReducers({
   menuOpen,
   budgetForm,
   budgetItemForm,
+  form: formReducer,
 });
 
 export default reducers;

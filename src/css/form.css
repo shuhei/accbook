@@ -28,10 +28,6 @@ input[type="date"] {
   padding: 0.1em 0.4em;
 }
 
-input.input--large {
-  font-size: 1.8rem;
-}
-
 input[type="date"] {
   border-radius: 0;
   -webkit-appearance: none;

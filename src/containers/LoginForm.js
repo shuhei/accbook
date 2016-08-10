@@ -1,48 +1,86 @@
 /* @flow */
-import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
-import { connect } from 'react-redux';
+import React from 'react';
+import { reduxForm, Field } from 'redux-form';
 
-import { signup, login } from '../actions';
+import { login, signup } from '../actions';
 
-class LoginForm extends Component {
-  getAuth() {
-    const username = findDOMNode(this.refs.username).value;
-    const password = findDOMNode(this.refs.password).value;
-    return { username, password };
-  }
+const LOGIN = 'login';
+const SIGNUP = 'signup';
 
-  handleSignup() {
-    const { dispatch } = this.props;
-    dispatch(signup(this.getAuth()));
-  }
+type RadioProps = {
+  input: {
+    value: string,
+    onChange: Function,
+  },
+};
+const FormTypeRadio = ({ input: { value, onChange } }: RadioProps) => (
+  <div>
+    <label className="text-large">
+      <input
+        type="radio"
+        className="text-large"
+        checked={value === LOGIN}
+        onChange={() => onChange(LOGIN)}
+      />
+      Log in
+    </label>
+    <label className="text-large">
+      <input
+        type="radio"
+        className="text-large"
+        checked={value === SIGNUP}
+        onChange={() => onChange(SIGNUP)}
+      />
+      Sign up
+    </label>
+  </div>
+);
 
-  handleLogin() {
-    const { dispatch } = this.props;
-    dispatch(login(this.getAuth()));
-  }
+type Props = {
+  handleSubmit: Function,
+};
+const LoginForm = ({ handleSubmit }: Props) => (
+  <form className="form login-form" onSubmit={handleSubmit}>
+    <h1>accbook</h1>
 
-  render() {
-    return (
-      <form className="form login-form">
-        <h1>accbook</h1>
+    <Field
+      name="username"
+      component="input"
+      type="text"
+      className="text-large"
+      placeholder="Username"
+    />
+    <Field
+      name="password"
+      component="input"
+      type="password"
+      className="text-large"
+      placeholder="Password"
+    />
+    <Field
+      name="formType"
+      component={FormTypeRadio}
+    />
 
-        <input type="text" className="input--large" placeholder="Username" ref="username" />
-        <input type="password" className="input--large" placeholder="Password" ref="password" />
+    <button type="submit" className="button button--primary button--large">
+      Go
+    </button>
+  </form>
+);
 
-        <button
-          type="button"
-          className="button button--secondary button--large"
-          onClick={() => this.handleSignup()}
-        >Sign up</button>
-        <button
-          type="button"
-          className="button button--primary button--large"
-          onClick={() => this.handleLogin()}
-        >Log in</button>
-      </form>
-    );
-  }
-}
-
-export default connect()(LoginForm);
+export default reduxForm({
+  form: 'login',
+  initialValues: {
+    formType: LOGIN,
+  },
+  onSubmit({ username, password, formType }, dispatch) {
+    switch (formType) {
+      case LOGIN:
+        return dispatch(login({ username, password }));
+      case SIGNUP:
+        return dispatch(signup({ username, password }));
+      default:
+        return Promise.resolve();
+    }
+  },
+})(LoginForm);
