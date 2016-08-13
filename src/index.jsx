@@ -3,7 +3,6 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Modal from 'react-modal';
 import RedBox from 'redbox-react';
 import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -48,9 +47,3 @@ renderApp();
 if (module.hot) {
   module.hot.accept('./containers/App', renderApp);
 }
-
-// FIXME: Click on overlay doesn't close the modal.
-// Because of using exenv instead of fbjs?
-// FIXME: We shouldn't need this.
-Modal.setAppElement(document.getElementsByTagName('body')[0]);
-Modal.injectCSS();

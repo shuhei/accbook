@@ -10,6 +10,7 @@ import {
   saveBudgetItem,
 } from '../src/sagas';
 import * as webapi from '../src/webapi';
+import { hideModal } from '../src/modules/modal';
 
 describe('fetchBudgets', () => {
   it('fetches budgets and select first one', () => {
@@ -98,6 +99,7 @@ describe('saveBudgetItem', () => {
       generator.next(savedItem).value,
       put({ type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem: savedItem })
     );
+    deepEqual(generator.next().value, put(hideModal()));
     deepEqual(generator.next(), { done: true, value: undefined });
   });
 
@@ -122,6 +124,7 @@ describe('saveBudgetItem', () => {
       generator.next(budgetItem).value,
       put({ type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem })
     );
+    deepEqual(generator.next().value, put(hideModal()));
     deepEqual(generator.next(), { done: true, value: undefined });
   });
 });

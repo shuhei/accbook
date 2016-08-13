@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { lifecycle } from 'recompose';
 
 import * as actions from '../actions';
+import { newBudgetItem, editBudgetItem } from '../modules/modal';
 import Wrapper from '../components/Wrapper';
 import MenuBar from '../components/MenuBar';
 import BudgetItemList from '../components/BudgetItemList';
-import BudgetFormModal from './BudgetFormModal';
-import BudgetItemFormModal from './BudgetItemFormModal';
+import Modal from './Modal';
 
 import type { Budget, BudgetItem } from '../types';
 
@@ -54,8 +54,7 @@ function Main(
           editItem={editItem}
         />
       }
-      <BudgetFormModal />
-      <BudgetItemFormModal />
+      <Modal />
     </Wrapper>
   );
 }
@@ -95,12 +94,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.editBudget(budget));
   },
   newItem() {
-    // FIXME
-    dispatch(actions.newItem());
+    dispatch(newBudgetItem());
   },
   editItem(item) {
-    // FIXME
-    dispatch(actions.editItem(item));
+    dispatch(editBudgetItem(item.id));
   },
 });
 

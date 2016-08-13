@@ -6,6 +6,9 @@ const dotenv = require('dotenv');
 dotenv.load();
 
 module.exports = {
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+  },
   entry: [
     'babel-polyfill',
     './src/index.js',
@@ -27,7 +30,7 @@ module.exports = {
         loader: 'style!css',
       },
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loader: 'babel',
         include: path.join(__dirname, 'src'),
       },

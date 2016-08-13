@@ -6,6 +6,9 @@ const dotenv = require('dotenv');
 dotenv.load();
 
 module.exports = {
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+  },
   devtool: 'eval',
   entry: [
     'react-hot-loader/patch',
@@ -32,7 +35,7 @@ module.exports = {
         loader: 'style!css',
       },
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loaders: ['babel'],
         include: path.join(__dirname, 'src'),
       },

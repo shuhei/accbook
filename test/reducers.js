@@ -66,38 +66,6 @@ describe('menuOpen', () => {
   });
 });
 
-describe('budgetItemForm', () => {
-  describe('BUDGET_ITEM_DELETE_SUCCEEDED', () => {
-    it('closes form', () => {
-      const state = {
-        item: { id: '123' },
-        errors: {},
-      };
-      const action = {
-        type: 'BUDGET_ITEM_DELETE_SUCCEEDED',
-        budgetItem: { id: '123', label: '', amount: 0, date: new Date(), budgetId: null },
-      };
-
-      const { item, errors } = budgetItemForm(state, action);
-      equal(item, null);
-      deepEqual(errors, {});
-    });
-  });
-
-  describe('CLOSE_ITEM_FORM', () => {
-    it('closes form', () => {
-      const state = {
-        item: { id: '123' },
-        errors: {},
-      };
-
-      const { item, errors } = budgetItemForm(state, { type: 'CLOSE_ITEM_FORM' });
-      equal(item, null);
-      deepEqual(errors, {});
-    });
-  });
-});
-
 describe('selectedBudgetId', () => {
   describe('BUDGET_SELECTED', () => {
     it('replaces with id property', () => {

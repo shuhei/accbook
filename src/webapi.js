@@ -53,6 +53,7 @@ export function logout(): Promise<void> {
   return Promise.resolve();
 }
 
+/* eslint-disable no-param-reassign */
 function flattenAttributes({ attributes }) {
   return Object.keys(attributes).reduce((acc, key) => {
     const value = attributes[key];
@@ -64,6 +65,7 @@ function flattenAttributes({ attributes }) {
     return acc;
   }, {});
 }
+/* eslint-enable no-param-reassign */
 
 function extractAttributes(parseObject) {
   return { ...flattenAttributes(parseObject), id: parseObject.id };

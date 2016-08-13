@@ -43,6 +43,7 @@ const LoginForm = ({ handleSubmit }: Props) => (
   <form className="form login-form" onSubmit={handleSubmit}>
     <h1>accbook</h1>
 
+    <Field name="formType" component={FormTypeRadio} />
     <Field
       name="username"
       component="input"
@@ -56,10 +57,6 @@ const LoginForm = ({ handleSubmit }: Props) => (
       type="password"
       className="text-large"
       placeholder="Password"
-    />
-    <Field
-      name="formType"
-      component={FormTypeRadio}
     />
 
     <button type="submit" className="button button--primary button--large">

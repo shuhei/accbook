@@ -3,12 +3,13 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
+import modal from './modules/modal';
+
 import type {
   Action,
   Budget,
   BudgetForm,
   BudgetItem,
-  BudgetItemForm,
   User,
 } from './types';
 
@@ -53,38 +54,6 @@ export function budgetForm(
       return { budget: action.payload, errors: {} };
     case 'CLOSE_BUDGET_FORM':
       return { budget: null, errors: {} };
-    default:
-      return state;
-  }
-}
-
-// TODO: loading and error?
-export function budgetItemForm(
-  state: BudgetItemForm = { item: null, errors: {} },
-  action: Action
-): BudgetItemForm {
-  switch (action.type) {
-    case 'NEW_ITEM': {
-      const item = {
-        id: null,
-        amount: 0,
-        label: '',
-        date: new Date(),
-        budgetId: null,
-      };
-      return { item, errors: {} };
-    }
-    case 'EDIT_ITEM': {
-      return { item: action.payload, errors: {} };
-    }
-    case 'BUDGET_ITEM_SAVE_SUCCEEDED':
-      return { item: null, errors: {} };
-    case 'BUDGET_ITEM_DELETE_SUCCEEDED':
-      return { item: null, errors: {} };
-    case 'BUDGET_ITEM_DELETE_FAILED':
-      return state;
-    case 'CLOSE_ITEM_FORM':
-      return { item: null, errors: {} };
     default:
       return state;
   }
@@ -160,14 +129,21 @@ export function budgetItems(state: BudgetItem[] = [], action: Action): BudgetIte
   }
 }
 
+const ui = combineReducers({
+  modal,
+});
+
 const reducers = combineReducers({
   user,
   budgets,
-  selectedBudgetId,
   budgetItems,
+
+  ui,
+
+  selectedBudgetId,
   menuOpen,
   budgetForm,
-  budgetItemForm,
+
   form: formReducer,
 });
 

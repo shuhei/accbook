@@ -3,12 +3,13 @@
 import { takeEvery } from 'redux-saga';
 import { call, put, fork, select } from 'redux-saga/effects';
 import * as webapi from './webapi';
+import { hideModal } from './modules/modal';
 
 import type { Action } from './types';
 
 // -- Subroutines
 
-export function *fetchBudgetItems(): Generator {
+export function* fetchBudgetItems(): Generator {
   try {
     const budgetItems: any = yield call(webapi.fetchItems);
     yield put({ type: 'BUDGET_ITEMS_FETCH_SUCCEEDED', budgetItems });
@@ -17,7 +18,7 @@ export function *fetchBudgetItems(): Generator {
   }
 }
 
-export function *fetchBudgets(): Generator {
+export function* fetchBudgets(): Generator {
   yield fork(fetchBudgetItems);
   try {
     const budgets: any = yield call(webapi.fetchBudgets);
@@ -30,7 +31,7 @@ export function *fetchBudgets(): Generator {
   }
 }
 
-export function *saveBudget(action: Action): Generator {
+export function* saveBudget(action: Action): Generator {
   if (action.type !== 'BUDGET_SAVE_REQUESTED') {
     return;
   }
@@ -42,7 +43,7 @@ export function *saveBudget(action: Action): Generator {
   }
 }
 
-export function *saveBudgetItem(action: Action): Generator {
+export function* saveBudgetItem(action: Action): Generator {
   if (action.type !== 'BUDGET_ITEM_SAVE_REQUESTED') {
     return;
   }
@@ -52,18 +53,20 @@ export function *saveBudgetItem(action: Action): Generator {
     const itemWithBudgetId = item.id ? item : { ...item, budgetId: state.selectedBudgetId };
     const budgetItem: any = yield call(webapi.saveItem, itemWithBudgetId);
     yield put({ type: 'BUDGET_ITEM_SAVE_SUCCEEDED', budgetItem });
+    yield put(hideModal());
   } catch (error) {
     yield put({ type: 'BUDGET_ITEM_SAVE_FAILED', error });
   }
 }
 
-export function *deleteBudgetItem(action: Action): Generator {
+export function* deleteBudgetItem(action: Action): Generator {
   if (action.type !== 'BUDGET_ITEM_DELETE_REQUESTED') {
     return;
   }
   try {
     const deletedItem = yield call(webapi.deleteItem, action.budgetItem);
     yield put({ type: 'BUDGET_ITEM_DELETE_SUCCEEDED', budgetItem: deletedItem });
+    yield put(hideModal());
   } catch (error) {
     yield put({ type: 'BUDGET_ITEM_DELETE_FAILED', error });
   }
@@ -71,23 +74,23 @@ export function *deleteBudgetItem(action: Action): Generator {
 
 // -- Watchers
 
-function *watchBudgetsFetch(): Generator {
+function* watchBudgetsFetch(): Generator {
   yield* takeEvery('BUDGETS_FETCH_REQUESTED', fetchBudgets);
 }
 
-function *watchBudgetSave(): Generator {
+function* watchBudgetSave(): Generator {
   yield* takeEvery('BUDGET_SAVE_REQUESTED', saveBudget);
 }
 
-function *watchBudgetItemSave(): Generator {
+function* watchBudgetItemSave(): Generator {
   yield* takeEvery('BUDGET_ITEM_SAVE_REQUESTED', saveBudgetItem);
 }
 
-function *watchBudgetItemDelete(): Generator {
+function* watchBudgetItemDelete(): Generator {
   yield* takeEvery('BUDGET_ITEM_DELETE_REQUESTED', deleteBudgetItem);
 }
 
-export default function *root(): Generator {
+export default function* root(): Generator {
   yield [
     fork(watchBudgetsFetch),
     fork(watchBudgetSave),
