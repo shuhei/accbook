@@ -38,6 +38,7 @@ export function* saveBudget(action: Action): Generator {
   try {
     const budget: any = yield call(webapi.saveBudget, action.budget);
     yield put({ type: 'BUDGET_SAVE_SUCCEEDED', budget });
+    yield put(hideModal());
   } catch (error) {
     yield put({ type: 'BUDGET_SAVE_FAILED', error });
   }

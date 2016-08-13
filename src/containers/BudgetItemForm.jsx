@@ -111,6 +111,7 @@ const mapStateToProps = (state, { itemId }) => {
     item,
     initialValues: {
       itemId,
+      budgetId: item.budgetId,
       label: item.label,
       isIncome: item.amount > 0,
       amount: Math.abs(item.amount),
@@ -136,11 +137,10 @@ const decorate = compose(
   connect(mapStateToProps, mapDispatchToProps),
   reduxForm({
     form: FORM_NAME,
-    onSubmit({ itemId, label, isIncome, amount, date }, dispatch) {
-      // TODO: Use normalize?
-      // TODO: Set budgetId when editing.
+    onSubmit({ itemId, budgetId, label, isIncome, amount, date }, dispatch) {
       const budgetItem = {
         id: itemId,
+        budgetId,
         label: label.trim(),
         amount: (isIncome ? 1 : -1) * amount,
         date: date && new Date(date),
