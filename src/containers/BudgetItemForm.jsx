@@ -1,3 +1,4 @@
+/* @flow */
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -137,6 +138,7 @@ const decorate = compose(
     form: FORM_NAME,
     onSubmit({ itemId, label, isIncome, amount, date }, dispatch) {
       // TODO: Use normalize?
+      // TODO: Set budgetId when editing.
       const budgetItem = {
         id: itemId,
         label: label.trim(),

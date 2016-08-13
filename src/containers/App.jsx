@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Main from './Main';
+import MainContainer from './MainContainer';
 import LoginForm from './LoginForm';
 
 import type { User } from '../types';
@@ -12,7 +12,7 @@ type Props = {
 };
 
 function App({ user }: Props) {
-  return user ? (<Main />) : (<LoginForm />);
+  return user ? (<MainContainer />) : (<LoginForm />);
 }
 
 function select({ user }) {

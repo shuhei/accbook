@@ -2,7 +2,7 @@
 /* global ReactClass */
 import React from 'react';
 import { connect } from 'react-redux';
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
 
 import { modalForType, hideModal } from '../modules/modal';
 
@@ -13,10 +13,10 @@ type Props = {
   close: Function,
 };
 
-const AppModal = ({ isOpen, Component, props, close }: Props) => (
-  <Modal isOpen={isOpen} onReqeustClose={close}>
+const Modal = ({ isOpen, Component, props, close }: Props) => (
+  <ReactModal isOpen={isOpen} onReqeustClose={close}>
     {isOpen ? <Component {...props} /> : null}
-  </Modal>
+  </ReactModal>
 );
 
 const mapStateToProps = state => ({
@@ -29,4 +29,4 @@ const mapDispatchToProps = () => ({
   close: hideModal,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppModal);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

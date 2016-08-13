@@ -1,16 +1,10 @@
 /* @flow */
-import React from 'react';
 import { connect } from 'react-redux';
 import { lifecycle } from 'recompose';
 
+import Main from '../components/Main';
 import * as actions from '../actions';
-import { newBudgetItem, editBudgetItem } from '../modules/modal';
-import Wrapper from '../components/Wrapper';
-import MenuBar from '../components/MenuBar';
-import BudgetItemList from '../components/BudgetItemList';
-import Modal from './Modal';
-
-import type { Budget, BudgetItem } from '../types';
+import { editBudget, newBudgetItem, editBudgetItem } from '../modules/modal';
 
 // TODO: Move to somewhere. Saga after login?
 const fetchOnMount = lifecycle({
@@ -18,46 +12,6 @@ const fetchOnMount = lifecycle({
     this.props.fetchBudgets();
   },
 });
-
-type Props = {
-  selectedBudget: Budget,
-  budgets: Budget[],
-  budgetItems: BudgetItem[],
-  menuOpen: boolean,
-  selectBudget: Function,
-  logout: Function,
-  toggleMenu: Function,
-  editBudget: Function,
-  newItem: Function,
-  editItem: Function
-};
-
-function Main(
-  {
-    selectedBudget, budgets, budgetItems, menuOpen,
-    selectBudget, logout, toggleMenu, editBudget, newItem, editItem,
-  }: Props
-) {
-  const sidebar = (
-    <MenuBar budgets={budgets} selectBudget={selectBudget} logout={logout} />
-  );
-
-  return (
-    <Wrapper menuOpen={menuOpen} toggleMenu={toggleMenu} logout={logout} sidebar={sidebar}>
-      {selectedBudget &&
-        <BudgetItemList
-          selectedBudget={selectedBudget}
-          items={budgetItems}
-          // TODO: Don't create a function on the fly.
-          editBudget={() => editBudget(selectedBudget)}
-          newItem={newItem}
-          editItem={editItem}
-        />
-      }
-      <Modal />
-    </Wrapper>
-  );
-}
 
 const mapStateToProps = state => {
   const { selectedBudgetId, budgets, budgetItems } = state;
@@ -90,8 +44,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: 'TOGGLE_MENU' });
   },
   editBudget(budget) {
-    // FIXME
-    dispatch(actions.editBudget(budget));
+    dispatch(editBudget(budget.id));
   },
   newItem() {
     dispatch(newBudgetItem());

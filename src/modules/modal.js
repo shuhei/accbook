@@ -2,7 +2,7 @@
 import type { Action } from '../types';
 
 import BudgetItemForm from '../containers/BudgetItemForm';
-import BudgetForm from '../components/BudgetForm';
+import BudgetForm from '../containers/BudgetForm';
 
 // Constants
 
@@ -39,11 +39,15 @@ export const modalForType = (type: ModalType) =>
 export const editBudgetItem = (itemId: string) =>
   showModal(BUDGET_ITEM_FORM_MODAL, { itemId });
 
+// TODO: Set budgetId.
 export const newBudgetItem = () =>
   showModal(BUDGET_ITEM_FORM_MODAL, { itemId: null });
 
-export const showBudgetFormModal = (budgetId: string) =>
+export const editBudget = (budgetId: string) =>
   showModal(BUDGET_FORM_MODAL, { budgetId });
+
+export const newBudget = () =>
+  showModal(BUDGET_FORM_MODAL, { budgetId: null });
 
 // Reducer
 
