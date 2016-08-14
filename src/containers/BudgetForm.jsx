@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 
 import { hideModal } from '../modules/modal';
+import { saveBudget } from '../modules/budgets';
 
 export const FORM_NAME = 'budget';
 
@@ -62,7 +63,7 @@ const decorate = compose(
         id: budgetId,
         label,
       };
-      dispatch({ type: 'BUDGET_SAVE_REQUESTED', budget });
+      dispatch(saveBudget(budget));
     },
   }),
 );

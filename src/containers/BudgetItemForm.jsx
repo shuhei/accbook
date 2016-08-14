@@ -8,6 +8,7 @@ import { Field, reduxForm, change } from 'redux-form';
 import type { BudgetItem } from '../types';
 import { formatFullDate } from '../formatters';
 import { hideModal } from '../modules/modal';
+import { saveBudgetItem, deleteBudgetItem } from '../modules/budgetItems';
 
 export const FORM_NAME = 'budgetItem';
 
@@ -126,7 +127,7 @@ const mapDispatchToProps = {
   },
   // TODO: Use itemId.
   deleteItem(budgetItem) {
-    return { type: 'BUDGET_ITEM_DELETE_REQUESTED', budgetItem };
+    return deleteBudgetItem(budgetItem);
   },
   setToday() {
     return change(FORM_NAME, 'date', formatFullDate(new Date()));
@@ -145,7 +146,7 @@ const decorate = compose(
         amount: (isIncome ? 1 : -1) * amount,
         date: date && new Date(date),
       };
-      dispatch({ type: 'BUDGET_ITEM_SAVE_REQUESTED', budgetItem });
+      dispatch(saveBudgetItem(budgetItem));
     },
   }),
 );

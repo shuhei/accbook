@@ -138,6 +138,25 @@ export function deleteItem(item: BudgetItem): Promise<BudgetItem> {
   });
 }
 
+export function deleteBudget(budget: Budget): Promise<Budget> {
+  return new Promise((resolve, reject) => {
+    if (budget.id) {
+      const obj = new ParseBudget({ ...budget, id: undefined });
+      obj.id = budget.id;
+      obj.destroy({
+        success() {
+          resolve(budget);
+        },
+        error(failed, error) {
+          reject(error);
+        },
+      });
+    } else {
+      reject(new Error('No id on Budget'));
+    }
+  });
+}
+
 export function saveBudget(budget: Budget): Promise<Budget> {
   return new Promise((resolve, reject) => {
     const parseBudget = new ParseBudget({ ...budget });

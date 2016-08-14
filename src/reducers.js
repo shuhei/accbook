@@ -4,12 +4,11 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
 import modal from './modules/modal';
+import budgets from './modules/budgets';
+import budgetItems from './modules/budgetItems';
 
 import type {
   Action,
-  Budget,
-  BudgetForm,
-  BudgetItem,
   User,
 } from './types';
 
@@ -43,87 +42,10 @@ export function menuOpen(state: boolean = false, { type }: Action): boolean {
   }
 }
 
-export function budgetForm(
-  state: BudgetForm = { budget: null, errors: {} },
-  action: Action
-): BudgetForm {
-  switch (action.type) {
-    case 'BUDGET_SAVE_SUCCEEDED':
-      return { budget: null, errors: {} };
-    case 'EDIT_BUDGET':
-      return { budget: action.payload, errors: {} };
-    case 'CLOSE_BUDGET_FORM':
-      return { budget: null, errors: {} };
-    default:
-      return state;
-  }
-}
-
 export function selectedBudgetId(state: ?string = null, action: Action): ?string {
   switch (action.type) {
     case 'BUDGET_SELECTED':
       return action.budget.id;
-    default:
-      return state;
-  }
-}
-
-// TODO: loading and error?
-export function budgets(state: Budget[] = [], action: Action): Budget[] {
-  switch (action.type) {
-    case 'BUDGETS_FETCH_SUCCEEDED':
-      return action.budgets;
-    case 'BUDGETS_FETCH_FAILED':
-      console.error('Failed to fetch budgets', action.error);
-      return state;
-    case 'BUDGET_SAVE_SUCCEEDED': {
-      const saved = action.budget;
-      if (state.find(budget => budget.id === saved.id)) {
-        return state.map(budget => (budget.id === saved.id ? saved : budget));
-      }
-      return state.concat([saved]);
-    }
-    case 'BUDGET_SAVE_FAILED':
-      console.error('Failed to save budget');
-      return state;
-    case 'BUDGET_DELETE_SUCCEEDED': {
-      const deleted = action.budget;
-      return state.filter((budget) => budget.id !== deleted.id);
-    }
-    case 'BUDGET_DELETE_FAILED':
-      console.error('Failed to save budget');
-      return state;
-    default:
-      return state;
-  }
-}
-
-// TODO: loading and error?
-// TODO: Use handleAction to destruct payload.
-export function budgetItems(state: BudgetItem[] = [], action: Action): BudgetItem[] {
-  switch (action.type) {
-    case 'BUDGET_ITEMS_FETCH_SUCCEEDED':
-      return action.budgetItems;
-    case 'BUDGET_ITEMS_FETCH_FAILED':
-      console.error('Failed to fetch items', action.error);
-      return state;
-    case 'BUDGET_ITEM_SAVE_SUCCEEDED': {
-      const saved = action.budgetItem;
-      if (state.filter(item => item.id === saved.id).length > 0) {
-        return state.map(item => (item.id === saved.id ? saved : item));
-      }
-      return state.concat([action.budgetItem]);
-    }
-    case 'BUDGET_ITEM_SAVE_FAILED':
-      console.error('Failed to save item', action.error);
-      return state;
-    case 'BUDGET_ITEM_DELETE_SUCCEEDED': {
-      const deleted = action.budgetItem;
-      return state.filter(item => item.id !== deleted.id);
-    }
-    case 'BUDGET_ITEM_DELETE_FAILED':
-      console.error('Failed to delete item');
-      return state;
     default:
       return state;
   }
@@ -142,7 +64,6 @@ const reducers = combineReducers({
 
   selectedBudgetId,
   menuOpen,
-  budgetForm,
 
   form: formReducer,
 });

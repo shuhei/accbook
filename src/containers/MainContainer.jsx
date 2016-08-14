@@ -4,6 +4,7 @@ import { lifecycle } from 'recompose';
 
 import Main from '../components/Main';
 import * as actions from '../actions';
+import { fetchBudgets } from '../modules/budgets';
 import { editBudget, newBudgetItem, editBudgetItem } from '../modules/modal';
 
 // TODO: Move to somewhere. Saga after login?
@@ -30,7 +31,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   fetchBudgets() {
-    dispatch({ type: 'BUDGETS_FETCH_REQUESTED' });
+    dispatch(fetchBudgets());
   },
   selectBudget(budget) {
     // TODO: Handle an action in a reducer or saga so that we can omit dispatches here.
