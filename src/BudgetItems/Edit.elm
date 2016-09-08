@@ -1,10 +1,10 @@
-module BudgetItems.Edit (..) where
+module BudgetItems.Edit exposing (..)
 
 import Html exposing (..)
+import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Signal exposing (Address)
-import BudgetItems.Actions exposing (..)
+import BudgetItems.Messages exposing (..)
 import BudgetItems.Models exposing (..)
 import Form exposing (Form, FieldState)
 import Form.Input as Input
@@ -22,38 +22,43 @@ initialViewModel =
   , item = BudgetItems.Models.new
   }
 
-view : Address Action -> ViewModel -> Html
-view address {form, item} =
-  let formAddress = Signal.forwardTo address FormAction
-      income = Form.getFieldAsBool "isIncome" form
+formView : ViewModel -> Html Form.Msg
+formView { form, item } =
+  let income = Form.getFieldAsBool "isIncome" form
       label' = Form.getFieldAsString "label" form
       amount = Form.getFieldAsString "amount" form
       date = Form.getFieldAsString "date" form
   in div []
        [ inputField
-           [ Input.checkboxInput income formAddress [ id "item-income" ]
+           [ Input.checkboxInput income [ id "item-income" ]
            , label [ for "item-income" ] [ text "Income" ]
            ]
-       , textField formAddress label' "text"
-       , textField formAddress amount "number"
-       , textField formAddress date "date"
-       , inputField
-           [ button [ class "btn", onClick address ListAll ] [ text "Cancel" ]
-           , button [ class "btn red", onClick address (DeleteIntent item) ] [ text "Delete" ]
-           , button [ class "btn", onClick address Save ] [ text "Save" ] ]
+       , textField label' "text"
+       , textField amount "number"
+       , textField date "date"
        ]
 
-inputField : List Html -> Html
+view : ViewModel -> Html Msg
+view model =
+  div []
+    [ App.map FormMsg (formView model)
+    , inputField
+        [ button [ class "btn", onClick ListAll ] [ text "Cancel" ]
+        , button [ class "btn red", onClick (DeleteIntent model.item) ] [ text "Delete" ]
+        , button [ class "btn", onClick Save ] [ text "Save" ] ]
+    ]
+
+inputField : List (Html a) -> Html a
 inputField children =
   div [ class "input-field" ] children
 
-textField : Address Form.Action -> FieldState e String -> String -> Html
-textField address field typeName =
+textField : FieldState e String -> String -> Html Form.Msg
+textField field typeName =
   inputField
-    [ Input.textInput field address ([ type' typeName ] ++ errorClassesFor field)
+    [ Input.textInput field ([ type' typeName ] ++ errorClassesFor field)
     , errorFor field ]
 
-errorFor : FieldState e a -> Html
+errorFor : FieldState e a -> Html Form.Msg
 errorFor field =
   case field.liveError of
     Just error ->
@@ -62,7 +67,7 @@ errorFor field =
     Nothing ->
       text ""
 
-errorClassesFor : FieldState e a -> List Html.Attribute
+errorClassesFor : FieldState e a -> List (Html.Attribute Form.Msg)
 errorClassesFor field =
   if field.isChanged
   then case field.liveError of

@@ -6,14 +6,31 @@ The app itself is to keep my budget under control. There are many accounting app
 
 ## Development
 
-Install dependencies and build assets:
+Install dependencies:
 
 ```
+npm install
 elm package install
 ```
 
-Develop:
+Run API server:
 
 ```
-elm reactor
+npm start
 ```
+
+Run dev server:
+
+```
+npm run dev
+```
+
+Open http://localhost:8000 with your browser.
+
+## Design Choices
+
+- Router: [Hop](https://github.com/sporto/hop)
+- Parent/Child communication: OutMsg pattern
+  - http://folkertdev.nl/blog/elm-child-parent-communication/
+  - http://folkertdev.nl/blog/elm-child-parent-communication-conti/)
+  - https://medium.com/@alex.lew/the-translator-pattern-a-model-for-child-to-parent-communication-in-elm-f4bfaa1d3f98#.4tl2z86i9

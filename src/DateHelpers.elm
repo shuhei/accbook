@@ -1,4 +1,4 @@
-module DateHelpers (..) where
+module DateHelpers exposing (..)
 
 import Date exposing (Date)
 import Json.Decode as Decode

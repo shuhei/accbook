@@ -1,14 +1,13 @@
-module Budgets.Effects (..) where
+module Budgets.Commands exposing (..)
 
-import Effects exposing (Effects)
 import Http
+import Task
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import String
 
 import Budgets.Models exposing (..)
-import Budgets.Actions exposing (..)
-import EffectsHelper
+import Budgets.Messages exposing (..)
 
 collectionUrl : String
 collectionUrl =
@@ -18,10 +17,10 @@ memberUrl : BudgetId -> String
 memberUrl id =
   String.join "/" [ collectionUrl, (toString id) ]
 
-fetchAll : Effects Action
+fetchAll : Cmd Msg
 fetchAll =
   Http.get collectionDecoder collectionUrl
-    |> EffectsHelper.toEffects FetchAllDone
+    |> Task.perform FetchAllFail FetchAllDone
 
 -- Encoder/Decoder
 

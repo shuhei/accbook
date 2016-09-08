@@ -1,12 +1,9 @@
 -- http://www.elm-tutorial.org/070_routing/router.html
-module Routing (..) where
+module Routing exposing (..)
 
-import Task exposing (Task)
-import Effects exposing (Effects, Never)
-import Signal exposing (Address)
-import Hop
+import Navigation
+import Hop exposing (makeUrl, matchUrl)
 import Hop.Types exposing (Config, Location, PathMatcher, Router, newLocation)
-import Hop.Navigate exposing (navigateTo)
 import Hop.Matchers exposing (match1, match2, match3, int)
 
 import BudgetItems.Models exposing (BudgetItemId)
@@ -17,22 +14,14 @@ type Route
   | BudgetItemEditRoute BudgetItemId
   | NotFoundRoute
 
-type Action
-  = HopAction ()
-  | ApplyRoute (Route, Location)
-  | NavigateTo String
-  | TaskDone ()
-
 type alias Model =
   { location : Location
   , route : Route
   }
 
-initialModel : Model
-initialModel =
-  { location = newLocation
-  , route = BudgetItemsRoute
-  }
+initialModel : (Route, Location) -> Model
+initialModel (route, location) =
+  { route = route, location = location }
 
 routerConfig : Config Route
 routerConfig =
@@ -42,28 +31,24 @@ routerConfig =
   , notFound = NotFoundRoute
   }
 
-type alias Context =
-  { navigateAddress : Address String }
+urlUpdate : (Route, Location) -> Model -> (Model, Cmd msg)
+urlUpdate (route, location) model =
+  let cmd = case route of
+              -- TODO: Any better way to redirect?
+              HomeRoute ->
+                navigateTo "#/budgetItems"
+              _ ->
+                Cmd.none
+  in ({ route = route, location = location }, cmd)
 
-update : Context -> Action -> Model -> (Model, Effects Action)
-update ctx action model =
-  case action of
-    NavigateTo path ->
-      (model, Effects.map HopAction (navigateTo routerConfig path))
-    ApplyRoute (route, location) ->
-      case route of
-        -- Redirect
-        HomeRoute ->
-          let fx = Signal.send ctx.navigateAddress "#/budgetItems"
-                     |> Effects.task
-                     |> Effects.map TaskDone
-          in (model, fx)
-        _ ->
-          ({ model | route = route, location = location }, Effects.none)
-    HopAction () ->
-      (model, Effects.none)
-    TaskDone () ->
-      (model, Effects.none)
+urlParser : Navigation.Parser (Route, Location)
+urlParser =
+  Navigation.makeParser (.href >> matchUrl routerConfig)
+
+-- Returns a Cmd to change URL.
+navigateTo : String -> Cmd msg
+navigateTo url =
+  Navigation.newUrl <| makeUrl routerConfig url
 
 indexMatcher : PathMatcher Route
 indexMatcher =
@@ -83,15 +68,3 @@ matchers =
   , budgetItemsMatcher
   , budgetItemEditMatcher
   ]
-
-router : Router Route
-router =
-  Hop.new routerConfig
-
-run : Task () ()
-run =
-  router.run
-
-signal : Signal Action
-signal =
-  Signal.map ApplyRoute router.signal

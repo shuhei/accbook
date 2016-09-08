@@ -1,23 +1,16 @@
-module Budgets.Update (..) where
+module Budgets.Update exposing (..)
 
-import Effects exposing (Effects)
-
-import Budgets.Actions exposing (..)
+import Common exposing (..)
+import Budgets.Messages exposing (..)
 import Budgets.Models exposing (..)
 
-update : Action -> Model -> (Model, Effects Action)
+update : Msg -> Model -> (Model, Cmd Msg, Cmd OutMsg)
 update action model =
   case action of
     Show id ->
-      -- TODO: Navigate to #budgets/:id
-      let fx = Effects.none
-      in (model, fx)
-    FetchAllDone result ->
-      case result of
-        Ok budgets ->
-          ({ model | budgets = budgets }, Effects.none)
-        Err errors ->
-          -- TODO: Show message
-          (model, Effects.none)
-    _ ->
-      (model, Effects.none)
+      let path = "#/budgets/" ++ (toString id)
+      in (model, Cmd.none, navigateTo path)
+    FetchAllDone budgets ->
+      ({ model | budgets = budgets }, Cmd.none, Cmd.none)
+    FetchAllFail error ->
+      (model, Cmd.none, sendError error)

@@ -1,4 +1,4 @@
-module BudgetItems.Models (..) where
+module BudgetItems.Models exposing (..)
 
 import Date exposing (Date)
 import Form exposing (Form)

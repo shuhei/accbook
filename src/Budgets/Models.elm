@@ -1,4 +1,4 @@
-module Budgets.Models (..) where
+module Budgets.Models exposing (..)
 
 type alias BudgetId =
   Int

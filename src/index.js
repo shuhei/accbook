@@ -5,10 +5,7 @@ require('./index.html');
 var Elm = require('./Main.elm');
 var mountNode = document.getElementById('main');
 
-var inboundPorts = {
-  getConfirmation: 0
-};
-var app = Elm.embed(Elm.Main, mountNode, inboundPorts);
+var app = Elm.Main.embed(mountNode);
 
 app.ports.askConfirmation.subscribe(function (args) {
   console.log('askConfirmation', args);

@@ -11,3 +11,5 @@ coverage
 
 /elm-stuff
 /elm.js
+/dist
+/index.html

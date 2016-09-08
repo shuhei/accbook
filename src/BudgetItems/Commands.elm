@@ -1,15 +1,14 @@
-module BudgetItems.Effects (..) where
+module BudgetItems.Commands exposing (..)
 
-import Effects exposing (Effects)
 import Http
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import DateHelpers exposing (..)
 import String
+import Task
 
-import BudgetItems.Actions exposing (..)
+import BudgetItems.Messages exposing (..)
 import BudgetItems.Models exposing (..)
-import EffectsHelper exposing (..)
 
 collectionUrl : String
 collectionUrl =
@@ -19,12 +18,12 @@ memberUrl : BudgetItemId -> String
 memberUrl id =
   String.join "/" [ collectionUrl, (toString id) ]
 
-fetchAll : Effects Action
+fetchAll : Cmd Msg
 fetchAll =
   Http.get collectionDecoder collectionUrl
-    |> toEffects FetchAllDone
+    |> Task.perform FetchAllFail FetchAllDone
 
-create : BudgetItem -> Effects Action
+create : BudgetItem -> Cmd Msg
 create item =
   let body = memberBody item
       config =
@@ -35,9 +34,9 @@ create item =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
-       |> toEffects CreateDone
+       |> Task.perform CreateFail CreateDone
 
-delete : BudgetItemId -> Effects Action
+delete : BudgetItemId -> Cmd Msg
 delete id =
   let config =
         { verb = "DELETE"
@@ -47,9 +46,9 @@ delete id =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson (Decode.succeed ())
-       |> toEffects (DeleteDone id)
+       |> Task.perform DeleteFail (\x -> DeleteDone id)
 
-save : BudgetItem -> Effects Action
+save : BudgetItem -> Cmd Msg
 save item =
   let body = memberBody item
       config =
@@ -60,7 +59,7 @@ save item =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
-       |> toEffects SaveDone
+       |> Task.perform SaveFail SaveDone
 
 -- Encoder/Decoder
 
