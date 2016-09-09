@@ -7,9 +7,8 @@ import Task
 import Types exposing (Budget, BudgetId, BudgetItem, BudgetItemId)
 
 type Msg
-  = ShowError String
   -- Budget
-  | ShowBudget BudgetId
+  = ShowBudget BudgetId
   | FetchAllBudgetsDone (List Budget)
   | FetchAllBudgetsFail Http.Error
   -- Budget Items
@@ -28,10 +27,6 @@ type Msg
   | DeleteItem BudgetItemId
   | DeleteItemDone BudgetItemId
   | DeleteItemFail Http.Error
-
-sendError : Http.Error -> Cmd Msg
-sendError error =
-  sendCommand <| ShowError (toString error)
 
 -- Util
 sendCommand : a -> Cmd a

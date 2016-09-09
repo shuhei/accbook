@@ -2,6 +2,7 @@ module Update exposing (update, urlUpdate)
 
 import Debug
 import Hop.Types exposing (Location)
+import Http
 
 import Types exposing (..)
 import Messages exposing (..)
@@ -15,8 +16,6 @@ import Form exposing (Form)
 update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case (Debug.log "action" action) of
-    ShowError error ->
-      ({ model | errorMessage = Just error }, Cmd.none)
     -- Budgets
     ShowBudget id ->
       let path = "#/budgets/" ++ (toString id)
@@ -24,21 +23,21 @@ update action model =
     FetchAllBudgetsDone budgets ->
       ({ model | budgets = budgets }, Cmd.none)
     FetchAllBudgetsFail error ->
-      (model, sendError error)
+      showError error model
     -- Budget Items
     ListAllItems ->
       (model, Routing.navigateTo "#/budgetItems")
     FetchAllItemsDone fetchedItems ->
       ({ model | budgetItems = fetchedItems }, Cmd.none)
     FetchAllItemsFail error ->
-      (model, sendError error)
+      showError error model
     CreateItem ->
       (model, createItem newItem)
     CreateItemDone item ->
       let updatedModel = { model | budgetItems = item :: model.budgetItems }
       in (updatedModel, sendCommand <| EditItem item)
     CreateItemFail error ->
-      (model, sendError error)
+      showError error model
     EditItem item ->
       let path = "#/budgetItems/" ++ (toString item.id) ++ "/edit"
           -- TODO: Do this in routing so that this works with only URL change.
@@ -54,7 +53,7 @@ update action model =
         { model | budgetItems = List.filter (\x -> x.id /= id) model.budgetItems }
       in (updatedModel, sendCommand ListAllItems)
     DeleteItemFail error ->
-      (model, sendError error)
+      showError error model
     ItemFormMsg formCmd ->
       ({ model | budgetItemForm = Form.update formCmd model.budgetItemForm }, Cmd.none)
     SaveItem ->
@@ -69,7 +68,7 @@ update action model =
           updatedCollection = List.map update model.budgetItems
       in ( { model | budgetItems = updatedCollection }, Routing.navigateTo "#/budgetItems")
     SaveItemFail error ->
-      (model, sendError error)
+      showError error model
 
 urlUpdate : (Route, Location) -> Model -> (Model, Cmd Msg)
 urlUpdate (route, location) model =
@@ -80,3 +79,8 @@ urlUpdate (route, location) model =
               _ ->
                 Cmd.none
   in ({ model | route = route, location = location }, cmd)
+
+-- Show error message.
+showError : Http.Error -> Model -> (Model, Cmd Msg)
+showError error model =
+  ({ model | errorMessage = Just (toString error) }, Cmd.none)
