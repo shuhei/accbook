@@ -8,8 +8,7 @@ import Form exposing (Form, FieldState)
 import Form.Input as Input
 
 import Messages exposing (..)
-import Types exposing (BudgetItem)
-import Models exposing (newItem)
+import Types exposing (BudgetItem, newItem)
 import BudgetItems.Form exposing (validateItemForm)
 
 -- import Materialize exposing (..)

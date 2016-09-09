@@ -33,3 +33,11 @@ type alias BudgetItem =
   , date : Date.Date
   }
 
+newItem : BudgetItem
+newItem =
+  { id = 0
+  , label = ""
+  , isIncome = False
+  , amount = 0
+  , date = Date.fromTime 0
+  }

@@ -12,7 +12,7 @@ import BudgetItems.List
 import BudgetItems.Edit
 import Materialize exposing (..)
 
-view : AppModel -> Html Msg
+view : Model -> Html Msg
 view model =
   let _ = Debug.log "model" model
       (title, page) = titleAndPage model
@@ -31,7 +31,7 @@ view model =
           ]
       ]
 
-sideNav : AppModel -> Html Msg
+sideNav : Model -> Html Msg
 sideNav model =
   let appName =
         listItem "Accbook"
@@ -39,7 +39,7 @@ sideNav model =
       budgets = Budgets.List.view model.budgets
   in ul [ class "side-nav fixed" ] (appName :: budgets)
 
-titleAndPage : AppModel -> (String, Html Msg)
+titleAndPage : Model -> (String, Html Msg)
 titleAndPage model =
   case model.route of
     HomeRoute ->
@@ -51,12 +51,12 @@ titleAndPage model =
     NotFoundRoute ->
       ("Not Found", notFoundView)
 
-budgetItemsPage : AppModel -> Html Msg
+budgetItemsPage : Model -> Html Msg
 budgetItemsPage model =
   let viewModel = { budgetItems = model.budgetItems }
   in BudgetItems.List.view viewModel
 
-budgetEditPage : AppModel -> BudgetItemId -> Html Msg
+budgetEditPage : Model -> BudgetItemId -> Html Msg
 budgetEditPage model itemId =
   let maybeItem =
         model.budgetItems
@@ -75,7 +75,7 @@ notFoundView =
     []
     [ a [ href "#/budgetItems" ] [ text "Budget Items" ] ]
 
-flash : AppModel -> Html a
+flash : Model -> Html a
 flash model =
   case model.errorMessage of
     Nothing ->

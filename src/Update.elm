@@ -12,7 +12,7 @@ import BudgetItems.Commands exposing (createItem, saveItem, deleteItem)
 import BudgetItems.Form exposing (..)
 import Form exposing (Form)
 
-update : Msg -> AppModel -> (AppModel, Cmd Msg)
+update : Msg -> Model -> (Model, Cmd Msg)
 update action model =
   case (Debug.log "action" action) of
     ShowError error ->
@@ -71,7 +71,7 @@ update action model =
     SaveItemFail error ->
       (model, sendError error)
 
-urlUpdate : (Route, Location) -> AppModel -> (AppModel, Cmd Msg)
+urlUpdate : (Route, Location) -> Model -> (Model, Cmd Msg)
 urlUpdate (route, location) model =
   let cmd = case route of
               -- TODO: Any better way to redirect?

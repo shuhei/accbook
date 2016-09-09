@@ -13,7 +13,7 @@ import BudgetItems.Commands
 import Ports exposing (..)
 import Routing
 
-init : (Route, Location) -> (AppModel, Cmd Msg)
+init : (Route, Location) -> (Model, Cmd Msg)
 init rl =
   let cmds = [ Budgets.Commands.fetchAllBudgets
              , BudgetItems.Commands.fetchAllItems
@@ -22,7 +22,7 @@ init rl =
   in (initialModel rl, cmd)
 
 -- TODO: Generalize.
-subscriptions : AppModel -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions model =
   getConfirmation DeleteItem
 
