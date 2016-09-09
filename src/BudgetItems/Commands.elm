@@ -21,7 +21,7 @@ memberUrl id =
 fetchAll : Cmd Msg
 fetchAll =
   Http.get collectionDecoder collectionUrl
-    |> Task.perform FetchAllFail FetchAllDone
+    |> Task.perform FetchAllItemsFail FetchAllItemsDone
 
 create : BudgetItem -> Cmd Msg
 create item =
@@ -34,7 +34,7 @@ create item =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
-       |> Task.perform CreateFail CreateDone
+       |> Task.perform CreateItemFail CreateItemDone
 
 delete : BudgetItemId -> Cmd Msg
 delete id =
@@ -46,7 +46,7 @@ delete id =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson (Decode.succeed ())
-       |> Task.perform DeleteFail (\x -> DeleteDone id)
+       |> Task.perform DeleteItemFail (\x -> DeleteItemDone id)
 
 save : BudgetItem -> Cmd Msg
 save item =
@@ -59,7 +59,7 @@ save item =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
-       |> Task.perform SaveFail SaveDone
+       |> Task.perform SaveItemFail SaveItemDone
 
 -- Encoder/Decoder
 

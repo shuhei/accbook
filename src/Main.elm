@@ -16,15 +16,15 @@ import Ports exposing (..)
 init : (Route, Location) -> (AppModel, Cmd Msg)
 init rl =
   let cmds = [ Cmd.map BudgetsMsg Budgets.Commands.fetchAll
-            , Cmd.map BudgetItemsMsg BudgetItems.Commands.fetchAll
-            ]
+             , Cmd.map BudgetItemsMsg BudgetItems.Commands.fetchAll
+             ]
       cmd = Cmd.batch cmds
   in (initialModel rl, cmd)
 
 -- TODO: Generalize.
 subscriptions : AppModel -> Sub Msg
 subscriptions model =
-  getConfirmation <| BudgetItemsMsg << BudgetItems.Messages.Delete
+  getConfirmation <| BudgetItemsMsg << BudgetItems.Messages.DeleteItem
 
 urlUpdate : (Route, Location) -> AppModel -> (AppModel, Cmd msg)
 urlUpdate rl model =

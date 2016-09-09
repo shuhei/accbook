@@ -11,5 +11,5 @@ view : Model -> List (Html Msg)
 view model =
   let row budget =
         listItem budget.name
-          [ onClick <| Show budget.id ]
+          [ onClick <| ShowBudget budget.id ]
   in List.map row model.budgets

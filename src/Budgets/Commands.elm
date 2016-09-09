@@ -20,7 +20,7 @@ memberUrl id =
 fetchAll : Cmd Msg
 fetchAll =
   Http.get collectionDecoder collectionUrl
-    |> Task.perform FetchAllFail FetchAllDone
+    |> Task.perform FetchAllBudgetsFail FetchAllBudgetsDone
 
 -- Encoder/Decoder
 

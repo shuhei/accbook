@@ -6,18 +6,18 @@ import Form
 import BudgetItems.Models exposing (..)
 
 type Msg
-  = FormMsg Form.Msg
-  | ListAll
-  | FetchAllDone (List BudgetItem)
-  | FetchAllFail Http.Error
-  | Create
-  | CreateDone BudgetItem
-  | CreateFail Http.Error
-  | Save
-  | SaveDone BudgetItem
-  | SaveFail Http.Error
-  | Edit BudgetItem
-  | DeleteIntent BudgetItem
-  | Delete BudgetItemId
-  | DeleteDone BudgetItemId
-  | DeleteFail Http.Error
+  = ItemFormMsg Form.Msg
+  | ListAllItems
+  | FetchAllItemsDone (List BudgetItem)
+  | FetchAllItemsFail Http.Error
+  | CreateItem
+  | CreateItemDone BudgetItem
+  | CreateItemFail Http.Error
+  | SaveItem
+  | SaveItemDone BudgetItem
+  | SaveItemFail Http.Error
+  | EditItem BudgetItem
+  | DeleteItemIntent BudgetItem
+  | DeleteItem BudgetItemId
+  | DeleteItemDone BudgetItemId
+  | DeleteItemFail Http.Error

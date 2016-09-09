@@ -30,7 +30,7 @@ view model =
         , tbody [] <| rows model.budgetItems
         ]
     , div [ class "fixed-action-btn" ]
-        [ floatingActionButton "add" [ onClick Create ]
+        [ floatingActionButton "add" [ onClick CreateItem ]
         ]
     ]
 
@@ -49,7 +49,7 @@ budgetItemRow : (BudgetItem, Int) -> Html Msg
 budgetItemRow (item, balance) =
   let amountClass = if item.isIncome then "green-text right-align" else "red-text right-align"
       balanceClass = if balance >= 0 then "right-align" else "red-text right-align"
-  in tr [ class "budget-item-table--item-row", onClick <| Edit item ]
+  in tr [ class "budget-item-table--item-row", onClick <| EditItem item ]
        [ td [] [ text <| humanDate item.date ]
        , td [] [ text item.label ]
        , td [ class amountClass ] [ text <| prettyInt <| netAmount item ]

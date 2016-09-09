@@ -7,10 +7,10 @@ import Budgets.Models exposing (..)
 update : Msg -> Model -> (Model, Cmd Msg, Cmd OutMsg)
 update action model =
   case action of
-    Show id ->
+    ShowBudget id ->
       let path = "#/budgets/" ++ (toString id)
       in (model, Cmd.none, navigateTo path)
-    FetchAllDone budgets ->
+    FetchAllBudgetsDone budgets ->
       ({ model | budgets = budgets }, Cmd.none, Cmd.none)
-    FetchAllFail error ->
+    FetchAllBudgetsFail error ->
       (model, Cmd.none, sendError error)

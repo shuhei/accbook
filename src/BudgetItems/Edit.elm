@@ -41,11 +41,11 @@ formView { form, item } =
 view : ViewModel -> Html Msg
 view model =
   div []
-    [ App.map FormMsg (formView model)
+    [ App.map ItemFormMsg (formView model)
     , inputField
-        [ button [ class "btn", onClick ListAll ] [ text "Cancel" ]
-        , button [ class "btn red", onClick (DeleteIntent model.item) ] [ text "Delete" ]
-        , button [ class "btn", onClick Save ] [ text "Save" ] ]
+        [ button [ class "btn", onClick ListAllItems ] [ text "Cancel" ]
+        , button [ class "btn red", onClick (DeleteItemIntent model.item) ] [ text "Delete" ]
+        , button [ class "btn", onClick SaveItem ] [ text "Save" ] ]
     ]
 
 inputField : List (Html a) -> Html a
