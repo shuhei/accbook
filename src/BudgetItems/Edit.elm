@@ -8,7 +8,9 @@ import Form exposing (Form, FieldState)
 import Form.Input as Input
 
 import Messages exposing (..)
-import Models exposing (BudgetItem, validate, new)
+import Types exposing (BudgetItem)
+import Models exposing (newItem)
+import BudgetItems.Form exposing (validateItemForm)
 
 -- import Materialize exposing (..)
 
@@ -19,8 +21,8 @@ type alias ViewModel =
 
 initialViewModel : ViewModel
 initialViewModel =
-  { form = Form.initial [] validate
-  , item = new
+  { form = Form.initial [] validateItemForm
+  , item = newItem
   }
 
 formView : ViewModel -> Html Form.Msg

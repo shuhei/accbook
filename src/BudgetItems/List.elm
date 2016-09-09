@@ -8,7 +8,7 @@ import List.Extra exposing (zip)
 
 import DateHelpers exposing (..)
 import Messages exposing (..)
-import Models exposing (BudgetItem)
+import Types exposing (BudgetItem)
 import Materialize exposing (..)
 
 type alias ViewModel =

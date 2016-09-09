@@ -1,4 +1,4 @@
-module BudgetItems.Commands exposing (..)
+module BudgetItems.Commands exposing (fetchAllItems, createItem, saveItem, deleteItem)
 
 import Http
 import Json.Decode as Decode exposing ((:=))
@@ -6,25 +6,17 @@ import Json.Encode as Encode
 import String
 import Task
 
+import Types exposing (..)
 import Messages exposing (..)
-import Models exposing (..)
 import DateHelpers exposing (..)
 
-collectionUrl : String
-collectionUrl =
-  "http://localhost:3000/budgetItems"
-
-memberUrl : BudgetItemId -> String
-memberUrl id =
-  String.join "/" [ collectionUrl, (toString id) ]
-
-fetchAll : Cmd Msg
-fetchAll =
+fetchAllItems : Cmd Msg
+fetchAllItems =
   Http.get collectionDecoder collectionUrl
     |> Task.perform FetchAllItemsFail FetchAllItemsDone
 
-create : BudgetItem -> Cmd Msg
-create item =
+createItem : BudgetItem -> Cmd Msg
+createItem item =
   let body = memberBody item
       config =
         { verb = "POST"
@@ -36,8 +28,8 @@ create item =
        |> Http.fromJson memberDecoder
        |> Task.perform CreateItemFail CreateItemDone
 
-delete : BudgetItemId -> Cmd Msg
-delete id =
+deleteItem : BudgetItemId -> Cmd Msg
+deleteItem id =
   let config =
         { verb = "DELETE"
         , headers = [ ("Content-Type", "application/json") ]
@@ -48,8 +40,8 @@ delete id =
        |> Http.fromJson (Decode.succeed ())
        |> Task.perform DeleteItemFail (\x -> DeleteItemDone id)
 
-save : BudgetItem -> Cmd Msg
-save item =
+saveItem : BudgetItem -> Cmd Msg
+saveItem item =
   let body = memberBody item
       config =
         { verb = "PATCH"
@@ -60,6 +52,16 @@ save item =
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
        |> Task.perform SaveItemFail SaveItemDone
+
+-- URL
+
+collectionUrl : String
+collectionUrl =
+  "http://localhost:3000/budgetItems"
+
+memberUrl : BudgetItemId -> String
+memberUrl id =
+  String.join "/" [ collectionUrl, (toString id) ]
 
 -- Encoder/Decoder
 

@@ -1,4 +1,4 @@
-module Budgets.Commands exposing (..)
+module Budgets.Commands exposing (fetchAllBudgets)
 
 import Http
 import Task
@@ -6,8 +6,15 @@ import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import String
 
-import Models exposing (Budget, BudgetId)
+import Types exposing (Budget, BudgetId)
 import Messages exposing (Msg (..))
+
+fetchAllBudgets : Cmd Msg
+fetchAllBudgets =
+  Http.get collectionDecoder collectionUrl
+    |> Task.perform FetchAllBudgetsFail FetchAllBudgetsDone
+
+-- URL
 
 collectionUrl : String
 collectionUrl =
@@ -16,11 +23,6 @@ collectionUrl =
 memberUrl : BudgetId -> String
 memberUrl id =
   String.join "/" [ collectionUrl, (toString id) ]
-
-fetchAll : Cmd Msg
-fetchAll =
-  Http.get collectionDecoder collectionUrl
-    |> Task.perform FetchAllBudgetsFail FetchAllBudgetsDone
 
 -- Encoder/Decoder
 

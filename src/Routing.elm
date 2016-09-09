@@ -6,7 +6,7 @@ import Hop exposing (makeUrl, matchUrl)
 import Hop.Types exposing (Config, Location, PathMatcher, Router, newLocation)
 import Hop.Matchers exposing (match1, match2, match3, int)
 
-import Models exposing (Route (..), BudgetItemId)
+import Types exposing (Route (..), BudgetItemId)
 
 routerConfig : Config Route
 routerConfig =
@@ -24,6 +24,8 @@ urlParser =
 navigateTo : String -> Cmd msg
 navigateTo url =
   Navigation.newUrl <| makeUrl routerConfig url
+
+-- Matchers
 
 indexMatcher : PathMatcher Route
 indexMatcher =

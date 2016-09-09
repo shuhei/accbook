@@ -4,12 +4,12 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
+import Types exposing (Route (..), BudgetItemId)
 import Messages exposing (..)
 import Models exposing (..)
 import Budgets.List
 import BudgetItems.List
 import BudgetItems.Edit
-import Models exposing (Route (..), BudgetItemId)
 import Materialize exposing (..)
 
 view : AppModel -> Html Msg
@@ -35,7 +35,7 @@ sideNav : AppModel -> Html Msg
 sideNav model =
   let appName =
         listItem "Accbook"
-          [ onClick <| NavigateTo "#/budgetItems" ]
+          [ onClick ListAllItems ]
       budgets = Budgets.List.view model.budgets
   in ul [ class "side-nav fixed" ] (appName :: budgets)
 

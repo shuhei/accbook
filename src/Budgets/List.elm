@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Events exposing (..)
 
 import Messages exposing (Msg (ShowBudget))
-import Models exposing (Budget)
+import Types exposing (Budget)
 import Materialize exposing (..)
 
 view : List Budget -> List (Html Msg)

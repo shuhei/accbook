@@ -3,6 +3,7 @@ module Main exposing (..)
 import Navigation
 import Hop.Types exposing (Location)
 
+import Types exposing (..)
 import Messages exposing (..)
 import Models exposing (..)
 import Update exposing (update, urlUpdate)
@@ -14,8 +15,8 @@ import Routing
 
 init : (Route, Location) -> (AppModel, Cmd Msg)
 init rl =
-  let cmds = [ Budgets.Commands.fetchAll
-             , BudgetItems.Commands.fetchAll
+  let cmds = [ Budgets.Commands.fetchAllBudgets
+             , BudgetItems.Commands.fetchAllItems
              ]
       cmd = Cmd.batch cmds
   in (initialModel rl, cmd)
