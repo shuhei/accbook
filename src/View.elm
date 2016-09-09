@@ -1,7 +1,6 @@
 module View exposing (..)
 
 import Html exposing (..)
-import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
@@ -10,8 +9,7 @@ import Models exposing (..)
 import Budgets.List
 import BudgetItems.List
 import BudgetItems.Edit
-import BudgetItems.Models exposing (BudgetItemId)
-import Routing
+import Models exposing (Route (..), BudgetItemId)
 import Materialize exposing (..)
 
 view : AppModel -> Html Msg
@@ -38,36 +36,36 @@ sideNav model =
   let appName =
         listItem "Accbook"
           [ onClick <| NavigateTo "#/budgetItems" ]
-      budgets = List.map (App.map BudgetsMsg) <| Budgets.List.view model.budgets
+      budgets = Budgets.List.view model.budgets
   in ul [ class "side-nav fixed" ] (appName :: budgets)
 
 titleAndPage : AppModel -> (String, Html Msg)
 titleAndPage model =
-  case model.routing.route of
-    Routing.HomeRoute ->
+  case model.route of
+    HomeRoute ->
       ("Budget Items", budgetItemsPage model)
-    Routing.BudgetItemsRoute ->
+    BudgetItemsRoute ->
       ("Budget Items", budgetItemsPage model)
-    Routing.BudgetItemEditRoute itemId ->
+    BudgetItemEditRoute itemId ->
       ("Edit Budget Item", budgetEditPage model itemId)
-    Routing.NotFoundRoute ->
+    NotFoundRoute ->
       ("Not Found", notFoundView)
 
 budgetItemsPage : AppModel -> Html Msg
 budgetItemsPage model =
-  let viewModel = { budgetItems = model.budgetItems.items }
-  in App.map BudgetItemsMsg <| BudgetItems.List.view viewModel
+  let viewModel = { budgetItems = model.budgetItems }
+  in BudgetItems.List.view viewModel
 
 budgetEditPage : AppModel -> BudgetItemId -> Html Msg
 budgetEditPage model itemId =
   let maybeItem =
-        model.budgetItems.items
+        model.budgetItems
           |> List.filter (\x -> x.id == itemId)
           |> List.head
   in case maybeItem of
     Just item ->
-      let viewModel = { form = model.budgetItems.form, item = item }
-      in App.map BudgetItemsMsg <| BudgetItems.Edit.view viewModel
+      let viewModel = { form = model.budgetItemForm, item = item }
+      in BudgetItems.Edit.view viewModel
     Nothing ->
       notFoundView
 

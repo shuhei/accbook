@@ -3,13 +3,13 @@ module Budgets.List exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 
-import Budgets.Messages exposing (..)
-import Budgets.Models exposing (..)
+import Messages exposing (Msg (ShowBudget))
+import Models exposing (Budget)
 import Materialize exposing (..)
 
-view : Model -> List (Html Msg)
-view model =
+view : List Budget -> List (Html Msg)
+view budgets =
   let row budget =
         listItem budget.name
           [ onClick <| ShowBudget budget.id ]
-  in List.map row model.budgets
+  in List.map row budgets

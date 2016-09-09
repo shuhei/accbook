@@ -5,18 +5,17 @@ import Hop.Types exposing (Location)
 
 import Messages exposing (..)
 import Models exposing (..)
-import Update exposing (update)
+import Update exposing (update, urlUpdate)
 import View exposing (view)
-import Routing exposing (Route)
 import Budgets.Commands
 import BudgetItems.Commands
-import BudgetItems.Messages
 import Ports exposing (..)
+import Routing
 
 init : (Route, Location) -> (AppModel, Cmd Msg)
 init rl =
-  let cmds = [ Cmd.map BudgetsMsg Budgets.Commands.fetchAll
-             , Cmd.map BudgetItemsMsg BudgetItems.Commands.fetchAll
+  let cmds = [ Budgets.Commands.fetchAll
+             , BudgetItems.Commands.fetchAll
              ]
       cmd = Cmd.batch cmds
   in (initialModel rl, cmd)
@@ -24,12 +23,7 @@ init rl =
 -- TODO: Generalize.
 subscriptions : AppModel -> Sub Msg
 subscriptions model =
-  getConfirmation <| BudgetItemsMsg << BudgetItems.Messages.DeleteItem
-
-urlUpdate : (Route, Location) -> AppModel -> (AppModel, Cmd msg)
-urlUpdate rl model =
-  let (updatedModel, cmd) = Routing.urlUpdate rl model.routing
-  in ({ model | routing = updatedModel }, cmd)
+  getConfirmation DeleteItem
 
 main : Program Never
 main =

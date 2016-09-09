@@ -6,22 +6,7 @@ import Hop exposing (makeUrl, matchUrl)
 import Hop.Types exposing (Config, Location, PathMatcher, Router, newLocation)
 import Hop.Matchers exposing (match1, match2, match3, int)
 
-import BudgetItems.Models exposing (BudgetItemId)
-
-type Route
-  = HomeRoute
-  | BudgetItemsRoute
-  | BudgetItemEditRoute BudgetItemId
-  | NotFoundRoute
-
-type alias Model =
-  { location : Location
-  , route : Route
-  }
-
-initialModel : (Route, Location) -> Model
-initialModel (route, location) =
-  { route = route, location = location }
+import Models exposing (Route (..), BudgetItemId)
 
 routerConfig : Config Route
 routerConfig =
@@ -30,16 +15,6 @@ routerConfig =
   , matchers = matchers
   , notFound = NotFoundRoute
   }
-
-urlUpdate : (Route, Location) -> Model -> (Model, Cmd msg)
-urlUpdate (route, location) model =
-  let cmd = case route of
-              -- TODO: Any better way to redirect?
-              HomeRoute ->
-                navigateTo "#/budgetItems"
-              _ ->
-                Cmd.none
-  in ({ route = route, location = location }, cmd)
 
 urlParser : Navigation.Parser (Route, Location)
 urlParser =

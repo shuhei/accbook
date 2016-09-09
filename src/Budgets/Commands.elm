@@ -6,8 +6,8 @@ import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import String
 
-import Budgets.Models exposing (..)
-import Budgets.Messages exposing (..)
+import Models exposing (Budget, BudgetId)
+import Messages exposing (Msg (..))
 
 collectionUrl : String
 collectionUrl =
