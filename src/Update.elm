@@ -28,8 +28,8 @@ update action model =
       ({ model | budgetItems = fetchedItems }, Cmd.none)
     FetchAllItemsFail error ->
       showError error model
-    CreateItem ->
-      (model, createItem newItem)
+    CreateItem budgetId ->
+      (model, createItem <| newItem budgetId)
     CreateItemDone item ->
       let updatedModel = { model | budgetItems = item :: model.budgetItems }
       in (updatedModel, sendCommand <| EditItem item)

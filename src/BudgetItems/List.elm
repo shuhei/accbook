@@ -8,11 +8,12 @@ import List.Extra exposing (zip)
 
 import DateHelper exposing (..)
 import Messages exposing (..)
-import Types exposing (BudgetItem)
+import Types exposing (Budget, BudgetId, BudgetItem)
 import Materialize exposing (..)
 
 type alias ViewModel =
   { budgetItems : List BudgetItem
+  , budget : Budget
   }
 
 view : ViewModel -> Html Msg
@@ -30,7 +31,8 @@ view model =
         , tbody [] <| rows model.budgetItems
         ]
     , div [ class "fixed-action-btn" ]
-        [ floatingActionButton "add" [ onClick CreateItem ]
+        [ floatingActionButton "add"
+            [ onClick <| CreateItem model.budget.id ]
         ]
     ]
 

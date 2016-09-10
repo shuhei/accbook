@@ -35,10 +35,10 @@ type alias BudgetItem =
   , date : Date.Date
   }
 
-newItem : BudgetItem
-newItem =
+newItem : BudgetId -> BudgetItem
+newItem budgetId =
   { id = 0
-  , budgetId = 0
+  , budgetId = budgetId
   , label = ""
   , isIncome = False
   , amount = 0

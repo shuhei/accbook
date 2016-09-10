@@ -15,7 +15,7 @@ type Msg
   | ItemFormMsg Form.Msg
   | FetchAllItemsDone (List BudgetItem)
   | FetchAllItemsFail Http.Error
-  | CreateItem
+  | CreateItem BudgetId
   | CreateItemDone BudgetItem
   | CreateItemFail Http.Error
   | SaveItem

@@ -64,7 +64,8 @@ homePage model =
 
 budgetPage : Model -> Budget -> Html Msg
 budgetPage model budget =
-  let viewModel = { budgetItems = selectBudgetItems budget.id model.budgetItems }
+  let viewModel = { budgetItems = selectBudgetItems budget.id model.budgetItems
+                  , budget = budget }
   in BudgetItems.List.view viewModel
 
 budgetEditPage : Model -> BudgetItem -> Html Msg
