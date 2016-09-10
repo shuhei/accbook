@@ -21,10 +21,11 @@ floatingActionButton name attrs =
     (class "btn-floating btn-large waves-effect waves-light red" :: attrs)
     [ i [ class "material-icons" ] [ text name ] ]
 
-listItem : String -> List (Attribute a) -> Html a
-listItem name attrs =
-  li []
-    [ a
-        (class "waves-effect waves-teal" :: attrs)
-        [ text name ]
-    ]
+listItem : String -> Bool -> List (Attribute a) -> Html a
+listItem name active attrs =
+  let klass = if active then [ class "active" ] else []
+  in li klass
+       [ a
+           (class "waves-effect waves-teal" :: attrs)
+           [ text name ]
+       ]

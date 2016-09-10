@@ -32,8 +32,14 @@ view model =
 
 sideNav : Model -> Html Msg
 sideNav model =
-  let appName = listItem "Accbook" []
-      budgets = Budgets.List.view model.budgets
+  let appName = listItem "Accbook" False []
+      selectedBudgetId =
+        case model.route of
+          BudgetRoute budgetId ->
+            Just budgetId
+          _ ->
+            Nothing
+      budgets = Budgets.List.view selectedBudgetId model.budgets
   in ul [ class "side-nav fixed" ] (appName :: budgets)
 
 titleAndPage : Model -> (String, Html Msg)
