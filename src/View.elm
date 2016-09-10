@@ -2,9 +2,8 @@ module View exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (..)
 
-import Types exposing (Route (..), BudgetItemId)
+import Types exposing (Route (..), Budget, BudgetId, BudgetItem, BudgetItemId)
 import Messages exposing (..)
 import Models exposing (..)
 import Budgets.List
@@ -33,9 +32,7 @@ view model =
 
 sideNav : Model -> Html Msg
 sideNav model =
-  let appName =
-        listItem "Accbook"
-          [ onClick ListAllItems ]
+  let appName = listItem "Accbook" []
       budgets = Budgets.List.view model.budgets
   in ul [ class "side-nav fixed" ] (appName :: budgets)
 
@@ -43,37 +40,49 @@ titleAndPage : Model -> (String, Html Msg)
 titleAndPage model =
   case model.route of
     HomeRoute ->
-      ("Budget Items", budgetItemsPage model)
-    BudgetItemsRoute ->
-      ("Budget Items", budgetItemsPage model)
+      ("Home", homePage model)
+    BudgetRoute budgetId ->
+      case findBudget budgetId model.budgets of
+        Just budget ->
+          (budget.name, budgetPage model budget)
+        Nothing ->
+          notFound
     BudgetItemEditRoute itemId ->
-      ("Edit Budget Item", budgetEditPage model itemId)
+      case findBudgetItem itemId model.budgetItems of
+        Just item ->
+          ("Edit Budget Item", budgetEditPage model item)
+        Nothing ->
+          notFound
     NotFoundRoute ->
-      ("Not Found", notFoundView)
+      notFound
 
-budgetItemsPage : Model -> Html Msg
-budgetItemsPage model =
-  let viewModel = { budgetItems = model.budgetItems }
+-- Pages
+
+homePage : Model -> Html Msg
+homePage model =
+  p [] [ text "Hello, World!" ]
+
+budgetPage : Model -> Budget -> Html Msg
+budgetPage model budget =
+  let viewModel = { budgetItems = selectBudgetItems budget.id model.budgetItems }
   in BudgetItems.List.view viewModel
 
-budgetEditPage : Model -> BudgetItemId -> Html Msg
-budgetEditPage model itemId =
-  let maybeItem =
-        model.budgetItems
-          |> List.filter (\x -> x.id == itemId)
-          |> List.head
-  in case maybeItem of
-    Just item ->
-      let viewModel = { form = model.budgetItemForm, item = item }
-      in BudgetItems.Edit.view viewModel
-    Nothing ->
-      notFoundView
+budgetEditPage : Model -> BudgetItem -> Html Msg
+budgetEditPage model item =
+  let viewModel = { form = model.budgetItemForm, item = item }
+  in BudgetItems.Edit.view viewModel
 
-notFoundView : Html a
-notFoundView =
+notFoundPage : Html a
+notFoundPage =
   div
     []
-    [ a [ href "#/budgetItems" ] [ text "Budget Items" ] ]
+    [ p [] [ text "Not found" ] ]
+
+notFound : (String, Html a)
+notFound =
+  ("404", notFoundPage)
+
+-- Helpers
 
 flash : Model -> Html a
 flash model =

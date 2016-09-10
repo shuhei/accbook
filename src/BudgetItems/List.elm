@@ -6,7 +6,7 @@ import Html.Events exposing (..)
 import Numeral
 import List.Extra exposing (zip)
 
-import DateHelpers exposing (..)
+import DateHelper exposing (..)
 import Messages exposing (..)
 import Types exposing (BudgetItem)
 import Materialize exposing (..)

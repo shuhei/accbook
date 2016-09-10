@@ -6,7 +6,7 @@ import Date
 
 type Route
   = HomeRoute
-  | BudgetItemsRoute
+  | BudgetRoute BudgetId
   | BudgetItemEditRoute BudgetItemId
   | NotFoundRoute
 
@@ -25,8 +25,10 @@ type alias Budget =
 type alias BudgetItemId =
   Int
 
+-- TODO: Use Maybe for id and budgetId?
 type alias BudgetItem =
   { id : BudgetItemId
+  , budgetId : BudgetId
   , label : String
   , isIncome : Bool
   , amount : Int
@@ -36,6 +38,7 @@ type alias BudgetItem =
 newItem : BudgetItem
 newItem =
   { id = 0
+  , budgetId = 0
   , label = ""
   , isIncome = False
   , amount = 0

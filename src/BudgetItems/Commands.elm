@@ -8,7 +8,7 @@ import Task
 
 import Types exposing (..)
 import Messages exposing (..)
-import DateHelpers exposing (..)
+import DateHelper exposing (..)
 
 fetchAllItems : Cmd Msg
 fetchAllItems =
@@ -71,9 +71,10 @@ collectionDecoder =
 
 memberDecoder : Decode.Decoder BudgetItem
 memberDecoder =
-  Decode.object5
+  Decode.object6
     BudgetItem
     ("id" := Decode.int)
+    ("budgetId" := Decode.int)
     ("label" := Decode.string)
     ("isIncome" := Decode.bool)
     ("amount" := Decode.int)
@@ -87,11 +88,11 @@ memberBody item =
 
 encodeMember : BudgetItem -> Encode.Value
 encodeMember item =
-  let list =
-        [ ("id", Encode.int item.id)
-        , ("label", Encode.string item.label)
-        , ("isIncome", Encode.bool item.isIncome)
-        , ("amount", Encode.int item.amount)
-        , ("date", encodeDate item.date)
-        ]
-  in Encode.object list
+  Encode.object
+    [ ("id", Encode.int item.id)
+    , ("budgetId", Encode.int item.budgetId)
+    , ("label", Encode.string item.label)
+    , ("isIncome", Encode.bool item.isIncome)
+    , ("amount", Encode.int item.amount)
+    , ("date", encodeDate item.date)
+    ]

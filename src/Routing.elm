@@ -31,9 +31,9 @@ indexMatcher : PathMatcher Route
 indexMatcher =
   match1 HomeRoute "/"
 
-budgetItemsMatcher : PathMatcher Route
-budgetItemsMatcher =
-  match1 BudgetItemsRoute "/budgetItems"
+budgetMatcher : PathMatcher Route
+budgetMatcher =
+  match2 BudgetRoute "/budgets/" int
 
 budgetItemEditMatcher : PathMatcher Route
 budgetItemEditMatcher =
@@ -42,6 +42,6 @@ budgetItemEditMatcher =
 matchers : List (PathMatcher Route)
 matchers =
   [ indexMatcher
-  , budgetItemsMatcher
+  , budgetMatcher
   , budgetItemEditMatcher
   ]

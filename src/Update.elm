@@ -18,15 +18,12 @@ update action model =
   case (Debug.log "action" action) of
     -- Budgets
     ShowBudget id ->
-      let path = "#/budgets/" ++ (toString id)
-      in (model, Routing.navigateTo path)
+      (model, Routing.navigateTo <| "#/budgets/" ++ (toString id))
     FetchAllBudgetsDone budgets ->
       ({ model | budgets = budgets }, Cmd.none)
     FetchAllBudgetsFail error ->
       showError error model
     -- Budget Items
-    ListAllItems ->
-      (model, Routing.navigateTo "#/budgetItems")
     FetchAllItemsDone fetchedItems ->
       ({ model | budgetItems = fetchedItems }, Cmd.none)
     FetchAllItemsFail error ->
@@ -49,9 +46,13 @@ update action model =
     DeleteItem id ->
       (model, deleteItem id)
     DeleteItemDone id ->
-      let updatedModel =
-        { model | budgetItems = List.filter (\x -> x.id /= id) model.budgetItems }
-      in (updatedModel, sendCommand ListAllItems)
+      let (removed, remaining) = List.partition (\x -> x.id == id) model.budgetItems
+          cmd = case List.head removed of
+            Just item ->
+              sendCommand <| ShowBudget item.budgetId
+            Nothing ->
+              Cmd.none
+      in ({ model | budgetItems = remaining }, cmd)
     DeleteItemFail error ->
       showError error model
     ItemFormMsg formCmd ->
@@ -64,8 +65,8 @@ update action model =
         Nothing ->
           (model, Cmd.none)
     SaveItemDone item ->
-      let update x = if x.id == item.id then item else x
-          updatedCollection = List.map update model.budgetItems
+      let replaceItem x = if x.id == item.id then item else x
+          updatedCollection = List.map replaceItem model.budgetItems
       in ( { model | budgetItems = updatedCollection }, Routing.navigateTo "#/budgetItems")
     SaveItemFail error ->
       showError error model

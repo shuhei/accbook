@@ -13,7 +13,6 @@ type Msg
   | FetchAllBudgetsFail Http.Error
   -- Budget Items
   | ItemFormMsg Form.Msg
-  | ListAllItems
   | FetchAllItemsDone (List BudgetItem)
   | FetchAllItemsFail Http.Error
   | CreateItem
