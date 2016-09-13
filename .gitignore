@@ -8,3 +8,8 @@ public/*.woff
 npm-debug.log
 .env*
 coverage
+
+/elm-stuff
+/elm.js
+/dist
+/index.html
