@@ -66,7 +66,7 @@ titleAndPage model =
 
 homePage : Model -> Html Msg
 homePage model =
-  p [] [ text "Hello, World!" ]
+  p [] [ text "Loading..." ]
 
 budgetPage : Model -> Budget -> Html Msg
 budgetPage model budget =

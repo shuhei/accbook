@@ -8,18 +8,12 @@ import Messages exposing (..)
 import Models exposing (..)
 import Update exposing (update, urlUpdate)
 import View exposing (view)
-import Budgets.Commands
-import BudgetItems.Commands
 import Ports exposing (..)
 import Routing
 
 init : (Route, Location) -> (Model, Cmd Msg)
 init rl =
-  let cmds = [ Budgets.Commands.fetchAllBudgets
-             , BudgetItems.Commands.fetchAllItems
-             ]
-      cmd = Cmd.batch cmds
-  in (initialModel rl, cmd)
+  (initialModel rl, sendCommand Init)
 
 -- TODO: Generalize.
 subscriptions : Model -> Sub Msg

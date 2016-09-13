@@ -1,18 +1,16 @@
 module Budgets.Commands exposing (fetchAllBudgets)
 
 import Http
-import Task
+import Task exposing (Task)
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import String
 
 import Types exposing (Budget, BudgetId)
-import Messages exposing (Msg (..))
 
-fetchAllBudgets : Cmd Msg
+fetchAllBudgets : Task Http.Error (List Budget)
 fetchAllBudgets =
   Http.get collectionDecoder collectionUrl
-    |> Task.perform FetchAllBudgetsFail FetchAllBudgetsDone
 
 -- URL
 

@@ -1,21 +1,24 @@
-module BudgetItems.Commands exposing (fetchAllItems, createItem, saveItem, deleteItem)
+module BudgetItems.Commands exposing
+  ( fetchAllItems
+  , createItem
+  , saveItem
+  , deleteItem
+  )
 
 import Http
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import String
-import Task
+import Task exposing (Task)
 
 import Types exposing (..)
-import Messages exposing (..)
 import DateHelper exposing (..)
 
-fetchAllItems : Cmd Msg
+fetchAllItems : Task Http.Error (List BudgetItem)
 fetchAllItems =
   Http.get collectionDecoder collectionUrl
-    |> Task.perform FetchAllItemsFail FetchAllItemsDone
 
-createItem : BudgetItem -> Cmd Msg
+createItem : BudgetItem -> Task Http.Error BudgetItem
 createItem item =
   let body = memberBody item
       config =
@@ -26,9 +29,8 @@ createItem item =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
-       |> Task.perform CreateItemFail CreateItemDone
 
-deleteItem : BudgetItemId -> Cmd Msg
+deleteItem : BudgetItemId -> Task Http.Error BudgetItemId
 deleteItem id =
   let config =
         { verb = "DELETE"
@@ -37,10 +39,9 @@ deleteItem id =
         , body = Http.empty
         }
   in Http.send Http.defaultSettings config
-       |> Http.fromJson (Decode.succeed ())
-       |> Task.perform DeleteItemFail (\x -> DeleteItemDone id)
+       |> Http.fromJson (Decode.succeed id)
 
-saveItem : BudgetItem -> Cmd Msg
+saveItem : BudgetItem -> Task Http.Error BudgetItem
 saveItem item =
   let body = memberBody item
       config =
@@ -51,7 +52,6 @@ saveItem item =
         }
   in Http.send Http.defaultSettings config
        |> Http.fromJson memberDecoder
-       |> Task.perform SaveItemFail SaveItemDone
 
 -- URL
 

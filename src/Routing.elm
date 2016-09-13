@@ -2,7 +2,7 @@
 module Routing exposing (..)
 
 import Navigation
-import Hop exposing (makeUrl, matchUrl)
+import Hop
 import Hop.Types exposing (Config, Location, PathMatcher, Router, newLocation)
 import Hop.Matchers exposing (match1, match2, match3, int)
 
@@ -18,12 +18,13 @@ routerConfig =
 
 urlParser : Navigation.Parser (Route, Location)
 urlParser =
-  Navigation.makeParser (.href >> matchUrl routerConfig)
+  Navigation.makeParser (.href >> Hop.matchUrl routerConfig)
 
 -- Returns a Cmd to change URL.
 navigateTo : String -> Cmd msg
 navigateTo url =
-  Navigation.newUrl <| makeUrl routerConfig url
+  Hop.makeUrl routerConfig url
+    |> Navigation.newUrl
 
 -- Matchers
 

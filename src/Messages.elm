@@ -7,14 +7,14 @@ import Task
 import Types exposing (Budget, BudgetId, BudgetItem, BudgetItemId)
 
 type Msg
+  -- Init
+  = Init
+  | InitDone (List Budget, List BudgetItem)
+  | InitFail Http.Error
   -- Budget
-  = ShowBudget BudgetId
-  | FetchAllBudgetsDone (List Budget)
-  | FetchAllBudgetsFail Http.Error
+  | ShowBudget BudgetId
   -- Budget Items
   | ItemFormMsg Form.Msg
-  | FetchAllItemsDone (List BudgetItem)
-  | FetchAllItemsFail Http.Error
   | CreateItem BudgetId
   | CreateItemDone BudgetItem
   | CreateItemFail Http.Error
